@@ -1,7 +1,7 @@
 'use client'
 
 import styles from '@/app/styles/main.module.css'
-import styles2 from './styles/navbar.module.css'
+import styles2 from '@/app/styles/navbar.module.css'
 import { useState } from 'react'
 
 export default function Home() {
@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <h1>Hi</h1>
+      <h1>Hi, this is a testing page</h1>
       <p>{state}</p>
       <button onClick={cycleStates} className={styles2.Button}>Cycle states</button>
     </main>

@@ -25,10 +25,13 @@
     text-align: center;
     border-radius: 2vw;
 }
-.loginTextHeader {
+.loginTextHeader, .loadingtext {
     color: black;
     font-size: 80px;
     margin: 3vw;
+}
+.loadingtext {
+    font-size: 50px;
 }
 
 .loginTextP {

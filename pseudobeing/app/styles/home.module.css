@@ -18,7 +18,7 @@
     padding: 1%;
     width: 55vw;
     height: 20vw;
-    background-color: rgb(138, 138, 138);
+    background-color: rgb(200, 200, 200);
     text-align: center;
     border-radius: 2vw;
 }
@@ -28,7 +28,7 @@
     padding: 1%;
     width: 55vw;
     height: 13vw;
-    background-color: rgb(138, 138, 138);
+    background-color: rgb(213, 213, 213);
     text-align: center;
     border-radius: 2vw;
     transform: translateY(160%);

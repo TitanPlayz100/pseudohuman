@@ -4,11 +4,14 @@ Game where there is a prompt given, and there are multiple answers all generated
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
+note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) to deploy
+
 # todo:
 - [ ] find a free or cheap ai api to use
 
 ## Frontend
-- [ ] create ui for login
+- [x] create ui for login
+- [x] create ui for home screen
 - [ ] create ui for the start of game
 - [ ] create ui for playing the game
 - [ ] create ui for end of game
@@ -26,6 +29,11 @@ Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 - [ ] allow for multiple games to run at once through different servers or smthing
 
 # Changelog
+## 18/12
+- continue making mock ui to build backend on
+    - made a login page
+    - made a 
+
 ## 17/12
 - Start work by creating initial nextjs files and getting main idea down
 

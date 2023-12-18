@@ -1,5 +1,5 @@
 .parentDiv {
-    padding: 2%;
+    padding: 1%;
     background-color: #242424; 
     transition: all 0.4s ease;
     width: 100%;
@@ -11,20 +11,19 @@
     justify-content:space-between;
 }
 .Button {
-    margin: 0.1vw;
+    margin: 1vw;
     outline: none;
     cursor: pointer;
     font-size:2em;
-    padding: 1%;
     border-radius: 5px;
     color: #ffffff;
     background: transparent;
-    height: auto;
     text-decoration: none;
     min-width: 100px;
     border: 2px solid #d3d3d3;
     text-align: center;
     transition: all 0.4s ease;
+    letter-spacing: 2px;
 }
 .Button:hover {
     border: 2px solid white;
