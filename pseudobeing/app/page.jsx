@@ -1,6 +1,7 @@
 'use client'
 
-import styles from '@/app/main.module.css'
+import styles from '@/app/styles/main.module.css'
+import styles2 from './styles/navbar.module.css'
 import { useState } from 'react'
 
 export default function Home() {
@@ -29,7 +30,7 @@ export default function Home() {
     <main className={styles.main}>
       <h1>Hi</h1>
       <p>{state}</p>
-      <button onClick={cycleStates}>Cycle states</button>
+      <button onClick={cycleStates} className={styles2.Button}>Cycle states</button>
     </main>
   )
 }

@@ -1,0 +1,32 @@
+.parentDiv {
+    padding: 2% 10%;
+    background-color: #242424; 
+    transition: all 0.4s ease;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    height: auto;
+}
+.Button {
+    margin: 1vw;
+    outline: none;
+    cursor: pointer;
+    font-size: 10mm;
+    padding: 1%;
+    border-radius: 0.3vw;
+    color: #ffffff;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    min-width: 100px;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+.Button:hover {
+    border: 1px solid white;
+}
+.Button:focus {
+    background-color: #4d4d4d;
+}
