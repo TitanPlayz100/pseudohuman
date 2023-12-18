@@ -1,0 +1,77 @@
+.parentdiv {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    width: 90%;
+    height: 40vw;
+    transform: translate(-50%, -50%);
+    background-color: rgb(0, 0, 0);
+    text-align: center;
+    border-radius: 2vw;
+    display: flex;
+    justify-content: center;
+    color: black;
+}
+.info {
+    position:fixed;
+    margin: 1vw;
+    padding: 1%;
+    width: 55vw;
+    height: 20vw;
+    background-color: rgb(138, 138, 138);
+    text-align: center;
+    border-radius: 2vw;
+}
+.buttondiv {
+    position:fixed;
+    margin: 1vw;
+    padding: 1%;
+    width: 55vw;
+    height: 13vw;
+    background-color: rgb(138, 138, 138);
+    text-align: center;
+    border-radius: 2vw;
+    transform: translateY(160%);
+}
+.button {
+    margin: 1.5vw;
+    outline: none;
+    cursor: pointer;
+    font-size:2em;
+    padding: 1.5vw;
+    border-radius: 5px;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    min-width: 100px;
+    border: 2px solid #2c2c2c;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+.button:hover {
+    border: 2px solid rgb(0, 0, 0);
+}
+.button:focus {
+    background-color: #535353;
+}
+.input {
+    width: auto;
+    background-color: rgb(21, 21, 21);
+    color: white;
+    padding: 1vw;
+    font-size: 1.8em;
+    box-sizing: border-box;
+    border: 2px solid rgb(28, 28, 28);
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.4s ease;
+}
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input[type=number]{
+    appearance:unset;
+    -moz-appearance: textfield;
+}

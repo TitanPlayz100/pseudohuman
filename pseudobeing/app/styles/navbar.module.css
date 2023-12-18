@@ -1,5 +1,5 @@
 .parentDiv {
-    padding: 2% 10%;
+    padding: 2%;
     background-color: #242424; 
     transition: all 0.4s ease;
     width: 100%;
@@ -7,26 +7,49 @@
     top: 0;
     z-index: 99;
     height: auto;
+    display: flex;
+    justify-content:space-between;
 }
 .Button {
-    margin: 1vw;
+    margin: 0.1vw;
     outline: none;
     cursor: pointer;
-    font-size: 10mm;
+    font-size:2em;
     padding: 1%;
-    border-radius: 0.3vw;
+    border-radius: 5px;
     color: #ffffff;
     background: transparent;
     height: auto;
     text-decoration: none;
     min-width: 100px;
-    border: 1px solid #d3d3d3;
+    border: 2px solid #d3d3d3;
     text-align: center;
     transition: all 0.4s ease;
 }
 .Button:hover {
-    border: 1px solid white;
+    border: 2px solid white;
 }
 .Button:focus {
     background-color: #4d4d4d;
+}
+.ul {
+    list-style:none;
+    margin-right: 5vw;
+}
+.image {
+    transform: translateY(10px);
+}
+.li {
+    display: inline;
+    margin: 10px;
+    vertical-align: middle;
+}
+.litext {
+    font-size: 3vw;
+    text-decoration: none;
+    color: white;
+}
+.loginbutton {
+    padding: 20px;
+    
 }
