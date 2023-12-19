@@ -2,7 +2,7 @@
 
 .loading:after {
     content: ' .';
-    animation: dots 1s steps(5, end) infinite;}
+    animation: dots 1s steps(10, end) infinite;}
   
   @keyframes dots {
     0%, 20% {

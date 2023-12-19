@@ -12,7 +12,7 @@ export default function homepage() {
             <div className={styles.buttondiv}>
                 <button className={styles.button}>Join Queue</button>
                 <button className={styles.button}>Private Game</button>
-                <input type='number' max={9999} placeholder='Input code' className={styles.input}></input>
+                <input type='text' maxLength={4} placeholder='Input code' className={styles.input}></input>
             </div>
         </div>
     )

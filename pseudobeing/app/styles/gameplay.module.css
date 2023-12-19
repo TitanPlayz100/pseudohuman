@@ -1,0 +1,89 @@
+/* guesser */
+.parentdiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -45%);
+    height: auto;
+    border: 2px solid whitesmoke;
+    border-radius: 20px;
+    padding: 2%;
+    padding-top: 0.5vw;
+    text-align: center;
+}
+.text {
+    display: block;
+    margin: 2vw;
+}
+.button {
+    margin: 0.5vw;
+    outline: none;
+    cursor: pointer;
+    font-size:1em;
+    padding: 1vw;
+    border-radius: 10px;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    width: 80%;
+    overflow: hidden;
+    border: 2px solid #aaaaaa;
+    text-align: center;
+    transition: all 0.4s ease;
+    color: #aaaaaa;
+}
+.button:hover {
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+.button:focus {
+    background-color: #ffffff1d;
+}
+
+/* pretender */
+.accordian {
+    background-color: black;
+    color: white;
+    text-align: left;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+}
+.accordianheading {
+    font-style: italic;
+    color: #aaaaaa;
+    margin-left: 20px;
+}
+.input {
+    width: 95%;
+    background-color: black;
+    color: white;
+    padding: 1vw;
+    font-size: 1em;
+    box-sizing: border-box;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.4s ease;
+    margin: 2vw; 
+}
+.submit {
+    margin: 0.5vw;
+    outline: none;
+    cursor: pointer;
+    font-size:1.8em;
+    padding: 1vw;
+    border-radius: 10px;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    width: auto;
+    overflow: hidden;
+    border: 2px solid #dcdcdc;
+    text-align: center;
+    transition: all 0.4s ease;
+    color: #ffffff;
+}
+.submit:hover {
+    border: 2px solid #c9d4ff;
+}

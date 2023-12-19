@@ -1,6 +1,6 @@
 .parentDiv {
-    padding: 1%;
-    background-color: #242424; 
+    padding: 0.5%;
+    border-bottom: 3px solid rgb(51, 51, 51);
     transition: all 0.4s ease;
     width: 100%;
     position: fixed;
@@ -44,11 +44,11 @@
     vertical-align: middle;
 }
 .litext {
-    font-size: 3vw;
+    font-size: 2.5vw;
     text-decoration: none;
     color: white;
 }
 .loginbutton {
-    padding: 20px;
+    padding: 15px;
     
 }
