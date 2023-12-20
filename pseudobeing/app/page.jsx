@@ -1,36 +1,38 @@
 'use client'
 
-import styles from '@/app/styles/main.module.css'
-import styles2 from '@/app/styles/navbar.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from "react"
+import styles from '@/app/styles/home.module.css'
+import io from "socket.io-client"
+
+const socket = io('http://localhost:3001');
+
 
 export default function Home() {
-  const [state, setstate] = useState("default");
-
-  function cycleStates() {
-    switch (state) {
-      case "default":
-        setstate("state 1")
-        break;
-
-      case "state 1":
-        setstate("state 2")
-        break;
-      
-      case "state 2":
-        setstate("default")
-        break;
-    
-      default:
-        break;
-    }
+  const [currentMessage, setCurrentMessage] = useState('');
+  const [messageArray, setMessagesArray] = useState([]);
+  
+  const handletype = (event) => {
+    setCurrentMessage(event.target.value);
   }
 
+  // send message
+  function submitmessage() {
+    socket.emit('sent-message', currentMessage);
+  }
+
+  // recieve message
+  useEffect(() => {
+    socket.on('send-message', (messageAr) => {
+      setMessagesArray(messageAr);
+    });
+  }, []);
+
   return (
-    <main className={styles.main}>
+    <main>
       <h1>Hi, this is a testing page</h1>
-      <p>{state}</p>
-      <button onClick={cycleStates} className={styles2.Button}>Cycle states</button>
+      <div>{messageArray.map((item, index) => <p key={index}>{item}</p>)}</div>
+      <input type='text' onKeyUp={handletype} placeholder="message" />
+      <button onClick={submitmessage} className={styles.button}>Send</button>
     </main>
   )
 }
