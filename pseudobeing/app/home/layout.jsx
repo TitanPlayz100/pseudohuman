@@ -5,7 +5,7 @@ import NavBar from "./navbar"
 
 export default function RootLayout({ children }) {
   return (
-    <html className={styles.homepage}>
+    <html className={styles.homepage} suppressHydrationWarning>
       <body>
         <NavBar />
         {children}

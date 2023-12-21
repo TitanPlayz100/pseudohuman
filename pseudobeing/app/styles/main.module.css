@@ -59,3 +59,7 @@
     border: 3px solid #121212;
     background-color: rgb(51, 51, 51);
 }
+.incorrect {
+    color: red;
+    font-size: 2em;
+}
