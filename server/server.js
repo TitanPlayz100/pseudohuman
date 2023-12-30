@@ -7,7 +7,7 @@ const { Server } = require('socket.io')
 const io = new Server(server, { cors: { origin: '*' } });
 
 // USER DATA SAVING AND RETRIEVING
-const filename = './users.json'
+const filename = './users.json';
 const testdata =
   [
     {
@@ -15,7 +15,6 @@ const testdata =
       "password": "testpassword"
     }
   ];
-let messageArray = ['test1', 'test2'];
 
 function load_user_file() {
   let obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -36,7 +35,6 @@ function check_username(username) {
   let result = false;
   users.forEach((user) => {
     if (user.username == username) {
-      console.log("found match")
       result = true;
     }
   });
@@ -66,40 +64,41 @@ function add_user(username, password) {
   save_user_file(users);
 }
 
+// MATCHMAKING ARRAY
+let matchingUsers = [];
+
 // WEBSOCKET CONNECTIONS
 io.on('connection', (socket) => {
-
-  console.log("user joined");
-  // io.emit('send-message', messageArray);
-
-
-  socket.on('sent-message', (message) => {
-    messageArray = [...messageArray, message]
-    io.emit('send-message', messageArray);
-  });
+  console.log("User joined");
 
   socket.on('check-user', (username) => {
-    result = check_username(username);
-    io.emit('checked-username', { valid: result, user: username });
+    let result = check_username(username);
+    io.emit('checked-username-' + username, { valid: result, user: username });
   });
 
   socket.on('check-password', (userobj) => {
-    username = userobj.username;
-    password = userobj.password;
-    result = check_password(username, password);
-    io.emit('checked-password', result);
+    let username = userobj.username;
+    let password = userobj.password;
+    let result = check_password(username, password);
+    io.emit('checked-password-' + username, result);
   });
 
   socket.on('register-user', (userobj) => {
-    username = userobj.username;
-    password = userobj.password;
-    result = add_user(username, password);
-    io.emit('registered-user', true);
+    let username = userobj.username;
+    let password = userobj.password;
+    add_user(username, password);
+    io.emit('registered-user-' + username, true);
+  });
+
+  socket.on('enter-matchmaking', (username) => {
+    matchingUsers.push(username);
+    const count = matchingUsers.length;
+    io.emit('entered-matchmaking-' + username, count);
   });
 
 
   socket.on('disconnect', () => {
-    console.log('user left')
+    matchingUsers = [];
   });
 
 });

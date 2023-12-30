@@ -1,4 +1,5 @@
 import styles from '@/app/styles/home.module.css'
+import { MainMenuButtons } from '@/app/components/MainMenuButtons';
 
 export default function homepage() {
     return (
@@ -9,11 +10,7 @@ export default function homepage() {
                 <p>You can play with random people or against a friend. </p>
                 <h2>Have Fun!</h2>
             </div>
-            <div className={styles.buttondiv}>
-                <button className={styles.button}>Join Queue</button>
-                <button className={styles.button}>Private Game</button>
-                <input type='text' maxLength={4} placeholder='Input code' className={styles.input}></input>
-            </div>
+            <MainMenuButtons/>
         </div>
     )
 }
