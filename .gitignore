@@ -1,0 +1,12 @@
+.vscode
+.env*.local
+.env
+.vercel
+.next/
+node_modules/
+
+*/out/
+*/build
+*/users.json
+
+

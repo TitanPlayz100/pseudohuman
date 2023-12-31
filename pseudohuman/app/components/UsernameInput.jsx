@@ -14,7 +14,7 @@ export function UsernameInput() {
     };
 
     useEffect(() => {
-        socket.on('checked-username-'+inputUser, (resultobj) => {
+        socket.on('checked-username-' + inputUser, (resultobj) => {
             const result = resultobj.valid;
             const username = resultobj.user;
             localStorage.setItem("tempuser", username);

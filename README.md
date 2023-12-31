@@ -23,18 +23,27 @@ Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=defau
 
 ## Backend
 - [x] create login system
-- [ ] create matchmaking system
+- [x] create matchmaking system
+    - [x] start a game when 2 people are available
+- [ ] create text prompts
+- [ ] get ai answers to question
+- [ ] get first players own answer to question, and then display ai and players answers to player 2
+- [ ] get player 2s answer and see if they were right or wrong
+- [ ] add the scores to a total
+- [ ] repeat this process multiple times
+- [ ] end the game after a player reaches 3 points, awarding that player a win
 - [ ] maybe add ability to create custom rooms for 2 people to join and play many times
-- [ ] start a game when 2 people area available
-- [ ] create text prompts to display for each question
-- [ ] get api for ai to recieve a fake input
-- [ ] get everyone elses input to display
-- [ ] have voting at end of each prompt to vote for who the ai is
-- [ ] after 5 prompts, reveal who it actually was
-- [ ] end the game
 - [ ] allow for multiple games to run at once through different servers or smthing
 
 # Changelog
+## 31/12
+- added start game page and countdown to starting the game
+
+## 30/12
+- fixed many login system bugs, 
+- made it more responsive by refactoring lots of client side components form server side components
+- made matchmaking work
+
 ## 21/12
 - made login system work on server and frontend
 
