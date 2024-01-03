@@ -1,32 +1,49 @@
 'use client'
 
 import styles from '@/app/styles/gameplay.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import { io } from "socket.io-client"
+
+const socket = io('http://localhost:3001');
 
 export default function Start() {
     const [inputText, setText] = useState("");
-    const [delayedText, setDelayedText] = useState("");
     const [waiting, setWaiting] = useState(false);
-    const info = {
-        question: "Example Question?",
-        generated: [
-            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Et, magnam mollitia ad dolor, illo quia modi debitis praesentium cum deserunt autem necessitatibus cupiditate quis ea dolorem itaque ipsa quam tenetur?",
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt, debitis similique, molestiae ratione voluptate eveniet asperiores, sunt itaque nisi tempora dignissimos nemo veniam. Exercitationem animi, quidem soluta excepturi quia praesentium!"
-        ]
-    };
+    const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading"] });
 
     const handleChange = (event) => {
         setText(event.target.value);
     }
 
     function submitAnswer() {
-        setDelayedText(inputText);
+        const input = inputText;
+        const gameid = localStorage.getItem('game_id');
+        socket.emit('send-player-answer', { gameid, input })
         setWaiting(true);
     }
 
+    useEffect(() => {
+        const gameid = localStorage.getItem('game_id');
+        socket.emit('get-question', gameid);
+
+        socket.on('return-question-' + gameid, (infoobj) => {
+            setinfo({
+                question: infoobj.question,
+                answers: infoobj.answers
+            });
+        });
+
+        socket.on('next-round-' + gameid, () => {
+            window.location = '/ingame/result';
+        });
+
+        socket.on('end-game-' + gameid, () => {
+            window.location = '/ingame/finish';
+        });
+    }, []);
 
     if (!waiting) {
         return (
@@ -41,7 +58,7 @@ export default function Start() {
                         <span className={styles.accordianheading}> (click to expand)</span>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {info.generated[0]}
+                        {info.answers[0]}
                     </AccordionDetails>
                 </Accordion>
                 <p></p>
@@ -51,7 +68,7 @@ export default function Start() {
                         <span className={styles.accordianheading}> (click to expand)</span>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {info.generated[1]}
+                        {info.answers[1]}
                     </AccordionDetails>
                 </Accordion>
 
@@ -64,7 +81,6 @@ export default function Start() {
                     onChange={handleChange}
                 />
                 <button className={styles.submit} onClick={submitAnswer}>Submit Answer</button>
-                <p>{delayedText}</p>
             </div>
         )
     }

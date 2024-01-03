@@ -17,8 +17,8 @@ export function LogoutButton() {
     }, []);
 
     function logout() {
-        localStorage.setItem('loggedIn', false);
-        localStorage.setItem('username', null);
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('username');
         window.location = '/home/login';
     }
 

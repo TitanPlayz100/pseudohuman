@@ -1,5 +1,5 @@
-const fs = require('fs')
-
+const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const filename = './users.json';
 const testdata =
@@ -35,24 +35,24 @@ function check_username(username) {
   return result;
 }
 
-function check_password(username, password) {
-  users = load_user_file();
+async function check_password(username, password) {
+  let users = load_user_file();
+  let valid = false;
   for (let i = 0; i < users.length; i++) {
     if (users[i].username == username) {
-      if (users[i].password == password) {
-        return true;
-      }
+      valid = await bcrypt.compare(password, users[i].password);
     }
   }
-  return false;
+  return valid;
 }
 
-function add_user(username, password) {
+async function add_user(username, password) {
   users = load_user_file();
+  const new_pass = await bcrypt.hash(password, 5);
   newdata =
   {
     "username": username,
-    "password": password
+    "password": new_pass
   }
   users.push(newdata);
   save_user_file(users);

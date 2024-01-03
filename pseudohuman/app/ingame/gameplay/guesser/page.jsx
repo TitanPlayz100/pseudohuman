@@ -1,25 +1,43 @@
 'use client'
 
 import styles from '@/app/styles/gameplay.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { io } from "socket.io-client"
+
+const socket = io('http://localhost:3001');
 
 export default function Start() {
-    const [displayText, setText] = useState("");
-    const info = {
-        question: "Example Question?",
-        answers: [
-            "Answer 1",
-            "Answer 2",
-            "Answer 3"
-        ],
-        correct: 1
-    };
+    const [isWaiting, setWaiting] = useState(true);
+    const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading", "loading"], correct: -1 });
 
     function selectAnswer(answer) {
-        setText((answer == info.correct) ? "Correct" : "Wrong")
+        const gameid = localStorage.getItem('game_id');
+        const playerNo = localStorage.getItem('playerNo');
+        const isCorrect = answer == info.correct;
+        socket.emit('guessed-answer', { gameid, playerNo, isCorrect });
     }
 
-    const isWaiting = false;
+    useEffect(() => {
+        const gameid = localStorage.getItem('game_id')
+
+        socket.on('player-answered-' + gameid, (currentGame) => {
+            setinfo({
+                question: currentGame.question,
+                answers: currentGame.answers,
+                correct: currentGame.correctanswer
+            })
+            setWaiting(false);
+        });
+
+        socket.on('next-round-' + gameid, () => {
+            window.location = '/ingame/result';
+        });
+
+        socket.on('end-game-' + gameid, () => {
+            window.location = '/ingame/finish';
+        });
+    }, []);
+
     if (isWaiting) {
         // text for waiting for opponent to answer
         return (
@@ -39,7 +57,6 @@ export default function Start() {
                 <button className={styles.button} onClick={() => selectAnswer(1)}>{info.answers[0]}</button>
                 <button className={styles.button} onClick={() => selectAnswer(2)}>{info.answers[1]}</button>
                 <button className={styles.button} onClick={() => selectAnswer(3)}>{info.answers[2]}</button>
-                <p>{displayText}</p>
             </div>
         )
     }

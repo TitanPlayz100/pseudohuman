@@ -8,8 +8,10 @@ Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=defau
 
 # todo:
 - [ ] find a free or cheap ai api to use
+    - https://www.botlibre.com
+    - **https://chatling.ai**
 - [ ] find a free server host
-    - https://render.com
+    - **https://render.com**
     - https://www.koyeb.com
     - https://www.fl0.com
     - https://adaptable.io
@@ -25,17 +27,33 @@ Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=defau
 - [x] create login system
 - [x] create matchmaking system
     - [x] start a game when 2 people are available
-- [ ] create text prompts
-- [ ] get ai answers to question
-- [ ] get first players own answer to question, and then display ai and players answers to player 2
-- [ ] get player 2s answer and see if they were right or wrong
-- [ ] add the scores to a total
-- [ ] repeat this process multiple times
-- [ ] end the game after a player reaches 3 points, awarding that player a win
+- [x] create text prompts
+- [x] get ai answers to question
+- [x] get first players own answer to question, and then display ai and players answers to player 2
+- [x] get player 2s answer and see if they were right or wrong
+- [x] add the scores to a total
+- [x] repeat this process multiple times
+- [x] end the game after a player reaches 3 points, awarding that player a win
 - [ ] maybe add ability to create custom rooms for 2 people to join and play many times
 - [ ] allow for multiple games to run at once through different servers or smthing
+- [ ] add anon accounts
 
 # Changelog
+## 3/1
+- finish gameplay loop
+    - added infinite rounds until a player reaches 3 points
+    - added a result screen every point
+    - added game ending screen
+    - when player reaches 3 points it ends the game
+    - navbar now displays the points and players properly
+
+## 2/1
+- seperated game functions into its own file for organisation
+- made the passwords hashed and salted using a simple library, and limited usernames to 10 chars
+
+## 1/1
+- got the main gameplay to work except the resetting of rounds and points.
+
 ## 31/12
 - added start game page and countdown to starting the game
 

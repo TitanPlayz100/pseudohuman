@@ -29,8 +29,9 @@ export function UsernameInput() {
     function pressedEnter(event) {
         if (event.key == "Enter") {
             if (inputUser == '') {
-                localStorage.setItem("username", 'anon');
-                window.location = '/home/mainmenu'
+                // localStorage.setItem("username", 'anon');
+                // window.location = '/home/mainmenu'
+                window.location = '/home/login'
             } else {
                 socket.emit('check-user', inputUser);
             }
@@ -41,9 +42,11 @@ export function UsernameInput() {
         <input
             className={styles.loginInput}
             type='text'
-            placeholder='Username'
+            placeholder='Username (max 10 characters)'
             onChange={setuser}
             onKeyDown={pressedEnter}
+            maxLength={10}
+            autoFocus
         />
     )
 }

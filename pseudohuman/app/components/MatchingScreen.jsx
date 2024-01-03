@@ -9,6 +9,7 @@ const socket = io('http://localhost:3001');
 
 export function MatchingScreen() {
     const [startgame, setStartgame] = useState(false);
+    const [leaving, setLeaving] = useState(false);
 
     function hasFoundPlayer(foundPlayer) {
         if (foundPlayer) {
@@ -20,17 +21,25 @@ export function MatchingScreen() {
 
     useEffect(() => {
         const username = localStorage.getItem('username');
+        socket.emit('enter-matchmaking', username);
+    }, [])
+
+    useEffect(() => {
+        const username = localStorage.getItem('username');
         socket.on('start-game', (game_id) => {
             localStorage.setItem("game_id", game_id);
             setStartgame(true);
-            setTimeout(() => {
-                window.location = '/ingame/startgame'
-            }, 1000);
+            setLeaving(true);
+            window.location = '/ingame/startgame'
         });
 
         socket.on('setup-' + username, (object) => {
             localStorage.setItem('playerNo', object.playerNo);
         });
+
+        window.onbeforeunload = () => {
+            if (leaving == true) { socket.emit('user-disconnected', username); }
+        }
 
     }, []);
 

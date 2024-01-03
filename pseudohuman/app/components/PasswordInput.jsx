@@ -20,6 +20,7 @@ export function PasswordInput() {
             if (result) {
                 localStorage.setItem('loggedIn', true);
                 localStorage.setItem('username', username);
+                localStorage.removeItem('tempuser');
                 window.location = '/home/mainmenu'
             } else {
                 setWrong(true);
@@ -37,13 +38,14 @@ export function PasswordInput() {
 
     return (
         <>
-            {isWrong ? <p className={styles.incorrect}>THE PASSWORD IS WRONG</p> : <></>}
+            {isWrong ? <p className={styles.incorrect}>Incorrect, try again</p> : <></>}
             <input
                 className={styles.loginInput}
                 type='password'
                 placeholder='Password'
                 onChange={setuser}
                 onKeyDown={pressedEnter}
+                autoFocus
             />
         </>
     )

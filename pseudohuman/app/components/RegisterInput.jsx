@@ -18,6 +18,7 @@ export function RegisterUsername() {
         socket.on('registered-user-' + username, () => {
             localStorage.setItem('loggedIn', true);
             localStorage.setItem('username', username);
+            localStorage.removeItem('tempuser');
             window.location = '/home/mainmenu'
         });
     }, []);
@@ -26,11 +27,8 @@ export function RegisterUsername() {
     function pressedEnter(event) {
         if (event.key == "Enter") {
             const username = localStorage.getItem('tempuser');
-            socket.emit('register-user',
-                {
-                    username: username,
-                    password: inputPass
-                });
+            let password = inputPass;
+            socket.emit('register-user', { username, password });
         }
     }
 
@@ -41,6 +39,7 @@ export function RegisterUsername() {
             placeholder='New Password'
             onChange={setuser}
             onKeyDown={pressedEnter}
+            autoFocus
         />
     )
 }
