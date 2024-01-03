@@ -1,10 +1,7 @@
 'use client'
 
 import styles from '@/app/styles/main.module.css';
-import { useEffect, useState } from 'react';
-import io from "socket.io-client"
-
-const socket = io('http://localhost:3001');
+import { useState } from 'react';
 
 export function RegisterUsername() {
     const [inputPass, setInput] = useState('');
@@ -13,23 +10,27 @@ export function RegisterUsername() {
         setInput(event.target.value);
     };
 
-    useEffect(() => {
-        const username = localStorage.getItem('tempuser');
-        socket.on('registered-user-' + username, () => {
-            localStorage.setItem('loggedIn', true);
-            localStorage.setItem('username', username);
-            localStorage.removeItem('tempuser');
-            window.location = '/home/mainmenu'
-        });
-    }, []);
-
-
     function pressedEnter(event) {
         if (event.key == "Enter") {
             const username = localStorage.getItem('tempuser');
             let password = inputPass;
-            socket.emit('register-user', { username, password });
+            register_user(username, password);
         }
+    }
+
+    async function register_user(username, password) {
+        await fetch("http://localhost:3001/api/register-user",
+            {
+                method: 'POST',
+                body: JSON.stringify({ username, password }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        localStorage.setItem('loggedIn', true);
+        localStorage.setItem('username', username);
+        localStorage.removeItem('tempuser');
+        window.location = '/home/mainmenu'
     }
 
     return (

@@ -4,17 +4,21 @@ Multiplayer online game where there is a prompt given, and there are multiple an
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
-Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) to deploy frontend.
-
 # todo:
 - [ ] find a free or cheap ai api to use
     - https://www.botlibre.com
     - **https://chatling.ai**
+
 - [ ] find a free server host
     - **https://render.com**
     - https://www.koyeb.com
     - https://www.fl0.com
     - https://adaptable.io
+
+- [ ] frontend hosting
+    - vercel
+
+- [ ] handle when user disconnects
 
 ## Frontend
 - [x] create ui for login
@@ -34,8 +38,8 @@ Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=defau
 - [x] add the scores to a total
 - [x] repeat this process multiple times
 - [x] end the game after a player reaches 3 points, awarding that player a win
-- [ ] maybe add ability to create custom rooms for 2 people to join and play many times
-- [ ] allow for multiple games to run at once through different servers or smthing
+- [ ] add ability to create custom rooms for 2 people to join and play many times
+- [ ] allow for multiple games to run at once
 - [ ] add anon accounts
 
 # Changelog
@@ -46,6 +50,7 @@ Note for self: use the [Vercel Platform](https://vercel.com/new?utm_medium=defau
     - added game ending screen
     - when player reaches 3 points it ends the game
     - navbar now displays the points and players properly
+- changed the login functions to be http requests rather than websockets
 
 ## 2/1
 - seperated game functions into its own file for organisation

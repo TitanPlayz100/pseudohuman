@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const { check_username, check_password, add_user } = require('./loginFunction');
 const { start_game, start_match, generate_question, generate_answer, next_round, player1WinsRound, player2WinsRound } = require('./gameFunction');
+const cors = require('cors')
 
 // SETUP SERVER
 const app = express();
@@ -12,31 +13,31 @@ const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
 let matchingUsers = [];
 let unique_game_id = 0;
 let runningGames = {};
+
 let previousMatch = '';
 let previousMatch2 = '';
 let recievedResults = [];
 
+// HTTP REQUESTS
+app.use(express.json(), cors());
+app.post('/api/check-user', (req, res) => {
+  const { username } = req.body;
+  const valid = check_username(username);
+  res.send({ valid });
+});
+app.post('/api/check-password', async (req, res) => {
+  const { username, password } = req.body;
+  const result = await check_password(username, password);
+  res.send({ result })
+});
+app.post('/api/register-user', (req, res) => {
+  const { username, password } = req.body;
+  add_user(username, password);
+  res.send({ valid: true })
+});
+
 // WEBSOCKET CONNECTIONS
 io.on('connection', (socket) => {
-  socket.on('check-user', (username) => {
-    let result = check_username(username);
-    io.emit('checked-username-' + username, { valid: result, user: username });
-  });
-
-  socket.on('check-password', async (userobj) => {
-    const username = userobj.username;
-    const password = userobj.password;
-    const result = await check_password(username, password);
-    io.emit('checked-password-' + username, result);
-  });
-
-  socket.on('register-user', (userobj) => {
-    let username = userobj.username;
-    let password = userobj.password;
-    add_user(username, password);
-    io.emit('registered-user-' + username, true);
-  });
-
   socket.on('enter-matchmaking', (username) => {
     if (username == previousMatch) { return; } // Prevent duplicate calls from 1 user
     previousMatch = username;

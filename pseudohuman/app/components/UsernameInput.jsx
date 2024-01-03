@@ -1,10 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import io from "socket.io-client"
+import { useState } from 'react';
 import styles from '@/app/styles/main.module.css';
-
-const socket = io('http://localhost:3001');
 
 export function UsernameInput() {
     const [inputUser, setInput] = useState('');
@@ -13,19 +10,6 @@ export function UsernameInput() {
         setInput(event.target.value);
     };
 
-    useEffect(() => {
-        socket.on('checked-username-' + inputUser, (resultobj) => {
-            const result = resultobj.valid;
-            const username = resultobj.user;
-            localStorage.setItem("tempuser", username);
-            if (result == true) {
-                window.location = '/home/login/inputPassword';
-            } else {
-                window.location = '/home/login/registerUsername';
-            }
-        });
-    }, [inputUser]);
-
     function pressedEnter(event) {
         if (event.key == "Enter") {
             if (inputUser == '') {
@@ -33,10 +17,24 @@ export function UsernameInput() {
                 // window.location = '/home/mainmenu'
                 window.location = '/home/login'
             } else {
-                socket.emit('check-user', inputUser);
+                check_username(inputUser);
             }
         }
     }
+
+    async function check_username(username) {
+        const res = await fetch("http://localhost:3001/api/check-user",
+            {
+                method: 'POST',
+                body: JSON.stringify({ username }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        const { valid } = await res.json();
+        localStorage.setItem("tempuser", username);
+        window.location = valid ? '/home/login/inputPassword' : '/home/login/registerUsername'
+    };
 
     return (
         <input
