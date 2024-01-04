@@ -1,9 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const { check_username, check_password, add_user } = require('./loginFunction');
 const { start_game, start_match, generate_question, generate_answer, next_round, player1WinsRound, player2WinsRound } = require('./gameFunction');
-const cors = require('cors')
 
 // SETUP SERVER
 const app = express();
@@ -14,41 +12,19 @@ let matchingUsers = [];
 let unique_game_id = 0;
 let runningGames = {};
 
-let previousMatch = '';
-let previousMatch2 = '';
 let recievedResults = [];
-
-// HTTP REQUESTS
-app.use(express.json(), cors());
-app.post('/api/check-user', (req, res) => {
-  const { username } = req.body;
-  const valid = check_username(username);
-  res.send({ valid });
-});
-app.post('/api/check-password', async (req, res) => {
-  const { username, password } = req.body;
-  const result = await check_password(username, password);
-  res.send({ result })
-});
-app.post('/api/register-user', (req, res) => {
-  const { username, password } = req.body;
-  add_user(username, password);
-  res.send({ valid: true })
-});
 
 // WEBSOCKET CONNECTIONS
 io.on('connection', (socket) => {
   socket.on('enter-matchmaking', (username) => {
-    if (username == previousMatch) { return; } // Prevent duplicate calls from 1 user
-    previousMatch = username;
+    if (matchingUsers.includes(username)) { return; } // prevent duplicate matchmaking
 
     matchingUsers.push(username);
     const count = matchingUsers.length;
     if (count >= 2) {
       unique_game_id += 1;
       runningGames[unique_game_id] = start_game(matchingUsers);
-      matchingUsers = [];
-      previousMatch = '';
+      setTimeout(() => matchingUsers = [], 1000);
       start_match(io, unique_game_id, runningGames);
     }
   });
@@ -111,16 +87,15 @@ io.on('connection', (socket) => {
   });
 
   socket.on('get-results', (gameid, username) => {
-    if (username == previousMatch2) { return; }
-    previousMatch2 = username;
+    if (recievedResults.includes(username)) { return; } // prevent duplicates
+    if (runningGames[gameid] == undefined) { console.log('doesnt exist'); return; } // prevent null from happening
     recievedResults.push(username);
     const current_game = runningGames[gameid];
     io.emit('got-results-' + gameid, current_game);
 
     if (recievedResults.length >= 2) {
       delete runningGames[gameid];
-      recievedResults = [];
-      previousMatch2 = '';
+      setTimeout(() => recievedResults = [], 1000);
     }
   });
 });

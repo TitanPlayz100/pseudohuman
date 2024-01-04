@@ -4,29 +4,17 @@ import styles from '@/app/styles/main.module.css';
 import { useState } from 'react';
 
 export function PasswordInput() {
-    const [inputPass, setInput] = useState('');
+    const [password, setInput] = useState('');
     const [isWrong, setWrong] = useState(false);
 
     const setuser = (event) => {
         setInput(event.target.value);
     };
 
-    function pressedEnter(event) {
-        if (event.key == "Enter") {
-            const username = localStorage.getItem('tempuser');
-            check_password(username, inputPass);
-        }
-    }
-
-    async function check_password(username, password) {
-        const res = await fetch("http://localhost:3001/api/check-password",
-            {
-                method: 'POST',
-                body: JSON.stringify({ username, password }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+    async function pressedEnter(event) {
+        if (event.key != "Enter") { return; }
+        const username = localStorage.getItem('tempuser');
+        const res = await fetch("/api/check_password", { method: 'POST', body: JSON.stringify({ username, password }) });
         const { result } = await res.json();
         if (result) {
             localStorage.setItem('loggedIn', true);

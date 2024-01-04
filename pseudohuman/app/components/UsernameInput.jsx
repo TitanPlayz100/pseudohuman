@@ -4,37 +4,20 @@ import { useState } from 'react';
 import styles from '@/app/styles/main.module.css';
 
 export function UsernameInput() {
-    const [inputUser, setInput] = useState('');
+    const [username, setInput] = useState('');
 
     const setuser = (event) => {
         setInput(event.target.value);
     };
 
-    function pressedEnter(event) {
-        if (event.key == "Enter") {
-            if (inputUser == '') {
-                // localStorage.setItem("username", 'anon');
-                // window.location = '/home/mainmenu'
-                window.location = '/home/login'
-            } else {
-                check_username(inputUser);
-            }
-        }
-    }
-
-    async function check_username(username) {
-        const res = await fetch("http://localhost:3001/api/check-user",
-            {
-                method: 'POST',
-                body: JSON.stringify({ username }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+    async function pressedEnter(event) {
+        if (event.key != "Enter") { return; }
+        if (username == '') { return; }
+        const res = await fetch("/api/check_username", { method: 'POST', body: JSON.stringify({ username }) });
         const { valid } = await res.json();
         localStorage.setItem("tempuser", username);
         window.location = valid ? '/home/login/inputPassword' : '/home/login/registerUsername'
-    };
+    }
 
     return (
         <input

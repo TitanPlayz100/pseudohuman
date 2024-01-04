@@ -19,6 +19,7 @@ Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
     - vercel
 
 - [ ] handle when user disconnects
+- [ ] stop copy paste ai answer as own answer
 
 ## Frontend
 - [x] create ui for login
@@ -43,6 +44,9 @@ Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 - [ ] add anon accounts
 
 # Changelog
+## 4/1
+- change login again to be run on nextjs servers instead of websockets
+
 ## 3/1
 - finish gameplay loop
     - added infinite rounds until a player reaches 3 points
