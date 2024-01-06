@@ -1,6 +1,6 @@
 import styles from '@/app/styles/navbar.module.css'
 import Image from "next/image"
-import { LogoutButton } from '../components/LoggedUserButton';
+import { LogoutButton } from './LoggedUserButton';
 
 export default function NavBar() {
   return (
@@ -10,7 +10,7 @@ export default function NavBar() {
         <li className={styles.li}><span className={styles.litext}>PseudoHuman Project</span></li>
       </ul>
       <ul className={styles.ul}>
-        <li className={styles.li}><LogoutButton/></li>
+        <li className={styles.li}><LogoutButton /></li>
       </ul>
     </div>
   )

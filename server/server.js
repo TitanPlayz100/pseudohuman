@@ -31,8 +31,10 @@ io.on('connection', (socket) => {
 
   socket.on('get-question', (gameid) => {
     let current_game = runningGames[gameid];
-    if (current_game.question === '') {
-      current_game.question, current_game.answers = generate_question();
+    if (current_game.question == '') {
+      const { question, answers } = generate_question();
+      current_game.question = question;
+      current_game.answers = answers;
       runningGames[gameid] = current_game;
     }
     io.emit('return-question-' + gameid, current_game)
@@ -88,7 +90,7 @@ io.on('connection', (socket) => {
 
   socket.on('get-results', (gameid, username) => {
     if (recievedResults.includes(username)) { return; } // prevent duplicates
-    if (runningGames[gameid] == undefined) { console.log('doesnt exist'); return; } // prevent null from happening
+    if (runningGames[gameid] == undefined) { return; } // prevent null from happening
     recievedResults.push(username);
     const current_game = runningGames[gameid];
     io.emit('got-results-' + gameid, current_game);

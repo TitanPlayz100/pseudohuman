@@ -3,9 +3,10 @@
 import styles from '@/app/styles/main.module.css';
 import { useState } from 'react';
 
-export function PasswordInput() {
+export default function PassInput() {
     const [password, setInput] = useState('');
     const [isWrong, setWrong] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const setuser = (event) => {
         setInput(event.target.value);
@@ -13,6 +14,7 @@ export function PasswordInput() {
 
     async function pressedEnter(event) {
         if (event.key != "Enter") { return; }
+        setLoading(true);
         const username = localStorage.getItem('tempuser');
         const res = await fetch("/api/check_password", { method: 'POST', body: JSON.stringify({ username, password }) });
         const { result } = await res.json();
@@ -23,12 +25,15 @@ export function PasswordInput() {
             window.location = '/home/mainmenu'
         } else {
             setWrong(true);
+            setLoading(false);
         }
     }
 
     return (
-        <>
-            {isWrong ? <p className={styles.incorrect}>Incorrect, try again</p> : <></>}
+        <div className={styles.loginDiv}>
+            <h1 className={styles.loginTextHeader}>Password</h1>
+            <p className={styles.loginTextP}>Input your Password. Press ENTER to continue</p>
+            <p className={styles.incorrect}>{isWrong ? "Incorrect, try again" : ""}</p>
             <input
                 className={styles.loginInput}
                 type='password'
@@ -37,6 +42,7 @@ export function PasswordInput() {
                 onKeyDown={pressedEnter}
                 autoFocus
             />
-        </>
+            <p className={styles.loginTextP}>{loading ? "Loading" : ""}</p>
+        </div>
     )
 }

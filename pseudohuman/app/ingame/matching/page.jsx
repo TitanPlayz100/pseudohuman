@@ -4,10 +4,13 @@ import styles from '@/app/styles/main.module.css'
 import dots from '@/app/styles/loadingdots.module.css'
 import { useEffect, useState } from 'react'
 import io from "socket.io-client"
+import { useRouter } from 'next/navigation'
 
 const socket = io('http://localhost:3001');
+// const socket = io('https://pseudobeing-server.onrender.com'); external server to be used in production
 
-export function MatchingScreen() {
+export default function MatchingScreen() {
+    const router = useRouter();
     const [startgame, setStartgame] = useState(false);
     const [leaving, setLeaving] = useState(false);
 
@@ -30,7 +33,7 @@ export function MatchingScreen() {
             localStorage.setItem("game_id", game_id);
             setStartgame(true);
             setLeaving(true);
-            window.location = '/ingame/startgame'
+            router.push('/ingame/startgame');
         });
 
         socket.on('setup-' + username, (object) => {

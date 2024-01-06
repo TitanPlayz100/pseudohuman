@@ -24,7 +24,7 @@ function start_match(server, game_id, running_games) {
     server.emit('setup-' + running_games[game_id].player1.username, { playerNo: 1 })
     server.emit('setup-' + running_games[game_id].player2.username, { playerNo: 2 })
     server.emit('start-game', game_id);
-    countdown(10, server, game_id, () => server.emit('ready-' + game_id, running_games[game_id].matchNo));
+    countdown(10, server, game_id, () => server.emit('ready-' + game_id, running_games[game_id].matchNo)); // change to 5 seconds
 }
 
 function next_round(server, game_id, matchNo) {
@@ -40,12 +40,11 @@ function countdown(seconds, server, game_id, after) {
 }
 
 function generate_question() {
-    let obj = JSON.parse(fs.readFileSync('./text prompts.json', 'utf8'));
-    const length = obj.length;
-    const random_num = getRndInteger(0, length - 1);
-    let question = obj[random_num].question;
-    let aianswers = obj[random_num].answers;
-    return question, aianswers;
+    const obj = JSON.parse(fs.readFileSync('./text prompts.json', 'utf8'));
+    const random_num = getRndInteger(0, obj.length - 1);
+    const question = obj[random_num].question;
+    const answers = obj[random_num].answers;
+    return { question, answers };
 }
 
 function getRndInteger(min, max) {

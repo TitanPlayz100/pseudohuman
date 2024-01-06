@@ -48,7 +48,7 @@ export default function Start() {
     if (!waiting) {
         return (
             <div className={styles.parentdiv}>
-                <h1>Question: {info.question}</h1>
+                <h1>{info.question}</h1>
                 <p>Write an answer, and make it appear like ChatGPT wrote it</p>
 
                 {/* ai generated responses */}

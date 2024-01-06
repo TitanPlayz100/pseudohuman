@@ -1,5 +1,5 @@
 import styles from '@/app/styles/home.module.css'
-import { MainMenuButtons } from '@/app/components/MainMenuButtons';
+import { MainMenuButtons } from '@/app/home/mainmenu/MainMenuButtons';
 
 export default function homepage() {
     return (
@@ -10,7 +10,7 @@ export default function homepage() {
                 <p>You can play with random people or against a friend. </p>
                 <h2>Have Fun!</h2>
             </div>
-            <MainMenuButtons/>
+            <MainMenuButtons />
         </div>
     )
 }

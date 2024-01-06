@@ -52,7 +52,7 @@ export default function Start() {
         // select options for the answer
         return (
             <div className={styles.parentdiv}>
-                <h1>Question: {info.question}</h1>
+                <h1>{info.question}</h1>
                 <p>Pick the option that seems most human</p>
                 <button className={styles.button} onClick={() => selectAnswer(1)}>{info.answers[0]}</button>
                 <button className={styles.button} onClick={() => selectAnswer(2)}>{info.answers[1]}</button>

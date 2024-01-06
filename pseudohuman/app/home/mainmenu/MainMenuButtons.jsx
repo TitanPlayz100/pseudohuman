@@ -4,7 +4,7 @@ import styles from '@/app/styles/home.module.css'
 
 export function MainMenuButtons() {
     function enterMatching() {
-        window.location = '/home/matching';
+        window.location = '/ingame/matching';
     }
 
     return (
