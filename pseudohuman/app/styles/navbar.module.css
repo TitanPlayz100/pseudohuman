@@ -8,13 +8,15 @@
     z-index: 99;
     height: auto;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
+    background-color: black;
 }
+
 .Button {
     margin: 1vw;
     outline: none;
     cursor: pointer;
-    font-size:2em;
+    font-size: 2em;
     border-radius: 5px;
     color: #ffffff;
     background: transparent;
@@ -25,29 +27,36 @@
     transition: all 0.4s ease;
     letter-spacing: 2px;
 }
+
 .Button:hover {
     border: 2px solid white;
 }
+
 .Button:focus {
     background-color: #4d4d4d;
 }
+
 .ul {
-    list-style:none;
+    list-style: none;
     margin-right: 5vw;
 }
+
 .image {
     transform: translateY(10px);
 }
+
 .li {
     display: inline;
     margin: 10px;
     vertical-align: middle;
 }
+
 .litext {
     font-size: 2.5vw;
     text-decoration: none;
     color: white;
 }
+
 .loginbutton {
     padding: 15px;
 }

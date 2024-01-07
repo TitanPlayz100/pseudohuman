@@ -1,7 +1,9 @@
+import styles from '@/app/styles/main.module.css'
+
 export default function RootLayout({ children }) {
     return (
-        <html suppressHydrationWarning>
-            <body>{children}</body>
+        <html lang='en'>
+            <body className={styles.homepage}>{children}</body>
         </html>
     )
 }

@@ -24,13 +24,14 @@ export default function Start() {
         const username = localStorage.getItem('username');
         socket.emit('get-results', gameid, username);
 
-        socket.on('got-results-' + gameid, (info) => {
+        socket.on('got-results-' + gameid, async (info) => {
             const winner = (info.winner == 'player1') ? info.player1.username : info.player2.username;
             const points = [info.player1.points, info.player2.points]
             const wonBy = calcPoints(points);
             setResults({ winner, points, wonBy })
             localStorage.removeItem('game_id');
             localStorage.removeItem('playerNo');
+            await fetch("/api/change_points", { method: 'POST', body: JSON.stringify({ username: winner, type: 'add', amount: 1 }) });
         });
     }, []);
 

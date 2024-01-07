@@ -12,7 +12,6 @@ const socket = io('http://localhost:3001');
 export default function MatchingScreen() {
     const router = useRouter();
     const [startgame, setStartgame] = useState(false);
-    const [leaving, setLeaving] = useState(false);
 
     function hasFoundPlayer(foundPlayer) {
         if (foundPlayer) {
@@ -32,7 +31,6 @@ export default function MatchingScreen() {
         socket.on('start-game', (game_id) => {
             localStorage.setItem("game_id", game_id);
             setStartgame(true);
-            setLeaving(true);
             router.push('/ingame/startgame');
         });
 
@@ -41,7 +39,9 @@ export default function MatchingScreen() {
         });
 
         window.onbeforeunload = () => {
-            if (leaving == true) { socket.emit('user-disconnected', username); }
+            socket.emit('user-disconnected', username);
+            localStorage.removeItem('game_id');
+            localStorage.removeItem('playerNo');
         }
 
     }, []);

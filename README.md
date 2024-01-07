@@ -39,13 +39,15 @@ Frontend NEXTjs hosted on [vercel](https://pseudohuman-project.vercel.app/home/l
 - [x] repeat this process multiple times
 - [x] end the game after a player reaches 3 points, awarding that player a win
 - [ ] add ability to create custom rooms for 2 people to join and play many times
-- [ ] allow for multiple games to run at once
+- [x] allow for multiple games to run at once
 - [ ] add anon accounts
 
 # Changelog
 ## 6/1
 - fixed being able to navigate to pages you are not meant to go to
 - fixed question not being displayed properly
+- added lifetime score tracker in database
+- ended games if someone disconnects
 
 ## 4/1
 - changed login again to be run on nextjs servers instead of websockets

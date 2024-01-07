@@ -3,6 +3,7 @@
 import { io } from "socket.io-client"
 import styles from '@/app/styles/startgame.module.css'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const socket = io('http://localhost:3001');
 
@@ -10,6 +11,7 @@ export default function Start() {
     const [player, setPlayer] = useState(1);
     const [countdown, setCount] = useState(10);
     const starttext = ["You will be guessing the player's response first", "You will pretend to be an AI first"]
+    const router = useRouter();
 
     useEffect(() => {
         setPlayer(localStorage.getItem('playerNo'))
@@ -24,9 +26,9 @@ export default function Start() {
         const gameid = localStorage.getItem('game_id')
         socket.on('ready-' + gameid, (roundNo) => {
             if (player == 1) {
-                window.location = '/ingame/gameplay/guesser';
+                router.push('/ingame/gameplay/guesser');
             } else if (player == 2) {
-                window.location = '/ingame/gameplay/pretender';
+                router.push('/ingame/gameplay/pretender');
             }
         })
     }, [player])

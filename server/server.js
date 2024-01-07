@@ -37,18 +37,13 @@ io.on('connection', (socket) => {
       current_game.answers = answers;
       runningGames[gameid] = current_game;
     }
-    io.emit('return-question-' + gameid, current_game)
+    io.emit('return-question-' + gameid, current_game);
   });
 
   socket.on('send-player-answer', (infoObj) => {
     let current_game = runningGames[infoObj.gameid];
     runningGames[infoObj.gameid] = generate_answer(current_game, infoObj.input);
     io.emit('player-answered-' + infoObj.gameid, current_game);
-  });
-
-  socket.on('user-disconnected', (username) => {
-    console.log("User " + username + " has left matchmaking");
-    matchingUsers = matchingUsers.filter((item) => { item !== username });
   });
 
   socket.on('guessed-answer', ({ gameid, playerNo, isCorrect }) => {
@@ -69,6 +64,10 @@ io.on('connection', (socket) => {
     }
 
     next_round(io, gameid, runningGames[gameid].matchNo);
+
+    const player1 = runningGames[gameid].player1;
+    const player2 = runningGames[gameid].player2;
+    io.emit('update-navbar-' + gameid, { player1, player2 })
 
   });
 
@@ -98,6 +97,27 @@ io.on('connection', (socket) => {
     if (recievedResults.length >= 2) {
       delete runningGames[gameid];
       setTimeout(() => recievedResults = [], 1000);
+    }
+  });
+
+  socket.on('user-disconnected', (username) => {
+    console.log("User " + username + " has left matchmaking");
+    matchingUsers = matchingUsers.filter((item) => { item !== username });
+
+    let gameid = -1;
+    const keys = Object.keys(runningGames)
+    for (let i = 0; i < keys.length; i++) {
+      const currentkey = keys[i];
+      if (runningGames[currentkey].player1.username == username) {
+        gameid = currentkey;
+      } else if (runningGames[currentkey].player2.username == username) {
+        gameid = currentkey;
+      }
+    }
+
+    if (gameid != -1) {
+      delete runningGames[gameid];
+      io.emit('end-game-dc-' + gameid, true);
     }
   });
 });

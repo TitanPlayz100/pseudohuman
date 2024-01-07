@@ -1,6 +1,7 @@
 'use client'
 
 import styles from '@/app/styles/gameplay.module.css'
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import io from "socket.io-client"
 
@@ -9,6 +10,7 @@ const socket = io('http://localhost:3001');
 export default function Start() {
     const [winner, setWinner] = useState("Player_1");
     const [countdown, setCount] = useState(10);
+    const router = useRouter();
 
     useEffect(() => {
         const gameid = localStorage.getItem('game_id')
@@ -27,15 +29,15 @@ export default function Start() {
         socket.on('ready-' + gameid, (matchNo) => {
             if (matchNo % 2 == 1) {
                 if (playerNo == 1) {
-                    window.location = '/ingame/gameplay/guesser';
+                    router.push('/ingame/gameplay/guesser');
                 } else if (playerNo == 2) {
-                    window.location = '/ingame/gameplay/pretender';
+                    router.push('/ingame/gameplay/pretender');
                 }
             } else {
                 if (playerNo == 1) {
-                    window.location = '/ingame/gameplay/pretender';
+                    router.push('/ingame/gameplay/pretender');
                 } else if (playerNo == 2) {
-                    window.location = '/ingame/gameplay/guesser';
+                    router.push('/ingame/gameplay/guesser');
                 }
             }
 

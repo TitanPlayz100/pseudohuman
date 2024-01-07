@@ -1,6 +1,7 @@
 'use client'
 
 import styles from '@/app/styles/gameplay.module.css'
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react'
 import { io } from "socket.io-client"
 
@@ -9,6 +10,7 @@ const socket = io('http://localhost:3001');
 export default function Start() {
     const [isWaiting, setWaiting] = useState(true);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading", "loading"], correct: -1 });
+    const router = useRouter();
 
     function selectAnswer(answer) {
         const gameid = localStorage.getItem('game_id');
@@ -30,11 +32,11 @@ export default function Start() {
         });
 
         socket.on('next-round-' + gameid, () => {
-            window.location = '/ingame/result';
+            router.push('/ingame/result');
         });
 
         socket.on('end-game-' + gameid, () => {
-            window.location = '/ingame/finish';
+            router.push('/ingame/finish');
         });
     }, []);
 

@@ -6,6 +6,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { io } from "socket.io-client"
+import { useRouter } from 'next/navigation';
 
 const socket = io('http://localhost:3001');
 
@@ -13,6 +14,7 @@ export default function Start() {
     const [inputText, setText] = useState("");
     const [waiting, setWaiting] = useState(false);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading"] });
+    const router = useRouter();
 
     const handleChange = (event) => {
         setText(event.target.value);
@@ -37,11 +39,11 @@ export default function Start() {
         });
 
         socket.on('next-round-' + gameid, () => {
-            window.location = '/ingame/result';
+            router.push('/ingame/result');
         });
 
         socket.on('end-game-' + gameid, () => {
-            window.location = '/ingame/finish';
+            router.push('/ingame/finish');
         });
     }, []);
 
