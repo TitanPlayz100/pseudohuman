@@ -9,7 +9,7 @@ const socket = io('http://localhost:3001');
 
 export default function Start() {
     const [winner, setWinner] = useState("Player_1");
-    const [countdown, setCount] = useState(10);
+    const [countdown, setCount] = useState(5);
     const router = useRouter();
 
     useEffect(() => {

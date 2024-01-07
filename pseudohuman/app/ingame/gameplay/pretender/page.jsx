@@ -2,9 +2,6 @@
 
 import styles from '@/app/styles/gameplay.module.css'
 import { useEffect, useState } from 'react'
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import { io } from "socket.io-client"
 import { useRouter } from 'next/navigation';
 
@@ -54,25 +51,11 @@ export default function Start() {
                 <p>Write an answer, and make it appear like ChatGPT wrote it</p>
 
                 {/* ai generated responses */}
-                <Accordion className={styles.accordian}>
-                    <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-                        <span>&gt; AI Response 1 </span>
-                        <span className={styles.accordianheading}> (click to expand)</span>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        {info.answers[0]}
-                    </AccordionDetails>
-                </Accordion>
-                <p></p>
-                <Accordion className={styles.accordian}>
-                    <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-                        <span>&gt; AI Response 2 </span>
-                        <span className={styles.accordianheading}> (click to expand)</span>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        {info.answers[1]}
-                    </AccordionDetails>
-                </Accordion>
+                <h3>AI Answer 1</h3>
+                <p>{info.answers[0]}</p>
+
+                <h3>AI Answer 2</h3>
+                <p>{info.answers[1]}</p>
 
                 {/* user input */}
                 <input

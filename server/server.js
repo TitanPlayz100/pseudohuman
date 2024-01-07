@@ -26,6 +26,10 @@ io.on('connection', (socket) => {
       runningGames[unique_game_id] = start_game(matchingUsers);
       setTimeout(() => matchingUsers = [], 1000);
       start_match(io, unique_game_id, runningGames);
+      const player1 = runningGames[unique_game_id].player1;
+      const player2 = runningGames[unique_game_id].player2;
+      io.emit('update-navbar-' + player1.username, { player1, player2 });
+      io.emit('update-navbar-' + player2.username, { player1, player2 });
     }
   });
 
@@ -57,6 +61,11 @@ io.on('connection', (socket) => {
     if (current_game.player2.points >= 3) { current_game.winner = 'player2'; }
     runningGames[gameid] = current_game;
 
+    const player1 = runningGames[gameid].player1;
+    const player2 = runningGames[gameid].player2;
+    io.emit('update-navbar-' + player1.username, { player1, player2 });
+    io.emit('update-navbar-' + player2.username, { player1, player2 });
+
     // Check if game ends
     if (current_game.winner != '') {
       io.emit('end-game-' + gameid);
@@ -64,11 +73,6 @@ io.on('connection', (socket) => {
     }
 
     next_round(io, gameid, runningGames[gameid].matchNo);
-
-    const player1 = runningGames[gameid].player1;
-    const player2 = runningGames[gameid].player2;
-    io.emit('update-navbar-' + gameid, { player1, player2 })
-
   });
 
   socket.on('get-current-winner', (gameid) => {
@@ -80,44 +84,33 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('first-navbar-update', (gameid) => {
-    if (runningGames[gameid] == undefined) { return; }
-    const player1 = runningGames[gameid].player1;
-    const player2 = runningGames[gameid].player2;
-    io.emit('update-navbar-' + gameid, { player1, player2 })
-  });
-
   socket.on('get-results', (gameid, username) => {
     if (recievedResults.includes(username)) { return; } // prevent duplicates
     if (runningGames[gameid] == undefined) { return; } // prevent null from happening
     recievedResults.push(username);
-    const current_game = runningGames[gameid];
-    io.emit('got-results-' + gameid, current_game);
 
     if (recievedResults.length >= 2) {
+      const current_game = runningGames[gameid];
+      io.emit('got-results-' + gameid, current_game);
       delete runningGames[gameid];
       setTimeout(() => recievedResults = [], 1000);
     }
   });
 
   socket.on('user-disconnected', (username) => {
-    console.log("User " + username + " has left matchmaking");
     matchingUsers = matchingUsers.filter((item) => { item !== username });
 
     let gameid = -1;
     const keys = Object.keys(runningGames)
     for (let i = 0; i < keys.length; i++) {
       const currentkey = keys[i];
-      if (runningGames[currentkey].player1.username == username) {
-        gameid = currentkey;
-      } else if (runningGames[currentkey].player2.username == username) {
-        gameid = currentkey;
+      const player1 = runningGames[currentkey].player1;
+      const player2 = runningGames[currentkey].player2;
+      const otherPlayer = (username == player1.username) ? player2.username : player1.username;
+      if (player1.username == username || player2.username == username) {
+        delete runningGames[gameid];
+        io.emit('end-game-dc-' + otherPlayer, username);
       }
-    }
-
-    if (gameid != -1) {
-      delete runningGames[gameid];
-      io.emit('end-game-dc-' + gameid, true);
     }
   });
 });

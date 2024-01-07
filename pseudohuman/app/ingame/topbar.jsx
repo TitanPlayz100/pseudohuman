@@ -7,14 +7,11 @@ import io from "socket.io-client"
 const socket = io('http://localhost:3001');
 
 export default function PlayerBar() {
-    const [info, setInfo] = useState({ player1: { username: 'Loading player 1', points: 0 }, player2: { username: 'Loading player 2', points: 0 } });
+    const [info, setInfo] = useState({ player1: { username: 'waiting', points: 0 }, player2: { username: 'waiting', points: 0 } });
 
     useEffect(() => {
-        const gameid = localStorage.getItem('game_id');
-
-        socket.emit('first-navbar-update', gameid);
-
-        socket.on('update-navbar-' + gameid, ({ player1, player2 }) => {
+        const username = localStorage.getItem('username');
+        socket.on('update-navbar-' + username, ({ player1, player2 }) => {
             setInfo({ player1, player2 })
         });
     }, []);
