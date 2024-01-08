@@ -2,10 +2,12 @@
 
 import PlayerBar from './topbar'
 import { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import io from "socket.io-client"
+import url from './http';
 
-const socket = io('http://localhost:3001');
+
+const socket = io(url());
 
 export default function RootLayout({ children }) {
   const path = usePathname();

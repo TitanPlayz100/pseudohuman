@@ -3,8 +3,9 @@
 import styles from '@/app/styles/startgame.module.css'
 import { useEffect, useState } from 'react';
 import io from "socket.io-client"
+import url from './http';
 
-const socket = io('http://localhost:3001');
+const socket = io(url());
 
 export default function PlayerBar() {
     const [info, setInfo] = useState({ player1: { username: 'waiting', points: 0 }, player2: { username: 'waiting', points: 0 } });

@@ -5,9 +5,9 @@ import dots from '@/app/styles/loadingdots.module.css'
 import { useEffect, useState } from 'react'
 import io from "socket.io-client"
 import { useRouter } from 'next/navigation'
+import url from '../http'
 
-const socket = io('http://localhost:3001');
-// const socket = io('https://pseudobeing-server.onrender.com'); external server to be used in production
+const socket = io(url());
 
 export default function MatchingScreen() {
     const router = useRouter();

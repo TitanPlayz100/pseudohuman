@@ -1,4 +1,4 @@
-const fs = require('fs')
+const { prompt } = require('./prompts')
 
 function start_game(matching_users) {
     const current_game = {
@@ -40,7 +40,7 @@ function countdown(seconds, server, game_id, after) {
 }
 
 function generate_question() {
-    const obj = JSON.parse(fs.readFileSync('./text prompts.json', 'utf8'));
+    const obj = prompt;
     const random_num = getRndInteger(0, obj.length - 1);
     const question = obj[random_num].question;
     const answers = obj[random_num].answers;

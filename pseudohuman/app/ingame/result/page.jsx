@@ -4,8 +4,9 @@ import styles from '@/app/styles/gameplay.module.css'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import io from "socket.io-client"
+import url from '../http';
 
-const socket = io('http://localhost:3001');
+const socket = io(url());
 
 export default function Start() {
     const [winner, setWinner] = useState("Player_1");
