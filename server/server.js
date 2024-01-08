@@ -6,7 +6,7 @@ const { start_game, start_match, generate_question, generate_answer, next_round,
 // SETUP SERVER
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
+const io = new Server(server, { cors: { origin: ['http://localhost:3000', 'https://pseudohuman-project.vercel.app'] } });
 
 let matchingUsers = [];
 let unique_game_id = 0;
