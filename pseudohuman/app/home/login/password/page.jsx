@@ -19,7 +19,6 @@ export default function PassInput() {
         const res = await fetch("/api/check_password", { method: 'POST', body: JSON.stringify({ username, password }) });
         const { result } = await res.json();
         if (result) {
-            localStorage.setItem('loggedIn', true);
             localStorage.setItem('username', username);
             localStorage.removeItem('tempuser');
             window.location = '/home/mainmenu'

@@ -17,6 +17,7 @@ let recievedResults = [];
 // WEBSOCKET CONNECTIONS
 io.on('connection', (socket) => {
   socket.on('enter-matchmaking', (username) => {
+    console.log(username + " has connected")
     if (matchingUsers.includes(username)) { return; } // prevent duplicate matchmaking
 
     matchingUsers.push(username);
@@ -24,12 +25,14 @@ io.on('connection', (socket) => {
     if (count >= 2) {
       unique_game_id += 1;
       runningGames[unique_game_id] = start_game(matchingUsers);
-      setTimeout(() => matchingUsers = [], 1000);
       start_match(io, unique_game_id, runningGames);
+
       const player1 = runningGames[unique_game_id].player1;
       const player2 = runningGames[unique_game_id].player2;
       io.emit('update-navbar-' + player1.username, { player1, player2 });
       io.emit('update-navbar-' + player2.username, { player1, player2 });
+
+      setTimeout(() => matchingUsers = [], 1000);
     }
   });
 
@@ -44,13 +47,13 @@ io.on('connection', (socket) => {
     io.emit('return-question-' + gameid, current_game);
   });
 
-  socket.on('send-player-answer', (infoObj) => {
-    let current_game = runningGames[infoObj.gameid];
-    runningGames[infoObj.gameid] = generate_answer(current_game, infoObj.input);
-    io.emit('player-answered-' + infoObj.gameid, current_game);
+  socket.on('send-player-answer', (gameid, input) => {
+    let current_game = runningGames[gameid];
+    runningGames[gameid] = generate_answer(current_game, input);
+    io.emit('player-answered-' + gameid, current_game);
   });
 
-  socket.on('guessed-answer', ({ gameid, playerNo, isCorrect }) => {
+  socket.on('guessed-answer', (gameid, playerNo, isCorrect) => {
     current_game = runningGames[gameid];
     // ternary hell - check who won round
     isCorrect ?
@@ -98,6 +101,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('user-disconnected', (username) => {
+    console.log(username + " has left the game")
     matchingUsers = matchingUsers.filter((item) => { item !== username });
 
     let gameid = -1;

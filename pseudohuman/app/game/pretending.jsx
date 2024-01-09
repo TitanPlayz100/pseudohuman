@@ -1,47 +1,33 @@
-'use client'
-
 import styles from '@/app/styles/gameplay.module.css'
 import { useEffect, useState } from 'react'
-import { io } from "socket.io-client"
-import { useRouter } from 'next/navigation';
-import url from '../../http';
+import EndRound from './endround';
+import Finish from './finish';
 
-const socket = io(url());
-
-export default function Start() {
+export default function Pretender({ props }) {
+    const { socket, changeDisplay, game_id } = props;
     const [inputText, setText] = useState("");
     const [waiting, setWaiting] = useState(false);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading"] });
-    const router = useRouter();
+    const handleChange = (event) => { setText(event.target.value); }
 
-    const handleChange = (event) => {
-        setText(event.target.value);
-    }
+    socket.emit('get-question', game_id);
 
     function submitAnswer() {
-        const input = inputText;
-        const gameid = localStorage.getItem('game_id');
-        socket.emit('send-player-answer', { gameid, input })
+        socket.emit('send-player-answer', game_id, inputText)
         setWaiting(true);
     }
 
     useEffect(() => {
-        const gameid = localStorage.getItem('game_id');
-        socket.emit('get-question', gameid);
-
-        socket.on('return-question-' + gameid, (infoobj) => {
-            setinfo({
-                question: infoobj.question,
-                answers: infoobj.answers
-            });
+        socket.on('return-question-' + game_id, (infoobj) => {
+            setinfo({ question: infoobj.question, answers: infoobj.answers });
         });
 
-        socket.on('next-round-' + gameid, () => {
-            router.push('/ingame/result');
+        socket.on('next-round-' + game_id, () => {
+            changeDisplay(<EndRound props={props} />)
         });
 
-        socket.on('end-game-' + gameid, () => {
-            router.push('/ingame/finish');
+        socket.on('end-game-' + game_id, () => {
+            changeDisplay(<Finish props={props} />)
         });
     }, []);
 

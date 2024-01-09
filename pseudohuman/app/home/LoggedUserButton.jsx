@@ -4,20 +4,14 @@ import styles from '@/app/styles/navbar.module.css'
 import { useEffect, useState } from 'react';
 
 export function LogoutButton() {
-    const [username, setUser] = useState('Login');
+    const [username, setUser] = useState('Loading');
 
     useEffect(() => {
         const user = localStorage.getItem('username');
-        const loggedIn = localStorage.getItem('loggedIn');
-        if (loggedIn) {
-            if (user != "null") {
-                setUser(user);
-            }
-        }
+        setUser(user == null ? "Login" : user);
     }, []);
 
     function logout() {
-        localStorage.removeItem('loggedIn');
         localStorage.removeItem('username');
         window.location = '/home/login/user';
     }

@@ -9,13 +9,11 @@ export default function RootLayout({ children }) {
   const router = useRouter();
   useEffect(() => {
     if (path != '/home/login/user') {
-      if (localStorage.getItem('loggedIn') != 'true') {
+      if (localStorage.getItem('username') == null) {
         router.push('/home/login/user');
       }
     }
-
   }, [])
-
 
   return (
     <>

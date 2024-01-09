@@ -1,43 +1,34 @@
-'use client'
-
 import styles from '@/app/styles/gameplay.module.css'
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react'
-import { io } from "socket.io-client"
-import url from '../../http';
+import EndRound from './endround';
+import Finish from './finish';
 
-const socket = io(url());
-
-export default function Start() {
+export default function Guesser({ props }) {
+    const { socket, changeDisplay, game_id, playerNo } = props;
     const [isWaiting, setWaiting] = useState(true);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading", "loading"], correct: -1 });
-    const router = useRouter();
 
     function selectAnswer(answer) {
-        const gameid = localStorage.getItem('game_id');
-        const playerNo = localStorage.getItem('playerNo');
         const isCorrect = answer == info.correct;
-        socket.emit('guessed-answer', { gameid, playerNo, isCorrect });
+        socket.emit('guessed-answer', game_id, playerNo, isCorrect);
     }
 
     useEffect(() => {
-        const gameid = localStorage.getItem('game_id')
-
-        socket.on('player-answered-' + gameid, (currentGame) => {
+        socket.on('player-answered-' + game_id, (currentGame) => {
             setinfo({
                 question: currentGame.question,
                 answers: currentGame.answers,
                 correct: currentGame.correctanswer
-            })
+            });
             setWaiting(false);
         });
 
-        socket.on('next-round-' + gameid, () => {
-            router.push('/ingame/result');
+        socket.on('next-round-' + game_id, () => {
+            changeDisplay(<EndRound props={props} />)
         });
 
-        socket.on('end-game-' + gameid, () => {
-            router.push('/ingame/finish');
+        socket.on('end-game-' + game_id, () => {
+            changeDisplay(<Finish props={props} />)
         });
     }, []);
 
@@ -49,9 +40,7 @@ export default function Start() {
                 <p className={styles.text}>Do you have what it takes?</p>
             </div>
         )
-    }
-
-    else {
+    } else {
         // select options for the answer
         return (
             <div className={styles.parentdiv}>

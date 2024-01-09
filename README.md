@@ -4,7 +4,7 @@ Multiplayer online game where there is a prompt given, and there are multiple an
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
-Frontend NEXTjs hosted on [vercel](https://pseudohuman-project.vercel.app/home/login) and using a postgres database also on vercel for logging in. Backend websocket server hosted on [render](https://pseudobeing-server.onrender.com).
+Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.vercel.app) and using a postgres database also on vercel for logging in. Backend websocket server hosted on [this server by render](https://pseudobeing-server.onrender.com).
 
 # todo:
 - [ ] find a free or cheap ai api to use
@@ -17,7 +17,7 @@ Frontend NEXTjs hosted on [vercel](https://pseudohuman-project.vercel.app/home/l
     - https://adaptable.io
 - [x] frontend hosting
     - vercel
-- [ ] handle when user disconnects
+- [x] handle when user disconnects
 - [ ] stop copy paste ai answer as own answer
 
 ## Frontend
@@ -43,6 +43,10 @@ Frontend NEXTjs hosted on [vercel](https://pseudohuman-project.vercel.app/home/l
 - [ ] add anon accounts
 
 # Changelog
+## 9/1
+- refactored game logic to fix odd connection issues and make it look cleaner
+- also made disconnecting work properly
+
 ## 6/1
 - fixed being able to navigate to pages you are not meant to go to
 - fixed question not being displayed properly

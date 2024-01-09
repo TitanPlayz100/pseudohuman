@@ -1,14 +1,12 @@
-'use client'
-
 import styles from '@/app/styles/startgame.module.css'
 import { useEffect, useState } from 'react';
-import io from "socket.io-client"
-import url from './http';
 
-const socket = io(url());
-
-export default function PlayerBar() {
-    const [info, setInfo] = useState({ player1: { username: 'waiting', points: 0 }, player2: { username: 'waiting', points: 0 } });
+export default function PlayerBar({ socket }) {
+    // default info that can change
+    const [info, setInfo] = useState({
+        player1: { username: 'waiting', points: 0 },
+        player2: { username: 'waiting', points: 0 }
+    });
 
     useEffect(() => {
         const username = localStorage.getItem('username');

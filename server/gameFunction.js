@@ -21,9 +21,8 @@ function start_game(matching_users) {
 }
 
 function start_match(server, game_id, running_games) {
-    server.emit('setup-' + running_games[game_id].player1.username, { playerNo: 1 })
-    server.emit('setup-' + running_games[game_id].player2.username, { playerNo: 2 })
-    server.emit('start-game', game_id);
+    server.emit('start-' + running_games[game_id].player1.username, game_id, 1);
+    server.emit('start-' + running_games[game_id].player2.username, game_id, 2);
     countdown(10, server, game_id, () => server.emit('ready-' + game_id, running_games[game_id].matchNo)); // change to 5 seconds
 }
 

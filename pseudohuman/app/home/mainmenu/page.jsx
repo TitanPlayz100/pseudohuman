@@ -1,5 +1,6 @@
+'use client'
+
 import styles from '@/app/styles/home.module.css'
-import { MainMenuButtons } from '@/app/home/mainmenu/MainMenuButtons';
 
 export default function homepage() {
     return (
@@ -10,7 +11,11 @@ export default function homepage() {
                 <p>You can play with random people or against a friend. </p>
                 <h2>Have Fun!</h2>
             </div>
-            <MainMenuButtons />
+            <div className={styles.buttondiv}>
+                <button className={styles.button} onClick={() => { window.location = '/game' }}>Join Queue</button>
+                <button className={styles.button} disabled={true}>Private Game</button>
+                <input type='text' maxLength={4} placeholder='Input code' className={styles.input} disabled={true}></input>
+            </div>
         </div>
     )
 }
