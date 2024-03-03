@@ -1,5 +1,6 @@
 import styles from '@/app/styles/startgame.module.css'
 import { useEffect, useState } from 'react';
+import secureLocalStorage from 'react-secure-storage';
 
 export default function PlayerBar({ socket }) {
     // default info that can change
@@ -9,8 +10,8 @@ export default function PlayerBar({ socket }) {
     });
 
     useEffect(() => {
-        const username = localStorage.getItem('username');
-        socket.on('update-navbar-' + username, ({ player1, player2 }) => {
+        const username = secureLocalStorage.getItem('username');
+        socket.on('update-navbar-' + username, (player1, player2) => {
             setInfo({ player1, player2 })
         });
     }, []);

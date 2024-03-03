@@ -1,13 +1,13 @@
 const { prompt } = require('./prompts')
 
-function start_game(matching_users) {
+function initGame(players) {
     const current_game = {
         player1: {
-            username: matching_users[0],
+            username: players[0],
             points: 0,
         },
         player2: {
-            username: matching_users[1],
+            username: players[1],
             points: 0,
         },
         matchNo: 1,
@@ -20,13 +20,13 @@ function start_game(matching_users) {
     return current_game
 }
 
-function start_match(server, game_id, running_games) {
-    server.emit('start-' + running_games[game_id].player1.username, game_id, 1);
-    server.emit('start-' + running_games[game_id].player2.username, game_id, 2);
-    countdown(10, server, game_id, () => server.emit('ready-' + game_id, running_games[game_id].matchNo)); // change to 5 seconds
+function startRound(server, game_id, current_game) {
+    server.emit('start-' + current_game.player1.username, game_id, 1);
+    server.emit('start-' + current_game.player2.username, game_id, 2);
+    countdown(10, server, game_id, () => server.emit('ready-' + game_id, current_game.matchNo));
 }
 
-function next_round(server, game_id, matchNo) {
+function nextRound(server, game_id, matchNo) {
     server.emit('next-round-' + game_id, '');
     countdown(5, server, game_id, () => server.emit('ready-' + game_id, matchNo));
 }
@@ -38,8 +38,8 @@ function countdown(seconds, server, game_id, after) {
     setTimeout(() => after(), seconds * 1000 + 1000);
 }
 
-function generate_question() {
-    const obj = prompt;
+function getQuestion() {
+    const obj = JSON.parse(JSON.stringify(prompt));
     const random_num = getRndInteger(0, obj.length - 1);
     const question = obj[random_num].question;
     const answers = obj[random_num].answers;
@@ -50,7 +50,7 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function generate_answer(current_game, input) {
+function generateAIResponses(current_game, input) {
     current_game.answers.push(input);
 
     // SHUFFLE THE ANSWERS
@@ -65,22 +65,13 @@ function generate_answer(current_game, input) {
     return current_game;
 }
 
-function player1WinsRound(current_game) {
-    current_game.player1.points += 1;
+function playerWins(current_game, playerNo) {
+    current_game["player" + playerNo].points += 1;
     current_game.matchNo += 1;
     current_game.question = '';
     current_game.answers = [];
-    current_game.who_scored_last = 1;
+    current_game.who_scored_last = playerNo;
     return current_game;
 }
 
-function player2WinsRound(current_game) {
-    current_game.player2.points += 1;
-    current_game.matchNo += 1;
-    current_game.question = '';
-    current_game.answers = [];
-    current_game.who_scored_last = 2;
-    return current_game;
-}
-
-module.exports = { start_game, start_match, generate_question, generate_answer, next_round, player1WinsRound, player2WinsRound }
+module.exports = { initGame, startRound, getQuestion, generateAIResponses, nextRound, playerWins }

@@ -6,6 +6,15 @@ Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
 Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.vercel.app) and using a postgres database also on vercel for logging in. Backend websocket server hosted on [this server by render](https://pseudobeing-server.onrender.com).
 
+AI related places
+https://docs.cohere.com/reference/generate
+https://dashboard.cohere.com/api-keys
+https://cohere.com
+
+https://vercel.com/templates/next.js/nextjs-ai-chatbot
+https://huggingface.co/openai-community/gpt2
+https://github.com/imoneoi/openchat-ui?tab=readme-ov-file
+
 # todo:
 - [ ] find a free or cheap ai api to use
     - **https://chatling.ai**
@@ -43,6 +52,11 @@ Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.verc
 - [ ] add anon accounts
 
 # Changelog
+## 3/3
+- finally fixed username faking vulnerability by encrypting the username in the localStorage
+- Also fixed answers from previous rounds showing up in other rounds
+- Found a new LLM that is free and can replace chatGPT
+
 ## 9/1
 - refactored game logic to fix odd connection issues and make it look cleaner
 - also made disconnecting work properly

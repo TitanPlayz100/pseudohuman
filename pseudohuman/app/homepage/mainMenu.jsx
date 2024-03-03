@@ -1,8 +1,6 @@
-'use client'
-
 import styles from '@/app/styles/home.module.css'
 
-export default function homepage() {
+export default function MainMenu() {
     return (
         <div className={styles.parentdiv}>
             <div className={styles.info}>
@@ -12,7 +10,7 @@ export default function homepage() {
                 <h2>Have Fun!</h2>
             </div>
             <div className={styles.buttondiv}>
-                <button className={styles.button} onClick={() => { window.location = '/game' }}>Join Queue</button>
+                <button className={styles.button} onClick={() => window.location = '/game'}>Join Queue</button>
                 <button className={styles.button} disabled={true}>Private Game</button>
                 <input type='text' maxLength={4} placeholder='Input code' className={styles.input} disabled={true}></input>
             </div>

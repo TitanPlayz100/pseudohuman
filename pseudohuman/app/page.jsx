@@ -1,11 +1,29 @@
 'use client'
-import { useEffect } from "react";
-export default function Home() {
+
+import { useEffect, useState } from "react"
+import NavBar from "./homepage/navbar"
+import UserInput from "./homepage/user";
+import { useSearchParams } from "next/navigation";
+
+export default function HomePage() {
+    const [display, setDisplay] = useState();
+    const [username, setUsername] = useState(null);
+    const changeDisplay = (display) => {
+        setDisplay(display)
+    };
+    const changeUsername = (display) => {
+        setUsername(display)
+    };
+    const urlUser = useSearchParams().get('username');
+
     useEffect(() => {
-        if (localStorage.getItem('username') == null) {
-            window.location = '/home/login/user';
-        } else {
-            window.location = '/home/mainmenu';
-        }
-    }, []);
+        setDisplay(<UserInput props={{ username, changeDisplay, changeUsername, urlUser }} />)
+    }, [])
+
+    return (
+        <>
+            <NavBar props={{ username }} />
+            {display}
+        </>
+    )
 }

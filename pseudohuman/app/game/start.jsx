@@ -7,7 +7,7 @@ export default function Start({ props }) {
     const { socket, changeDisplay, game_id, playerNo } = props;
 
     const [countdown, setCount] = useState(10);
-    const starttext = ["You will be guessing the playerNo's response first", "You will pretend to be an AI first"]
+    const starttext = ["You will be guessing the other player's response first", "You will pretend to be an AI first"]
 
     useEffect(() => {
         socket.on('countdown-' + game_id, (number) => {

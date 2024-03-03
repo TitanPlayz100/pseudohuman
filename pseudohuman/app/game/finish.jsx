@@ -1,12 +1,10 @@
 import styles from '@/app/styles/gameplay.module.css'
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Finish({ props }) {
     const { socket, username, game_id } = props;
     const [results, setResults] = useState({});
     const [loading, setLoading] = useState('');
-    const router = useRouter();
 
     socket.emit('get-results', game_id, username);
 
@@ -22,7 +20,7 @@ export default function Finish({ props }) {
             setLoading('Adding result to database');
             await fetch("/api/change_points", { method: 'POST', body: JSON.stringify({ username, amount: 1 }) });
         }
-        router.push('/home/mainmenu');
+        window.location = '/?username=' + username;
         socket.disconnect();
     }
 
