@@ -1,25 +1,21 @@
-const prompt = [
-    {
-        "question": "Question 1",
-        "answers": [
-            "Answer 1",
-            "Answer 2"
-        ]
-    },
-    {
-        "question": "Question 2",
-        "answers": [
-            "Answer 3",
-            "Answer 4"
-        ]
-    },
-    {
-        "question": "Question 3",
-        "answers": [
-            "Answer 5",
-            "Answer 6"
-        ]
-    }
+export const questions = [
+    "What is chemistry",
+    "What is physics",
+    "What is quantum mechanics",
+    "How would you survive a zombie apocyypse",
+    "What are some good last words to have",
+    "What is the worst consiracy theory you know",
+    "What is the best way to spend 1 million dollars",
+    "What are some good Netflix shows to watch",
+    "Do aliens exist",
+    "What is the funniest joke you know",
+    "Recommend the best password you know",
+    "Suppose time travel was real, what would be the best year to time travel to",
+    "Best social media platform",
+    "What does the word 'ok' mean for you",
+    "What is the worst name a kid could have",
+    "What would people be nostalgic of in 500 years from now",
+    "Google en passant",
+    "Would you lose",
+    "What is 9 + 10",
 ];
-
-module.exports = { prompt }

@@ -1,27 +1,37 @@
 import styles from '@/app/styles/main.module.css';
 import { useState } from 'react';
 import MainMenu from './mainMenu';
+import secureLocalStorage from 'react-secure-storage';
+
+const server = (process.env.NEXT_PUBLIC_SERVER == "DEV")
+    ? 'http://localhost:3001'
+    : 'https://pseudobeing-server.onrender.com';
+
 
 export default function RegUser({ props }) {
     const { username, changeDisplay } = props;
     const [password, setInput] = useState('');
     const [bottomText, setBottomText] = useState('');
 
+
     async function pressedEnter(event) {
         if (event.key != "Enter") { return; }
 
         setBottomText('Loading');
-        const res = await fetch("/api/register", { method: 'POST', body: JSON.stringify({ username, password }) });
+        const res = await fetch(server + "/register", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
 
         try {
-            await res.json();
+            const { processed } = await res.json();
+            if (!processed) { setBottomText('An error occured'); return }
             secureLocalStorage.setItem('username', username);
-            secureLocalStorage.setItem('password', password);
             changeDisplay(<MainMenu props={props} />)
-        } catch (error) {
-            console.log(error)
-            setBottomText('An Error Occured');
         }
+        catch (error) { setBottomText('An internal error occured'); }
+
     }
 
     return (

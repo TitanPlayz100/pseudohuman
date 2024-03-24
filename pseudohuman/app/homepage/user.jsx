@@ -5,6 +5,11 @@ import RegUser from './register';
 import MainMenu from './mainMenu';
 import secureLocalStorage from 'react-secure-storage';
 
+const server = (process.env.NEXT_PUBLIC_SERVER == "DEV")
+    ? 'http://localhost:3001'
+    : 'https://pseudobeing-server.onrender.com';
+
+
 export default function UserInput({ props }) {
     const { changeDisplay, changeUsername, urlUser } = props
     const [username, setInput] = useState('');
@@ -12,44 +17,35 @@ export default function UserInput({ props }) {
 
     useEffect(() => {
         const tempUsername = secureLocalStorage.getItem('username');
-        if (tempUsername == urlUser) {
-            changeUsername(username);
-            changeDisplay(<MainMenu props={props} />);
-        }
-
-        if (tempUsername != null) {
-            setInput(tempUsername);
-        } else {
-            secureLocalStorage.removeItem('password');
-        }
+        if (tempUsername == null) return;
+        if (tempUsername != urlUser) setInput(tempUsername);
+        changeUsername(username);
+        changeDisplay(<MainMenu props={props} />);
     }, [])
 
     async function pressedEnter(event) {
         if (event.key != "Enter") { return; }
         if (username == '') { return; }
 
-        // if (username == 'testuser1' || 'testuser2') {
-        //     changeUsername(username)
-        //     changeDisplay(<MainMenu props={{ changeDisplay, changeUsername, username }} />)
-        //     return;
-        // }
-
         setBottomText('Loading');
-        const res = await fetch("/api/check_username", { method: 'POST', body: JSON.stringify({ username }) });
+
+        const res = await fetch(server + "/check_username", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
 
         try {
             const { valid } = await res.json();
-            if (valid) {
-                changeUsername(username)
-                changeDisplay(<PassInput props={{ changeDisplay, changeUsername, username }} />)
-            } else {
-                changeUsername(username)
-                changeDisplay(<RegUser props={{ changeDisplay, changeUsername, username }} />)
+            changeUsername(username);
+            switch (valid) {
+                case null: setBottomText('An error occured'); break;
+                case true: changeDisplay(<PassInput props={{ changeDisplay, changeUsername, username }} />); break;
+                case false: changeDisplay(<RegUser props={{ changeDisplay, changeUsername, username }} />); break;
             }
-
-        } catch (error) {
-            setBottomText('An internal error occured')
         }
+        catch (error) { setBottomText('An internal error occured'); }
+
     }
 
     return (

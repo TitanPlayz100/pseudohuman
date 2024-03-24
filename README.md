@@ -4,42 +4,34 @@ Multiplayer online game where there is a prompt given, and there are multiple an
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
-Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.vercel.app) and using a postgres database also on vercel for logging in. Backend websocket server hosted on [this server by render](https://pseudobeing-server.onrender.com).
+Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.vercel.app) and using a supabase database. Backend websocket server hosted on [this server by render](https://pseudobeing-server.onrender.com).
 
-AI related places
-https://docs.cohere.com/reference/generate
+LLM places
 https://dashboard.cohere.com/api-keys
-https://cohere.com
+https://aistudio.google.com/app/apikey
 
-https://vercel.com/templates/next.js/nextjs-ai-chatbot
-https://huggingface.co/openai-community/gpt2
-https://github.com/imoneoi/openchat-ui?tab=readme-ov-file
 
 # todo:
-- [ ] find a free or cheap ai api to use
-    - **https://chatling.ai**
-    - https://www.botlibre.com
-- [x] find a free server host
-    - **https://render.com**
-    - https://www.koyeb.com
-    - https://www.fl0.com
-    - https://adaptable.io
-- [x] frontend hosting
-    - vercel
-- [x] handle when user disconnects
 - [ ] stop copy paste ai answer as own answer
+- [ ] add ability to create custom rooms for 2 people to join and play many times
+- [ ] add anon accounts
+- [ ] redesign front end
+- [x] integrate the AI api into the app
+- [ ] store the answers that both the user and ai provide in a long term database
+- [ ] leaderboard, or show lifetime score
 
-## Frontend
+- [x] find a free or cheap ai api to use
+- [x] find a free server host **https://render.com**
+- [x] frontend hosting
+- [x] handle when user disconnects
 - [x] create ui for login
 - [x] create ui for home screen
 - [x] create ui for the start of game
 - [x] create ui for playing the game
 - [x] create ui for end of game
-
-## Backend
 - [x] create login system
 - [x] create matchmaking system
-    - [x] start a game when 2 people are available
+- [x] start a game when 2 people are available
 - [x] create text prompts
 - [x] get ai answers to question
 - [x] get first players own answer to question, and then display ai and players answers to player 2
@@ -47,11 +39,16 @@ https://github.com/imoneoi/openchat-ui?tab=readme-ov-file
 - [x] add the scores to a total
 - [x] repeat this process multiple times
 - [x] end the game after a player reaches 3 points, awarding that player a win
-- [ ] add ability to create custom rooms for 2 people to join and play many times
 - [x] allow for multiple games to run at once
-- [ ] add anon accounts
 
 # Changelog
+## 11/3
+- using google's gemini ai instead because cohere is 10/min while gemini is 60/min
+
+## 4/3
+- removed the storage of passwords
+- fixed bug regarding signing in when username is null automatically by accident
+
 ## 3/3
 - finally fixed username faking vulnerability by encrypting the username in the localStorage
 - Also fixed answers from previous rounds showing up in other rounds

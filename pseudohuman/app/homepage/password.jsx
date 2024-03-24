@@ -1,37 +1,43 @@
 import styles from '@/app/styles/main.module.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MainMenu from './mainMenu';
 import secureLocalStorage from 'react-secure-storage';
+
+const server = (process.env.NEXT_PUBLIC_SERVER == "DEV")
+    ? 'http://localhost:3001'
+    : 'https://pseudobeing-server.onrender.com';
+
 
 export default function PassInput({ props }) {
     const { username, changeDisplay } = props;
     const [password, setInput] = useState('');
     const [bottomText, setBottomText] = useState('');
 
-    useEffect(() => {
-        const tempPassword = secureLocalStorage.getItem('password');
-        if (tempPassword != null) {
-            setInput(tempPassword);
-        }
-    })
 
     async function pressedEnter(event) {
         if (event.key != "Enter") { return; }
 
         setBottomText('Loading');
-        const res = await fetch("/api/check_password", { method: 'POST', body: JSON.stringify({ username, password }) });
+
+        const res = await fetch(server + "/check_password", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
         try {
-            const { result } = await res.json();
-            if (result) {
-                secureLocalStorage.setItem('username', username);
-                secureLocalStorage.setItem('password', password);
-                changeDisplay(<MainMenu props={props} />);
-                return;
+            const { valid } = await res.json();
+            switch (valid) {
+                case null: setBottomText('An error occured'); break;
+                case false: setBottomText('Wrong, Try Again'); break;
+                case true:
+                    secureLocalStorage.setItem('username', username);
+                    changeDisplay(<MainMenu props={props} />); break;
             }
-            setBottomText('Wrong, Try Again');
-        } catch (error) {
-            setBottomText('An Error Occured');
         }
+        catch (error) { setBottomText('An internal error occured'); }
+
+
     }
 
     return (

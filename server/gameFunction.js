@@ -1,4 +1,5 @@
-const { prompt } = require('./prompts')
+import { getAIanswerCohere } from './AI_API.js';
+import { questions } from './prompts.js';
 
 function initGame(players) {
     const current_game = {
@@ -38,11 +39,11 @@ function countdown(seconds, server, game_id, after) {
     setTimeout(() => after(), seconds * 1000 + 1000);
 }
 
-function getQuestion() {
-    const obj = JSON.parse(JSON.stringify(prompt));
-    const random_num = getRndInteger(0, obj.length - 1);
-    const question = obj[random_num].question;
-    const answers = obj[random_num].answers;
+async function getQuestion() {
+    const prompt = JSON.parse(JSON.stringify(questions));
+    const random_num = getRndInteger(0, prompt.length - 1);
+    const question = prompt[random_num];
+    const answers = [await getAIanswerCohere(question), await getAIanswerCohere(question)]
     return { question, answers };
 }
 
@@ -54,8 +55,7 @@ function generateAIResponses(current_game, input) {
     current_game.answers.push(input);
 
     // SHUFFLE THE ANSWERS
-    let unshuffled = current_game.answers;
-    let shuffled = unshuffled
+    const shuffled = current_game.answers
         .map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
@@ -74,4 +74,4 @@ function playerWins(current_game, playerNo) {
     return current_game;
 }
 
-module.exports = { initGame, startRound, getQuestion, generateAIResponses, nextRound, playerWins }
+export { initGame, startRound, getQuestion, generateAIResponses, nextRound, playerWins }
