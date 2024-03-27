@@ -14,8 +14,8 @@ export default function Start({ props }) {
             setCount(number);
         });
 
-        socket.on('ready-' + game_id, () => {
-            changeDisplay(playerNo == 1 ? <Guesser props={props} /> : <Pretender props={props} />)
+        socket.on('ready-' + game_id, (matchNo, questions) => {
+            changeDisplay(playerNo == 1 ? <Guesser props={props} /> : <Pretender props={{ ...props, questions }} />)
         });
     }, []);
 

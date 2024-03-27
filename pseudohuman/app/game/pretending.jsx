@@ -4,13 +4,10 @@ import EndRound from './endround';
 import Finish from './finish';
 
 export default function Pretender({ props }) {
-    const { socket, changeDisplay, game_id } = props;
+    const { socket, changeDisplay, game_id, questions } = props;
     const [inputText, setText] = useState("");
     const [waiting, setWaiting] = useState(false);
-    const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading"] });
     const handleChange = (event) => { setText(event.target.value); }
-
-    socket.emit('get-question', game_id);
 
     function submitAnswer() {
         socket.emit('send-player-answer', game_id, inputText)
@@ -18,31 +15,27 @@ export default function Pretender({ props }) {
     }
 
     useEffect(() => {
-        socket.on('return-question-' + game_id, (infoobj) => {
-            setinfo({ question: infoobj.question, answers: infoobj.answers });
+        socket.on('next-round-' + game_id, (winner) => {
+            changeDisplay(<EndRound props={{ ...props, winner }} />)
         });
 
-        socket.on('next-round-' + game_id, () => {
-            changeDisplay(<EndRound props={props} />)
-        });
-
-        socket.on('end-game-' + game_id, () => {
-            changeDisplay(<Finish props={props} />)
+        socket.on('end-game-' + game_id, (final_winner, amount) => {
+            changeDisplay(<Finish props={{ ...props, final_winner, amount }} />)
         });
     }, []);
 
     if (!waiting) {
         return (
             <div className={styles.parentdiv}>
-                <h1>{info.question}</h1>
+                <h1>{questions.question}</h1>
                 <p>Write an answer, and make it appear like ChatGPT wrote it</p>
 
                 {/* ai generated responses */}
                 <h3>AI Answer 1</h3>
-                <p>{info.answers[0]}</p>
+                <p>{questions.answers[0]}</p>
 
                 <h3>AI Answer 2</h3>
-                <p>{info.answers[1]}</p>
+                <p>{questions.answers[1]}</p>
 
                 {/* user input */}
                 <input

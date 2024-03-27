@@ -5,10 +5,6 @@ import RegUser from './register';
 import MainMenu from './mainMenu';
 import secureLocalStorage from 'react-secure-storage';
 
-const server = (process.env.NEXT_PUBLIC_SERVER == "DEV")
-    ? 'http://localhost:3001'
-    : 'https://pseudobeing-server.onrender.com';
-
 
 export default function UserInput({ props }) {
     const { changeDisplay, changeUsername, urlUser } = props
@@ -29,7 +25,7 @@ export default function UserInput({ props }) {
 
         setBottomText('Loading');
 
-        const res = await fetch(server + "/check_username", {
+        const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/check_username", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username })

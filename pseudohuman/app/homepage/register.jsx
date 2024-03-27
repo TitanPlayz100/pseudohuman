@@ -3,11 +3,6 @@ import { useState } from 'react';
 import MainMenu from './mainMenu';
 import secureLocalStorage from 'react-secure-storage';
 
-const server = (process.env.NEXT_PUBLIC_SERVER == "DEV")
-    ? 'http://localhost:3001'
-    : 'https://pseudobeing-server.onrender.com';
-
-
 export default function RegUser({ props }) {
     const { username, changeDisplay } = props;
     const [password, setInput] = useState('');
@@ -18,7 +13,7 @@ export default function RegUser({ props }) {
         if (event.key != "Enter") { return; }
 
         setBottomText('Loading');
-        const res = await fetch(server + "/register", {
+        const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/register", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })

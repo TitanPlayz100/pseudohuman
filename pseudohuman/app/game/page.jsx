@@ -7,11 +7,7 @@ import MatchingScreen from "./matching";
 import styles from '@/app/styles/main.module.css'
 import secureLocalStorage from "react-secure-storage";
 
-const connection = (process.env.NEXT_PUBLIC_SERVER == "DEV")
-    ? 'http://localhost:3001'
-    : 'https://pseudobeing-server.onrender.com';
-
-const socket = io(connection);
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
 export default function GamePage() {
     const [display, setDisplay] = useState(<div className={styles.loginDiv}><h1 className={styles.loadingtext}>Loading</h1></div>);

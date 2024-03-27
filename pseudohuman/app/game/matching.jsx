@@ -6,27 +6,32 @@ import secureLocalStorage from 'react-secure-storage';
 
 export default function MatchingScreen({ props }) {
     const { socket, changeDisplay, username } = props;
-    const [startgame, setStartgame] = useState(false);
+    const [currentState, setCurrentState] = useState('no connection');
 
-    function foundPlayer(foundPlayer) {
-        if (socket.connected == false) return <h1 className={styles.loadingtext + " " + dots.loading}>Connecting to Server</h1>;
-        if (foundPlayer) return <h1 className={styles.loadingtext}>Player Found!</h1>;
-        return <h1 className={styles.loadingtext + " " + dots.loading}>Waiting For Another Player</h1>;
-    }
+    socket.emit('enter-matchmaking', username);
 
     useEffect(() => {
-        socket.emit('enter-matchmaking', username);
-
+        socket.on('entered-matching-' + username, () => {
+            setCurrentState('connected')
+        });
         socket.on('start-' + username, (game_id, playerNo) => {
-            setStartgame(true);
+            setCurrentState('found');
             secureLocalStorage.setItem('game_id', game_id);
             changeDisplay(<Start props={{ ...props, playerNo, game_id }} />);
         });
     }, [])
 
+    function display() {
+        switch (currentState) {
+            case 'no connection': return <h1 className={styles.loadingtext + " " + dots.loading}>Connecting to Server</h1>
+            case 'connected': return <h1 className={styles.loadingtext + " " + dots.loading}>Waiting For Another Player</h1>;
+            case 'found': return <h1 className={styles.loadingtext}>Player Found!</h1>;
+        }
+    }
+
     return (
         <div className={styles.loginDiv}>
-            {foundPlayer(startgame)}
+            {display()}
         </div>
     )
 }

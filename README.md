@@ -42,6 +42,15 @@ https://aistudio.google.com/app/apikey
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 27/3
+- redesigned entire backend to be better organised
+- changed database providers to supabase as it is much faster and free
+- changed the system to store running games on realtime database
+- removed need fer vercel database by changing authentication to supabase and the custom server
+- the connections between server and client now only send relevant information
+    - doesnt share important info like answers anymore
+- front end now does none of the computing (hopefully), all functions now in backend
+
 ## 11/3
 - using google's gemini ai instead because cohere is 10/min while gemini is 60/min
 
