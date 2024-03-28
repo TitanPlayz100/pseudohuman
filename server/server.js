@@ -20,7 +20,7 @@ export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUP
 export let matchingUsers = [];
 
 // server setup
-const corsURLS = { origin: ['http://localhost:3000', 'https://pseudohuman-project.vercel.app'] }
+const corsURLS = { origin: ['http://localhost:3000', process.env.SERVER_URL] }
 const app = express();
 app.use(express.json());
 app.use(cors(corsURLS));

@@ -1,3 +1,4 @@
+import shuffleArray from "shuffle-array";
 import { fetchData, insertData } from "../database/dbInterface.js";
 import { matchingUsers, socketIO } from "../server.js";
 import { get_question } from "./gamedata.js";
@@ -33,7 +34,9 @@ async function initGame(player1, player2, game_ID) {
 
     for (let i = 0; i < 6; i++) {
         const { question: q, ai_answers: a } = allprompts[Math.floor(Math.random() * allprompts.length)]
-        const obj = { 'ai': a, 'question': q }
+        shuffleArray(a);
+        const selected = a.slice(0, 2);
+        const obj = { 'ai': selected, 'question': q }
         questions.push(obj);
     }
 
