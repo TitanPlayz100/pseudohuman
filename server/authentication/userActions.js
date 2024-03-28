@@ -1,4 +1,4 @@
-import { fetchDataFiltered, insertData, updateData } from "../database/dbInterface.js";
+import { fetchDataCaseInsensitive, insertData, updateData } from "../database/dbInterface.js";
 import { compare, hash } from 'bcrypt';
 
 // AUTH
@@ -8,20 +8,20 @@ export async function registerUser(username, password) {
 }
 
 export async function checkUsername(username) {
-    const usernames = await fetchDataFiltered('UserTable', 'username', 'username', username)
-    if (!username) return null;
+    const usernames = await fetchDataCaseInsensitive('UserTable', 'username', 'username', username)
+    if (!username || username.length < 1) return null;
     return usernames.length > 0;
 }
 
 export async function checkPassword(username, password) {
-    const passwordStored = await fetchDataFiltered('UserTable', 'password', 'username', username)
-    if (!passwordStored) return null;
+    const passwordStored = await fetchDataCaseInsensitive('UserTable', 'password', 'username', username)
+    if (!passwordStored || passwordStored.length < 1) return null;
     return await compare(password, passwordStored[0].password);
 }
 
 export async function addStat(username, statName, amount) {
-    const current_amount = await fetchDataFiltered('UserTable', statName, 'username', username)
-    if (current_amount == false) return false;
+    const current_amount = await fetchDataCaseInsensitive('UserTable', statName, 'username', username)
+    if (!current_amount || current_amount.length < 1) return false;
     const new_amount = current_amount[0][statName] + amount;
     return await updateData('UserTable', [{ [statName]: new_amount }], 'username', username)
 }

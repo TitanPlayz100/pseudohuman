@@ -15,7 +15,7 @@ export default function EndRound({ props }) {
         socket.on('ready-' + game_id, (matchNo, questions) => {
             const isPlayer1 = playerNo == 1;
             const isOddMatch = matchNo % 2 == 1;
-            display = isOddMatch ^ isPlayer1 ? <Pretender props={{ ...props, questions }} /> : <Guesser props={props} />
+            const display = isOddMatch ^ isPlayer1 ? <Pretender props={{ ...props, questions }} /> : <Guesser props={props} />
 
             changeDisplay(display);
         })

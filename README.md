@@ -4,22 +4,27 @@ Multiplayer online game where there is a prompt given, and there are multiple an
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
-Frontend NEXTjs hosted on [this page by vercel](https://pseudohuman-project.vercel.app) and using a supabase database. Backend websocket server hosted on [this server by render](https://pseudobeing-server.onrender.com).
+The game is live now at [this link.](https://pseudohuman-project.vercel.app)
 
-LLM places
-https://dashboard.cohere.com/api-keys
-https://aistudio.google.com/app/apikey
+The frontend NextJs project is [hosted on Vercel](https://vercel.com/home) using a [Supabase database](https://supabase.com). Backend websocket server hosted on [Render](https://render.com).
+
+### LLM places
+https://dashboard.cohere.com/
+
+https://aistudio.google.com/app
 
 
-# todo:
+## TODO:
+- [ ] timer for each players turn
 - [ ] stop copy paste ai answer as own answer
 - [ ] add ability to create custom rooms for 2 people to join and play many times
 - [ ] add anon accounts
 - [ ] redesign front end
-- [x] integrate the AI api into the app
-- [ ] store the answers that both the user and ai provide in a long term database
+- [ ] integrate the AI api into the app
 - [ ] leaderboard, or show lifetime score
 
+Others:
+- [x] store the answers that both the user and ai provide in a long term database
 - [x] find a free or cheap ai api to use
 - [x] find a free server host **https://render.com**
 - [x] frontend hosting
@@ -42,6 +47,11 @@ https://aistudio.google.com/app/apikey
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 28/3
+- made usernames case insensitive, can still use capitals in name for display
+- fixed not switching roles every match
+- vercel speed insights and analytics
+
 ## 27/3
 - redesigned entire backend to be better organised
 - changed database providers to supabase as it is much faster and free

@@ -8,7 +8,7 @@ export async function endGame(players, winner, pointDiff, winnum, game_id) {
     await addStat(winnum + "_username", 'wins', 1);
     await addStat(players.p1_username, 'total_games', 1);
     await addStat(players.p2_username, 'total_games', 1);
-    console.log('Game ' + game_id + ' ended');
+    console.info('Game ' + game_id + ' ended');
 }
 
 export async function disconnectGame(username) {

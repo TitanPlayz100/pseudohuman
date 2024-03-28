@@ -19,6 +19,16 @@ export async function fetchDataFiltered(table, columns, filterColumn, filter) {
     return data;
 }
 
+export async function fetchDataCaseInsensitive(table, columns, filterColumn, filter) {
+    const { data, error } = await supabase
+        .from(table)
+        .select(columns)
+        .ilike(filterColumn, filter)
+
+    if (error) { console.error(error); return false; }
+    return data;
+}
+
 export async function insertData(table, items) {
     const { error } = await supabase
         .from(table)
