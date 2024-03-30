@@ -8,22 +8,22 @@ The game is live now at [this link.](https://pseudohuman-project.vercel.app)
 
 The frontend NextJs project is [hosted on Vercel](https://vercel.com/home) using a [Supabase database](https://supabase.com). Backend websocket server hosted on [Render](https://render.com).
 
-### LLM places
-https://dashboard.cohere.com/
+There is a [cron job](https://console.cron-job.org) enabled, which is a repeated task to send a request to a server. This is to keep the server always active, as usually it sleeps every 15 minutes.
 
-https://aistudio.google.com/app
-
+The Large Language Models used in this project are from [Cohere](https://dashboard.cohere.com/) and from [google's Gemini](https://aistudio.google.com/app).
 
 ## TODO:
-- [ ] timer for each players turn
-- [ ] stop copy paste ai answer as own answer
-- [ ] add ability to create custom rooms for 2 people to join and play many times
-- [ ] add anon accounts
+- [ ] story creation gamemode
+- [ ] add ability to create custom rooms for 2 people
 - [ ] redesign front end
-- [ ] integrate the AI api into the app
-- [ ] leaderboard, or show lifetime score
 
 Others:
+- [x] timer for each players turn
+- [x] stop copy paste ai answer as own answer
+- ~~[ ] add anon accounts~~
+- [x] integrate the AI api into the app
+- [x] show lifetime score
+- [x] stop server sleeping
 - [x] store the answers that both the user and ai provide in a long term database
 - [x] find a free or cheap ai api to use
 - [x] find a free server host **https://render.com**
@@ -47,6 +47,15 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 30/3
+- added all ai answers to each question, game is now playable
+- added lifetime stats display
+- fixed people copy pasting answers as their own
+- increased character limit for answers to 150
+- trying out a cron job to stop server from sleeping
+- finally fixed the file organisation for server code, much easier to view code for different parts of the server
+- added a timer for each turn so that there is more intense gameplay
+
 ## 28/3
 - made usernames case insensitive, can still use capitals in name for display
 - fixed not switching roles every match

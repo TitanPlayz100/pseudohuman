@@ -1,4 +1,4 @@
-import { checkUsername, checkPassword, registerUser, addStat } from "./userActions.js";
+import { checkUsername, checkPassword, registerUser, addStat, getStat } from "./useractions.js";
 
 export async function check_username(req, res) {
     const username = req.body.username;
@@ -24,6 +24,13 @@ export async function change_stat(req, res) {
     const username = req.body.username;
     const stat = req.body.stat;
     const value = req.body.value;
-    const processed = await addStat(username, stat, value)
+    const processed = await addStat(username, stat, value);
+    res.send({ processed });
+}
+
+export async function get_stat(req, res) {
+    const username = req.body.username;
+    const stat = req.body.stat;
+    const processed = await getStat(username, stat);
     res.send({ processed });
 }

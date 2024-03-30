@@ -4,13 +4,13 @@ import Guesser from './guessing';
 import Pretender from './pretending';
 
 export default function Start({ props }) {
-    const { socket, changeDisplay, game_id, playerNo } = props;
-
-    const [countdown, setCount] = useState(10);
-    const starttext = ["You will be guessing the other player's response first", "You will pretend to be an AI first"]
+    const { socket, changeDisplay, game_id, playerNo, startText } = props;
+    const [countdown, setCount] = useState(5);
+    const [prepared, setPrepared] = useState(false);
 
     useEffect(() => {
         socket.on('countdown-' + game_id, (number) => {
+            setPrepared(true);
             setCount(number);
         });
 
@@ -22,8 +22,8 @@ export default function Start({ props }) {
     return (
         <div className={styles.startdialogue}>
             <h1 className={styles.text}>Starting Soon</h1>
-            <p className={styles.text}>{starttext[playerNo - 1]}</p>
-            <p className={styles.text}>Starting in {countdown}</p>
+            <p className={styles.text}>{startText}</p>
+            <p className={styles.text}>{prepared ? `Starting in ${countdown}` : "Preparing game"}</p>
             <p>Good Luck</p>
         </div>
     )

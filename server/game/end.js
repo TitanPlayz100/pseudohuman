@@ -1,11 +1,11 @@
-import { matchingUsers, socketIO } from "../server.js";
+import { queue, socketIO } from "../server.js";
 import { fetchDataFiltered, updateData } from "../database/dbInterface.js";
-import { addStat } from "../authentication/userActions.js";
+import { addStat } from "../auth/useractions.js";
 
 export async function endGame(players, winner, pointDiff, winnum, game_id) {
     await updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
     socketIO.emit('end-game-' + game_id, winner, pointDiff);
-    await addStat(winnum + "_username", 'wins', 1);
+    await addStat(winner, 'wins', 1);
     await addStat(players.p1_username, 'total_games', 1);
     await addStat(players.p2_username, 'total_games', 1);
     console.info('Game ' + game_id + ' ended');
@@ -13,7 +13,7 @@ export async function endGame(players, winner, pointDiff, winnum, game_id) {
 
 export async function disconnectGame(username) {
     console.info(username + ' has left');
-    matchingUsers.splice(matchingUsers.indexOf(username), 1);
+    queue.splice(queue.indexOf(username), 1);
     const data = await getOtherUser(username);
     if (data == null) return;
     const [otherUser, game_id] = data;

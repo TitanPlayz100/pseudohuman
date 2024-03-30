@@ -6,6 +6,7 @@ import Finish from './finish';
 export default function Guesser({ props }) {
     const { socket, changeDisplay, game_id, playerNo } = props;
     const [waitingText, setWaiting] = useState("Waiting for opponent to answer");
+    const [timer, setTimer] = useState(15);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading", "loading"] });
 
     function selectAnswer(index) {
@@ -27,7 +28,12 @@ export default function Guesser({ props }) {
         socket.on('end-game-' + game_id, (final_winner, amount) => {
             changeDisplay(<Finish props={{ ...props, final_winner, amount }} />)
         });
-    }, []);
+
+        socket.on('countdown-' + game_id, (number) => {
+            if (waitingText != '') return;
+            setTimer(number);
+        });
+    }, [waitingText]);
 
     if (waitingText) {
         // text for waiting for opponent to answer
@@ -43,6 +49,7 @@ export default function Guesser({ props }) {
             <div className={styles.parentdiv}>
                 <h1>{info.question}</h1>
                 <p>Pick the option that seems most human</p>
+                <p>{timer} seconds left</p>
                 <button className={styles.button} onClick={() => selectAnswer(0)}>{info.answers[0]}</button>
                 <button className={styles.button} onClick={() => selectAnswer(1)}>{info.answers[1]}</button>
                 <button className={styles.button} onClick={() => selectAnswer(2)}>{info.answers[2]}</button>

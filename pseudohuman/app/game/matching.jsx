@@ -14,10 +14,10 @@ export default function MatchingScreen({ props }) {
         socket.on('entered-matching-' + username, () => {
             setCurrentState('connected')
         });
-        socket.on('start-' + username, (game_id, playerNo) => {
+        socket.on('start-' + username, (game_id, playerNo, startText) => {
             setCurrentState('found');
             secureLocalStorage.setItem('game_id', game_id);
-            changeDisplay(<Start props={{ ...props, playerNo, game_id }} />);
+            changeDisplay(<Start props={{ ...props, playerNo, game_id, startText }} />);
         });
     }, [])
 

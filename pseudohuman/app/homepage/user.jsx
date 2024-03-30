@@ -15,8 +15,8 @@ export default function UserInput({ props }) {
         const tempUsername = secureLocalStorage.getItem('username');
         if (tempUsername == null) return;
         if (tempUsername != urlUser) setInput(tempUsername);
-        changeUsername(username);
-        changeDisplay(<MainMenu props={props} />);
+        changeUsername(tempUsername);
+        changeDisplay(<MainMenu props={{ ...props, username: tempUsername }} />);
     }, [])
 
     async function pressedEnter(event) {
