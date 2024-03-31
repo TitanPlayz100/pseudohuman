@@ -15,7 +15,7 @@ export async function sendAnswer(game_id, input) {
     answers.push(input);
     shuffleArray(answers);
     socketIO.emit('player-answered-' + game_id, question, answers);
-    playerNo = match_NO % 2 == 0 ? 2 : 1
+    const playerNo = match_NO % 2 == 0 ? 2 : 1
 
     if (input == 'timed out') {
         guessedAnswer(game_id, playerNo, 'timed out');

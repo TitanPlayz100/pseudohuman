@@ -45,4 +45,4 @@ socketIO.on('connection', (socket) => {
   socket.on('user-disconnected', disconnectGame);
 });
 
-server.listen(3001, () => console.info('Server listening on port 3001'));
+server.listen(process.env.PORT, () => console.info('Server listening on port ' + process.env.PORT));

@@ -47,6 +47,10 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 31/3
+- start using bun to run server instead of node because its faster
+- have to use a dockerfile for the server now, not much more complex, and solves the server startup problem
+
 ## 30/3
 - added all ai answers to each question, game is now playable
 - added lifetime stats display

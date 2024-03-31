@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --no-deprecation server.js",
     "dev": "nodemon --no-deprecation server.js",
-    "startbun": "bun server.js"
+    "startbun": "bun server.js",
+    "devbun": "bun --watch server.js"
   },
   "keywords": [],
   "author": "",
