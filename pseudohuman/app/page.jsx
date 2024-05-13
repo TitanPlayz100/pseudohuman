@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import NavBar from "./homepage/navbar"
 import UserInput from "./homepage/user";
 import { useSearchParams } from "next/navigation";
+import Background from "./background";
 
 export default function HomePage() {
     const [display, setDisplay] = useState();
@@ -22,6 +23,7 @@ export default function HomePage() {
 
     return (
         <>
+            <Background />
             <NavBar props={{ username }} />
             {display}
         </>

@@ -64,7 +64,7 @@ export default function Pretender({ props }) {
                 <input
                     className={similarityScore > 75 ? styles.inputwarn : styles.input}
                     type='text'
-                    placeholder='Input text (max 100)'
+                    placeholder='Input text (max 150)'
                     maxLength={150}
                     onChange={handleChange}
                 />

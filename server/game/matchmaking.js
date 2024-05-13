@@ -10,8 +10,8 @@ export async function enterMatchmaking(username) {
     socketIO.emit('entered-matching-' + username);
     if (queue.length < 2) return; // not enough players
 
-    const [p1, p2] = queue.splice(0, 2);
-    const game_id = generateGameID(4);
+    const [p1, p2] = queue.splice(0, 2); // get 2 players
+    const game_id = generateGameID(4); // unique game ID
 
     console.info('game ' + game_id + ' started');
     updatePlayerNav([p1, 0], [p2, 0]);
@@ -26,14 +26,16 @@ async function initGame(player1, player2, game_ID) {
     const allprompts = await fetchData('PromptsTable', '*');
     const questions = [];
 
+    // generate 6 random questions
     for (let i = 0; i < 6; i++) {
-        const { question: q, ai_answers: a } = allprompts[Math.floor(Math.random() * allprompts.length)];
-        shuffleArray(a);
-        const selected = a.slice(0, 2);
-        const obj = { 'ai': selected, 'question': q };
+        const { question: que, ai_answers: ans } = allprompts[Math.floor(Math.random() * allprompts.length)];
+        shuffleArray(ans);
+        const selected = ans.slice(0, 2);
+        const obj = { 'ai': selected, 'question': que };
         questions.push(obj);
     }
 
+    // set default game info
     const gameinfo = {
         game_ID,
         questions,
@@ -50,5 +52,6 @@ async function initGame(player1, player2, game_ID) {
 }
 
 function generateGameID(length) {
+    // uses current time and base 16
     return Date.now().toString(16).replace(/\./, '').slice(11 - length);
 }

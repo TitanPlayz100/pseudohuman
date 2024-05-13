@@ -15,23 +15,20 @@ export default function GamePage() {
 
     useEffect(() => {
         const username = secureLocalStorage.getItem('username');
-
-        if (username == null) {
-            window.location = '/'
-            return;
-        }
-
+        if (username == null) { throw new Error('The username was not saved. Please try logging in again to validate username'); }
         setDisplay(<MatchingScreen props={{ socket, changeDisplay, username }} />)
 
         // detect other user disconnected
         socket.on('end-game-dc-' + username, () => {
             window.location = '/?username=' + username;
+            console.log('user disconnected');
             socket.disconnect();
         });
 
         // Detect disconnect
         window.onbeforeunload = () => {
             secureLocalStorage.removeItem('game_id');
+            console.log('other user disconnected');
             socket.emit('user-disconnected', username);
         }
     }, []);

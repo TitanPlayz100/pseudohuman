@@ -10,7 +10,7 @@ export default function PassInput({ props }) {
 
 
     async function pressedEnter(event) {
-        if (event.key != "Enter") { return; }
+        if (event.key != "Enter") return;
 
         setBottomText('Loading');
 
@@ -31,8 +31,6 @@ export default function PassInput({ props }) {
             }
         }
         catch (error) { setBottomText('An internal error occured'); }
-
-
     }
 
     return (

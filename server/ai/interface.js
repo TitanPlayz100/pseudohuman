@@ -10,9 +10,13 @@ async function askCohere(question) {
 
 async function askGemini(question) {
     const prompt = question;
-    const result = await gemini.generateContent(prompt + '. Answer in one line and maximum 25 words.');
-    const answer = result.response.text().replace('\n', ' ');
-    return answer;
+    try {
+        const result = await gemini.generateContent(prompt + '. Answer in one line and maximum 25 words.');
+        const answer = result.response.text().replace('\n', ' ');
+        return answer;
+    } catch (error) {
+        return false;
+    }
 }
 
 async function newQuestion(question, ai_answers) {
@@ -28,15 +32,33 @@ async function appendAnswer(question, ai_answers_new) {
 }
 
 async function generate() {
-    const questions = await fetchData('PromptsTable', 'questions');
+    const questions = [...questionsNew];
+    let index = 1;
+    const max = questions.length;
     for (let question of questions) {
-
         const answer = await askCohere(question);
         const answer2 = await askGemini(question);
+        index++;
+
+        if (!answer || !answer2) {
+            console.log(index + ' failed');
+            continue;
+        }
 
         await newQuestion(question, [answer, answer2]);
-        console.log('added new answers');
+        console.log(index + ' out of ' + max);
         await new Promise(resolve => setTimeout(resolve, 6000));
     }
 }
-// await generate();
+
+async function getQuestions() {
+    let questions = []
+    for (let i = 0; i < 20; i++) {
+        const response = await fetch('https://riddles-api.vercel.app/random');
+        const data = await response.json();
+        questions.push(data.riddle)
+    }
+    return questions;
+}
+
+const questionsNew = []

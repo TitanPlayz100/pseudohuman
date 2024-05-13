@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 
 export default function PlayerBar({ socket }) {
-    // default info that can change
+    // default info
     const [info, setInfo] = useState({
         player1: { username: 'waiting', points: 0 },
         player2: { username: 'waiting', points: 0 }

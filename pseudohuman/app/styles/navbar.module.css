@@ -9,7 +9,7 @@
     height: auto;
     display: flex;
     justify-content: space-between;
-    background-color: black;
+    backdrop-filter: blur(5px);
 }
 
 .Button {

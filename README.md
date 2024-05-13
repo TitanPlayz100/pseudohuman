@@ -8,9 +8,9 @@ The game is live now at [this link.](https://pseudohuman-project.vercel.app)
 
 The frontend NextJs project is [hosted on Vercel](https://vercel.com/home) using a [Supabase database](https://supabase.com). Backend websocket server hosted on [Render](https://render.com).
 
-There is a [cron job](https://console.cron-job.org) enabled, which is a repeated task to send a request to a server. This is to keep the server always active, as usually it sleeps every 15 minutes.
+There is a [cron job](https://www.val.town/v/titanplayz/server_thing) enabled, which is a repeated task to send a request to a server. This is to keep the server always active, as usually it sleeps every 15 minutes.
 
-The Large Language Models used in this project are from [Cohere](https://dashboard.cohere.com/) and from [google's Gemini](https://aistudio.google.com/app).
+The Large Language Models used in this project are from [Cohere](https://dashboard.cohere.com/) and from [Google's Gemini](https://aistudio.google.com/app).
 
 ## TODO:
 - [ ] story creation gamemode
@@ -47,6 +47,9 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 15/4
+- many comments added, changed visuals to look nicer
+
 ## 31/3
 - start using bun to run server instead of node because its faster
 - have to use a dockerfile for the server now, not much more complex, and solves the server startup problem

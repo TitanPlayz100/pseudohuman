@@ -13,7 +13,7 @@ import { enterMatchmaking } from './game/matchmaking.js';
 import { disconnectGame } from './game/end.js';
 import { guessedAnswer, sendAnswer } from './game/gameloop.js';
 
-// init ai and database
+// init ai, database, and global variables
 export const cohereAI = new CohereClient({ token: process.env.AI_API_KEY });
 export const geminiAI = (new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY)).getGenerativeModel({ model: "gemini-pro" });
 export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -33,8 +33,7 @@ app.post('/register', register);
 app.post('/change_stat', change_stat);
 app.post('/get_stat', get_stat);
 
-
-// Socket Server
+// socket server
 const server = createServer(app);
 export const socketIO = new Server(server, { cors: corsURLS });
 
