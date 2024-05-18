@@ -16,10 +16,10 @@ The Large Language Models used in this project are from [Cohere](https://dashboa
 
 ## TODO:
 - [ ] story creation gamemode
-- [ ] add ability to create custom rooms for 2 people
-- [ ] redesign front end
 
 Others:
+- [x] add ability to create custom rooms for 2 people
+- [x] redesign front end
 - [x] timer for each players turn
 - [x] stop copy paste ai answer as own answer
 - ~~[ ] add anon accounts~~

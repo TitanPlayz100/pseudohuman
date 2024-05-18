@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import io from "socket.io-client"
 import PlayerBar from "./topbar";
 import MatchingScreen from "./matching";
@@ -54,13 +54,12 @@ export default function GamePage() {
     }, []);
 
     return (
-        <>
+        <Suspense>
             <GameBackground />
-
             {/* only show topbar when game starts */}
             {showBar ? <PlayerBar socket={socket} /> : <></>}
             {display}
-        </>
+        </Suspense>
     )
 
 }
