@@ -1,0 +1,28 @@
+/* import fonts from public directory */
+@font-face {
+    font-family: 'phoenix';
+    src: url('/phoenixfont.ttf');
+}
+
+@font-face {
+    font-family: 'sperry';
+    src: url('/sperry.ttf');
+}
+
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #06230c;
+}
+
+.homepage {
+    background-color: black;
+    color: white;
+    font-family: 'phoenix';
+    font-size: 3vh;
+    height: 100vh;
+    margin: 0px;
+    padding: 0px
+}

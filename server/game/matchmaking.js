@@ -1,17 +1,29 @@
 import shuffleArray from "shuffle-array";
 import { fetchData, insertData } from "../database/dbInterface.js";
-import { queue, socketIO } from "../server.js";
+import { queue, privateQueue, socketIO } from "../server.js";
 import { nextRound, updatePlayerNav } from "./gameloop.js";
+import { splicePrivateQueueID } from "./end.js";
 
-export async function enterMatchmaking(username) {
+export async function enterMatchmaking(username, code) {
     console.info(username + ' has joined');
-    if (queue.includes(username)) return; // prevent duplicate matchmaking
-    queue.push(username);
-    socketIO.emit('entered-matching-' + username);
-    if (queue.length < 2) return; // not enough players
+    let p1, p2, game_id;
 
-    const [p1, p2] = queue.splice(0, 2); // get 2 players
-    const game_id = generateGameID(4); // unique game ID
+    // joining with room code
+    if (code != null) {
+        const info = splicePrivateQueueID(code);
+        if (info == null) return;
+        const { player1, game_id: gameid } = info;
+        game_id = gameid;
+        [p1, p2] = [player1, username];
+    } else { // joining normal matchmaking
+        if (queue.includes(username)) return; // prevent duplicate matchmaking
+        queue.push(username);
+        socketIO.emit('entered-matching-' + username);
+        if (queue.length < 2) return; // not enough players
+
+        [p1, p2] = queue.splice(0, 2); // get 2 players
+        game_id = generateGameID(4); // unique game ID
+    }
 
     console.info('game ' + game_id + ' started');
     updatePlayerNav([p1, 0], [p2, 0]);
@@ -21,6 +33,29 @@ export async function enterMatchmaking(username) {
     await initGame(p1, p2, game_id);
     await nextRound(game_id, 1);
 };
+
+export async function enterMatchmakingPrivate(username) {
+    console.info(username + ' has joined the private queue');
+
+    if (privateQueue.some((info) => info.player1 == username)) return;
+
+    const game_id = generateGameID(4);
+    const info = { player1: username, game_id };
+    privateQueue.push(info);
+
+    socketIO.emit('entered-matching-private-' + username, game_id);
+}
+
+export async function check_room_id(req, res) {
+    const id = req.body.gameid;
+    let valid = false;
+    privateQueue.forEach((info) => {
+        if (info.game_id == id) {
+            valid = true;
+        }
+    })
+    res.send({ valid });
+}
 
 async function initGame(player1, player2, game_ID) {
     const allprompts = await fetchData('PromptsTable', '*');

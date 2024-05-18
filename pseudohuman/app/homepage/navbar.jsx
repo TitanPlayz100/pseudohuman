@@ -1,4 +1,4 @@
-import styles from '@/app/styles/navbar.module.css'
+import styles from './navbar.module.css'
 import Image from "next/image"
 import { LogoutButton } from './LoggedUserButton';
 

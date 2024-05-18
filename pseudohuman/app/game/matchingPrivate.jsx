@@ -4,17 +4,20 @@ import { useEffect, useState } from 'react'
 import Start from './start';
 import secureLocalStorage from 'react-secure-storage';
 
-export default function MatchingScreen({ props }) {
-    const { socket, changeDisplay, username, changeTopbar, roomCode } = props;
+export default function MatchingScreenPrivate({ props }) {
+    const { socket, changeDisplay, username, changeTopbar } = props;
     const [currentState, setCurrentState] = useState('no connection');
+    const [gameID, setGameID] = useState('Private Game');
 
 
     useEffect(() => {
-        socket.emit('enter-matchmaking', username, roomCode);
+        socket.emit('enter-matchmaking-private', username);
 
-        socket.on('entered-matching-' + username, () => {
+        socket.on('entered-matching-private-' + username, (game_id) => {
             setCurrentState('connected')
+            setGameID(`Game ID: ${game_id}`);
         });
+
         socket.on('start-' + username, (game_id, playerNo, startText) => {
             setCurrentState('found');
             changeTopbar(true);
@@ -34,6 +37,7 @@ export default function MatchingScreen({ props }) {
 
     return (
         <div className={styles.matchingDiv}>
+            <h2 className={styles.subtext}>{gameID}</h2>
             {display()}
             <button className={styles.button} onClick={() => window.location = '/?username=' + username}>Leave</button>
         </div>

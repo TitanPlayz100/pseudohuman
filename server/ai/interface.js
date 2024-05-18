@@ -41,7 +41,7 @@ async function generate() {
         index++;
 
         if (!answer || !answer2) {
-            console.log(index + ' failed');
+            console.error(index + ' failed');
             continue;
         }
 

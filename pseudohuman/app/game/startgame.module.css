@@ -1,0 +1,99 @@
+/* top bar */
+.playersdiv {
+    width: 99vw;
+    padding: 0.5vw;
+    overflow: hidden;
+    height: auto;
+    border-bottom: 3px solid rgb(2, 65, 3);
+    display: flex;
+    justify-content: space-around;
+    backdrop-filter: blur(4px);
+    color: #2ea024;
+    background-color: #000000a0;
+    font-size: 1.5em;
+}
+
+.playerstext {
+    margin: 1.5vw;
+    font-size: 0.8em;
+}
+
+.vstext {
+    margin: 1vw;
+}
+
+/* starting game */
+.startdialogue {
+    font-size: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    height: auto;
+    padding: 2%;
+    padding-top: 0.5vw;
+    text-align: center;
+    border: 5px solid #38B000;
+    color: #70E000;
+    box-shadow: 0 0 50px #38B000;
+    backdrop-filter: blur(4px);
+}
+
+.text {
+    display: block;
+    margin: 2vw;
+}
+
+/* matchmaking div */
+.matchingDiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: auto;
+    text-align: center;
+    transform: translate(-50%, -40%);
+    border: 5px solid #38B000;
+    color: #70E000;
+    box-shadow: 0 0 50px #38B000;
+    backdrop-filter: blur(4px);
+}
+
+.loadingtext {
+    font-family: 'phoenix';
+    margin: 3vw;
+    margin-top: 4vh;
+    font-size: 1.8em;
+    margin-bottom: 0;
+
+}
+
+/* private game */
+.subtext {
+    margin: 0;
+    margin-top: 2vh;
+}
+
+.button {
+    color: rgb(77, 221, 37);
+    font-family: 'Phoenix';
+    margin: 2vw;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.3em;
+    padding: 1.5%;
+    background: transparent;
+    height: auto;
+    min-width: 100px;
+    text-align: center;
+    border: 0.3vh solid rgb(48, 184, 25);
+    box-shadow: 0 0 20px green;
+    transition: all 1s ease;
+}
+
+.button:hover,
+.button:focus {
+    background-color: #17a90040;
+    transition: all 0.2s ease;
+}

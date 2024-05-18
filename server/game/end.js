@@ -1,8 +1,8 @@
-import { queue, socketIO } from "../server.js";
+import { queue, privateQueue, socketIO } from "../server.js";
 import { fetchDataFiltered, updateData } from "../database/dbInterface.js";
 import { addStat } from "../auth/useractions.js";
 
-export async function endGame(players, winner, pointDiff, winnum, game_id) {
+export async function endGame(players, winner, pointDiff, game_id) {
     await updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
     socketIO.emit('end-game-' + game_id, winner, pointDiff);
     await addStat(winner, 'wins', 1);
@@ -14,6 +14,8 @@ export async function endGame(players, winner, pointDiff, winnum, game_id) {
 export async function disconnectGame(username) {
     console.info(username + ' has left');
     queue.splice(queue.indexOf(username), 1);
+    splicePrivateQueue(username);
+
     const data = await getOtherUser(username);
     if (data == null) return;
     const [otherUser, game_id] = data;
@@ -22,6 +24,29 @@ export async function disconnectGame(username) {
     socketIO.emit('end-game-dc-' + otherUser);
     updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
 };
+
+function splicePrivateQueue(username) {
+    let index = null;
+    privateQueue.forEach((info, idx) => {
+        if (info.player1 == username) {
+            index = idx;
+        }
+    })
+    if (index == null) return;
+    privateQueue.splice(index, 1);
+}
+
+export function splicePrivateQueueID(gameid) {
+    let index = null;
+    privateQueue.forEach((info, idx) => {
+        if (info.game_id == gameid) {
+            index = idx;
+        }
+    })
+    if (index == null) return null;
+    const info = privateQueue.splice(index, 1);
+    return info[0];
+}
 
 async function getOtherUser(username) {
     const running = await fetchDataFiltered('GamesTable', 'p1_username,p2_username,game_ID', 'status', true);

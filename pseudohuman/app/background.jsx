@@ -1,8 +1,9 @@
 'use client'
 
-import styles from '@/app/styles/main.module.css'
+import styles from './background.module.css'
 import { useEffect } from 'react';
 
+// start background
 const bgsetup = () => {
     const canvas = document.getElementById('canvas'),
         ctx = canvas.getContext('2d'),
@@ -25,6 +26,7 @@ const bgsetup = () => {
         return Math.random() * (max - min) + min;
     }
 
+    // individual falling character creator
     class Point {
         constructor(x, y) {
             this.x = x;
@@ -51,8 +53,9 @@ const bgsetup = () => {
         }
     }
 
+    // every 50ms updates display
     function update() {
-        ctx.fillStyle = "rgba(0,0,0,0.05)";
+        ctx.fillStyle = "#00000010";
         ctx.fillRect(0, 0, cw, ch);
         ctx2.clearRect(0, 0, cw, ch);
         let i = fallingCharArr.length;
@@ -64,7 +67,7 @@ const bgsetup = () => {
 
     for (let i = 0; i < maxColums; i++) {
         const chance = randomInt(1, 100);
-        if (chance < 85) continue;
+        if (chance < 70) continue;
         fallingCharArr.push(new Point(i * fontSize, randomFloat(-window.innerHeight, 0)));
     }
 
@@ -76,6 +79,7 @@ export default function Background() {
 
     return (
         <div className={styles.background}>
+            {/* incase the canvas is not supported */}
             <canvas id="canvas">Canvas is not supported in your browser.</canvas>
             <canvas id="canvas2">Canvas is not supported in your browser.</canvas>
         </div>

@@ -1,4 +1,4 @@
-import styles from '@/app/styles/startgame.module.css'
+import styles from './startgame.module.css'
 import { useEffect, useState } from "react";
 import Guesser from './guessing';
 import Pretender from './pretending';

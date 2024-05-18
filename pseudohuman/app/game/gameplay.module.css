@@ -1,0 +1,114 @@
+.parentdiv {
+    font-size: 0.7em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -45%);
+    height: auto;
+    border: 5px solid #38B000;
+    box-shadow: 0 0 50px #38B000;
+    color: #1ac728;
+    backdrop-filter: blur(4px);
+    background-color: #000000a0;
+    padding: 1%;
+    padding-top: 0.5vw;
+    padding-left: 2vw;
+}
+
+/* guesser */
+.button {
+    font-family: 'phoenix';
+    margin: 0.5vw;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 1vw;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    width: 80%;
+    overflow: hidden;
+    text-align: center;
+    color: rgb(77, 221, 37);
+    border: 0.3vh solid rgb(48, 184, 25);
+    box-shadow: 0 0 20px green;
+    transition: all 1s ease;
+}
+
+.button:hover,
+.submit:hover {
+    background-color: #1ac72833;
+    transition: all 0.2s ease;
+}
+
+.button:focus {
+    background-color: #ffffff1d;
+}
+
+/* pretender */
+.input,
+.inputwarn {
+    font-family: 'sperry';
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(51, 255, 5);
+    padding: 0.6vw;
+    font-size: 1.2em;
+    box-sizing: border-box;
+    border: 0.2vh solid rgb(48, 184, 25);
+    outline: none;
+    transition: all 0.4s ease;
+    margin-top: 2vh;
+}
+
+.inputwarn {
+    border-color: rgb(255, 81, 81);
+    color: rgb(255, 215, 215);
+}
+
+.submit {
+    font-family: 'phoenix';
+    margin: 0.5vw;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.8em;
+    padding: 1vw;
+    background: transparent;
+    height: auto;
+    text-decoration: none;
+    width: auto;
+    overflow: hidden;
+    text-align: center;
+    color: rgb(77, 221, 37);
+    border: 0.5vh solid rgb(48, 184, 25);
+    box-shadow: 0 0 20px green;
+    transition: all 1s ease;
+}
+
+.text,
+.textwarn {
+    margin: 2vw;
+}
+
+.textwarn {
+    color: rgb(255, 126, 126);
+    margin: 1vw;
+
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.h1 {
+    font-size: 1.5em;
+    color: #6dc614;
+    text-align: center;
+}
+
+/* background */
+.background {
+    position: absolute;
+    background: linear-gradient(140deg, rgba(0, 0, 0, 0), rgba(14, 93, 14, 0.384));
+    width: 100vw;
+    height: 100vh;
+}

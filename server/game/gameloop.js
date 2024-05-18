@@ -22,7 +22,7 @@ export async function sendAnswer(game_id, input) {
     } else {
         // countdown for other player to pick answer
         clearCountdown(game_id)
-        countdown(14, game_id, () => {
+        countdown(20, game_id, () => {
             guessedAnswer(game_id, playerNo, 'timed out');
         });
     }
@@ -44,7 +44,7 @@ export async function guessedAnswer(game_id, playerNo, answer) {
     // check for winner
     if (players[winScore] >= 3) {
         const pointDifference = Math.abs(players.p1_score - players.p2_score);
-        endGame(players, winnerUsername, pointDifference, winnerNum, game_id);
+        endGame(players, winnerUsername, pointDifference, game_id);
     } else {
         socketIO.emit('next-round-' + game_id, winnerUsername);
         nextRound(game_id, matchNo);
@@ -57,7 +57,7 @@ export async function nextRound(game_id, num) {
     countdown(4, game_id, () => {
         socketIO.emit('ready-' + game_id, num, questions);
         // countdown for player to write answer
-        countdown(29, game_id, () => {
+        countdown(45, game_id, () => {
             sendAnswer(game_id, 'timed out');
         });
     });
@@ -68,7 +68,7 @@ function countdown(seconds, game_id, after) {
     for (let i = 0; i < seconds; i++) {
         timers.push(setTimeout(() => {
             // new timer with 1 sec delay
-            socketIO.emit('countdown-' + game_id, seconds - i)
+            socketIO.emit('countdown-' + game_id, seconds - i, seconds);
         }, (1 + i) * 1000))
     }
     timers.push(setTimeout(() => after(), seconds * 1000 + 1000));
@@ -92,7 +92,9 @@ async function getWinner(game_id, player, ans, players) {
 export function updatePlayerNav([p1user, p1score], [p2user, p2score]) {
     const p1Info = { username: p1user, points: p1score };
     const p2Info = { username: p2user, points: p2score };
-    socketIO.emit('update-navbar-' + p1user, p1Info, p2Info);
-    socketIO.emit('update-navbar-' + p2user, p1Info, p2Info);
+    setTimeout(() => {
+        socketIO.emit('update-navbar-' + p1user, p1Info, p2Info);
+        socketIO.emit('update-navbar-' + p2user, p1Info, p2Info);
+    }, 100);
 }
 

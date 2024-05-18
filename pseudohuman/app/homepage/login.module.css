@@ -1,0 +1,62 @@
+.loginDiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 58vh;
+    text-align: center;
+    transform: translate(-50%, -40%);
+    border: 5px solid #38B000;
+    border-radius: 3px;
+    color: #70E000;
+    box-shadow: 0 0 50px #38B000;
+    backdrop-filter: blur(4px);
+}
+
+.loginTextHeader,
+.loadingtext {
+    font-size: 4em;
+    margin: 3vw;
+}
+
+.loadingtext {
+    font-size: 2.5em;
+}
+
+.loginTextP {
+    font-size: 1em;
+    margin: 3vw;
+    color: #06c529;
+}
+
+.loginInput,
+.loginInputError {
+    font-family: 'phoenix';
+    width: 90%;
+    background-color: rgb(0, 0, 0);
+    color: #06c529;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 1vw;
+    font-size: 1.2em;
+    margin: 3vw;
+    box-sizing: border-box;
+    border: 3px solid #3b3b3b;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.4s ease;
+}
+
+.loginInputError:focus {
+    border: 3px solid #971919;
+    color: #ff5b5b
+}
+
+.loginInput:focus {
+    border: 3px solid #058C42;
+}
+
+.incorrect {
+    color: red;
+}
