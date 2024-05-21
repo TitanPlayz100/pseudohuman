@@ -5,7 +5,7 @@ import Finish from './finish';
 import ProgressBar from '@ramonak/react-progress-bar';
 
 export default function Guesser({ props }) {
-    const { socket, changeDisplay, game_id, playerNo } = props;
+    const { socket, changeDisplay, game_id, playerNo, playAudio, music } = props;
     const [waitingText, setWaiting] = useState("Waiting for opponent to answer");
     const [timer, setTimer] = useState(20);
     const [info, setinfo] = useState({ question: "Loading", answers: ["loading", "loading", "loading"] });
@@ -15,9 +15,12 @@ export default function Guesser({ props }) {
         const selected = info.answers[index];
         socket.emit('guessed-answer', game_id, playerNo, selected);
         setWaiting("Checking answer...");
+        playAudio('select');
     }
 
     useEffect(() => {
+        music.play();
+
         socket.on('player-answered-' + game_id, (question, answers) => {
             setinfo({ question, answers });
             setWaiting('');
@@ -35,6 +38,10 @@ export default function Guesser({ props }) {
             if (waitingText != '') return;
             setMax(max);
             setTimer(number);
+
+            if (number == 5) {
+                playAudio('hyperalert');
+            }
         });
     }, [waitingText]);
 
@@ -53,9 +60,9 @@ export default function Guesser({ props }) {
                 <h1>{info.question}</h1>
                 <p>Pick the option that seems most human</p>
 
-                <button className={styles.button} onClick={() => selectAnswer(0)}>{info.answers[0]}</button>
-                <button className={styles.button} onClick={() => selectAnswer(1)}>{info.answers[1]}</button>
-                <button className={styles.button} onClick={() => selectAnswer(2)}>{info.answers[2]}</button>
+                <button className={styles.button} onClick={() => { selectAnswer(0); playAudio('select') }}>{info.answers[0]}</button>
+                <button className={styles.button} onClick={() => { selectAnswer(1); playAudio('select') }}>{info.answers[1]}</button>
+                <button className={styles.button} onClick={() => { selectAnswer(2); playAudio('select') }}>{info.answers[2]}</button>
 
                 {/* progress bar and timer */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: 'auto', gap: '1vw' }}>

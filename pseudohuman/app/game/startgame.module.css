@@ -22,6 +22,22 @@
     margin: 1vw;
 }
 
+.interaction {
+    position: absolute;
+    opacity: 0.3;
+    bottom: 15vh;
+    width: 100vw;
+    text-align: center;
+    font-size: 0.8em;
+    pointer-events: none;
+
+}
+
+.invis {
+    opacity: 0;
+    transition: all 1s ease;
+}
+
 /* starting game */
 .startdialogue {
     font-size: 1em;

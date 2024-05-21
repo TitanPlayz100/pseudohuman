@@ -49,6 +49,10 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 21/5
+- added sounds
+- split background from game to ensure it doesnt refresh
+
 ## 18/5
 - finished frontend redesign to look more old school terminal style
 - nice background particles

@@ -3,11 +3,12 @@ import spinner from '../loadingspinner.module.css'
 import { useEffect, useState } from 'react'
 import Start from './start';
 import secureLocalStorage from 'react-secure-storage';
+import { useRouter } from 'next/navigation';
 
 export default function MatchingScreen({ props }) {
     const { socket, changeDisplay, username, changeTopbar, roomCode } = props;
     const [currentState, setCurrentState] = useState('no connection');
-
+    const router = useRouter();
 
     useEffect(() => {
         socket.emit('enter-matchmaking', username, roomCode);
@@ -35,7 +36,7 @@ export default function MatchingScreen({ props }) {
     return (
         <div className={styles.matchingDiv}>
             {display()}
-            <button className={styles.button} onClick={() => window.location = '/?username=' + username}>Leave</button>
+            <button className={styles.button} onClick={() => router.push('/?username=' + username)}>Leave</button>
         </div>
     )
 }

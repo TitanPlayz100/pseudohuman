@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import env from "dotenv"; env.config();
+import env from "dotenv";
+env.config();
 
 import { createServer } from 'http';
 import { Server } from 'socket.io';

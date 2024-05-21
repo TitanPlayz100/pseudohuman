@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import styles from './home.module.css';
 import { useEffect, useState } from 'react';
 
@@ -5,6 +6,8 @@ export default function MainMenu({ props }) {
     const { username } = props;
     const [gameid, setGameid] = useState('');
     const [stats, setStats] = useState({ wins: 'loading wins', total_games: 'loading games' });
+    const audio = new Audio('/sfx/mmstart.mp3');
+    const router = useRouter();
 
     // function to update the stats
     const displayStats = async () => {
@@ -40,7 +43,21 @@ export default function MainMenu({ props }) {
         })
         const data = await response.json();
         if (data.valid) {
-            window.location = '/game?gameid=' + gameid;
+            router.push('/game?gameid=' + gameid);
+        }
+    }
+
+    function playSFX() {
+        audio.volume = 0.1;
+        audio.play();
+    }
+
+    function join(isPrivate = false) {
+        playSFX();
+        if (isPrivate == true) {
+            setTimeout(() => router.push('/game?private=true'), 500);
+        } else {
+            setTimeout(() => router.push('/game'), 500);
         }
     }
 
@@ -59,8 +76,8 @@ export default function MainMenu({ props }) {
                 <p style={{ textAlign: 'center', color: 'gray' }}>{username}:<br /> {stats.wins} / {stats.total_games}</p>
             </div>
             <div className={styles.buttondiv}>
-                <button className={styles.button} onClick={() => window.location = '/game'}>Join Queue</button>
-                <button className={styles.button} onClick={() => window.location = '/game?private=true'}>Private Game</button>
+                <button className={styles.button} onClick={join}>Join Queue</button>
+                <button className={styles.button} onClick={join.bind(null, true)}>Private Game</button>
                 <br />
                 <input
                     type='text'

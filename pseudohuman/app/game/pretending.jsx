@@ -7,7 +7,7 @@ import ProgressBar from '@ramonak/react-progress-bar';
 import { replaceProfanities } from 'no-profanity';
 
 export default function Pretender({ props }) {
-    const { socket, changeDisplay, game_id, questions } = props;
+    const { socket, changeDisplay, game_id, questions, playAudio, music } = props;
     const [inputText, setText] = useState("");
     const [waiting, setWaiting] = useState(false);
     const [timer, setTimer] = useState(45);
@@ -39,9 +39,13 @@ export default function Pretender({ props }) {
 
         socket.emit('send-player-answer', game_id, inputTextclean)
         setWaiting(true);
+
+        playAudio('select');
     }
 
     useEffect(() => {
+        music.play();
+
         socket.on('next-round-' + game_id, (winner) => {
             changeDisplay(<EndRound props={{ ...props, winner }} />)
         });
@@ -54,6 +58,10 @@ export default function Pretender({ props }) {
             if (waiting) return;
             setMax(maxNo);
             setTimer(number);
+
+            if (number == 5) {
+                playAudio('hyperalert');
+            }
         });
     }, []);
 

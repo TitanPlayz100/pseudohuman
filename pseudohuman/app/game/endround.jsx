@@ -4,10 +4,19 @@ import Guesser from './guessing';
 import Pretender from './pretending';
 
 export default function EndRound({ props }) {
-    const { socket, changeDisplay, game_id, playerNo, winner } = props;
+    const { socket, changeDisplay, game_id, playerNo, winner, playAudio, username, music } = props;
     const [countdown, setCount] = useState(5);
 
     useEffect(() => {
+        music.pause();
+        music.currentTime = 0;
+
+        if (winner == username) {
+            playAudio('showscore')
+        } else {
+            playAudio('lose')
+        }
+
         socket.on('countdown-' + game_id, (number) => {
             setCount(number);
         });

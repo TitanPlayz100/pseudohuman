@@ -3,12 +3,13 @@ import spinner from '../loadingspinner.module.css'
 import { useEffect, useState } from 'react'
 import Start from './start';
 import secureLocalStorage from 'react-secure-storage';
+import { useRouter } from 'next/navigation';
 
 export default function MatchingScreenPrivate({ props }) {
     const { socket, changeDisplay, username, changeTopbar } = props;
     const [currentState, setCurrentState] = useState('no connection');
     const [gameID, setGameID] = useState('Private Game');
-
+    const router = useRouter();
 
     useEffect(() => {
         socket.emit('enter-matchmaking-private', username);
@@ -39,7 +40,7 @@ export default function MatchingScreenPrivate({ props }) {
         <div className={styles.matchingDiv}>
             <h2 className={styles.subtext}>{gameID}</h2>
             {display()}
-            <button className={styles.button} onClick={() => window.location = '/?username=' + username}>Leave</button>
+            <button className={styles.button} onClick={() => router.push('/?username=' + username)}>Leave</button>
         </div>
     )
 }

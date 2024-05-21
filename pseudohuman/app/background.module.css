@@ -1,12 +1,12 @@
 /* import fonts from public directory */
 @font-face {
     font-family: 'phoenix';
-    src: url('/phoenixfont.ttf');
+    src: url('/fonts/phoenixfont.ttf');
 }
 
 @font-face {
     font-family: 'sperry';
-    src: url('/sperry.ttf');
+    src: url('/fonts/sperry.ttf');
 }
 
 .background {
