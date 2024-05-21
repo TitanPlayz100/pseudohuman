@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import styles from './bg.module.css';
 import Particles, { initParticlesEngine } from '@tsparticles/react';

@@ -12,6 +12,8 @@ export default function PlayerBar({ socket }) {
     useEffect(() => {
         // gets username from localstorage
         const username = secureLocalStorage.getItem('username');
+
+        // updates navbar on change
         socket.on('update-navbar-' + username, (player1, player2) => {
             setInfo({ player1, player2 });
         });

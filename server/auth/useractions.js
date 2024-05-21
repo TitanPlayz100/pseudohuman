@@ -1,4 +1,4 @@
-import { fetchDataCaseInsensitive, insertData, updateData } from "../database/dbInterface.js";
+import { fetchDataCaseInsensitive, insertData, updateData } from '../database/dbInterface.js';
 import { compare, hash } from 'bcrypt';
 
 // AUTH

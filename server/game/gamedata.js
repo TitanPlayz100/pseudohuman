@@ -1,4 +1,4 @@
-import { fetchDataFiltered, updateData } from "../database/dbInterface.js";
+import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
 
 export async function getQuestion(game_id) {
     const game = await fetchDataFiltered('GamesTable', 'match_NO,questions', 'game_ID', game_id);
@@ -22,9 +22,11 @@ export async function updateGameData(game_id, name, newData) {
     switch (name) {
         case 'round_winner':
         case 'human_responses':
-            newObj[name] = [...data, newData]; break;
+            newObj[name] = [...data, newData];
+            break;
         default:
-            newObj[name] = data + newData; break;
+            newObj[name] = data + newData;
+            break;
     }
 
     await updateData('GamesTable', [newObj], 'game_ID', game_id);

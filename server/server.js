@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import env from "dotenv";
+import env from 'dotenv';
 env.config();
 
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { CohereClient } from "cohere-ai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { CohereClient } from 'cohere-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
 import { check_password, check_username, register, change_stat, get_stat } from './auth/endpoints.js';
@@ -16,7 +16,7 @@ import { guessedAnswer, sendAnswer } from './game/gameloop.js';
 
 // init ai, database, and global variables
 export const cohereAI = new CohereClient({ token: process.env.AI_API_KEY });
-export const geminiAI = (new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY)).getGenerativeModel({ model: "gemini-pro" });
+export const geminiAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY).getGenerativeModel({ model: 'gemini-pro' });
 export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 export const queue = [];
 export const privateQueue = [];
@@ -40,12 +40,12 @@ app.post('/check_room_id', check_room_id);
 const server = createServer(app);
 export const socketIO = new Server(server, { cors: corsURLS });
 
-socketIO.on('connection', (socket) => {
-  socket.on('enter-matchmaking', enterMatchmaking);
-  socket.on('enter-matchmaking-private', enterMatchmakingPrivate);
-  socket.on('send-player-answer', sendAnswer);
-  socket.on('guessed-answer', guessedAnswer);
-  socket.on('user-disconnected', disconnectGame);
+socketIO.on('connection', socket => {
+    socket.on('enter-matchmaking', enterMatchmaking);
+    socket.on('enter-matchmaking-private', enterMatchmakingPrivate);
+    socket.on('send-player-answer', sendAnswer);
+    socket.on('guessed-answer', guessedAnswer);
+    socket.on('user-disconnected', disconnectGame);
 });
 
 server.listen(process.env.PORT, () => console.info('Server listening on port ' + process.env.PORT));

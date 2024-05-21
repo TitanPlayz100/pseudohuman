@@ -49,7 +49,7 @@ export default function MatchingScreen({ props }) {
     return (
         <div className={styles.matchingDiv}>
             {display()}
-            <button className={styles.button} onClick={() => router.push('/?username=' + username)}>
+            <button className={styles.button} onClick={() => router.push('/?username=' + username, { scroll: false })}>
                 Leave
             </button>
         </div>

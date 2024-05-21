@@ -8,6 +8,7 @@ export default function EndRound({ props }) {
     const [countdown, setCount] = useState(5);
 
     useEffect(() => {
+        // audio
         music.pause();
         music.currentTime = 0;
 

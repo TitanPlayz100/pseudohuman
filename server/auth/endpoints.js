@@ -1,4 +1,4 @@
-import { checkUsername, checkPassword, registerUser, addStat, getStat } from "./useractions.js";
+import { checkUsername, checkPassword, registerUser, addStat, getStat } from './useractions.js';
 
 export async function check_username(req, res) {
     const username = req.body.username;

@@ -1,5 +1,5 @@
-import { cohereAI as cohere, geminiAI as gemini } from "../server.js";
-import { fetchDataFiltered, insertData, updateData } from "../database/dbInterface.js";
+import { cohereAI as cohere, geminiAI as gemini } from '../server.js';
+import { fetchDataFiltered, insertData, updateData } from '../database/dbInterface.js';
 
 async function askCohere(question) {
     const prompt = question + '. Answer in one line and maximum 25 words.';
@@ -52,13 +52,13 @@ async function generate() {
 }
 
 async function getQuestions() {
-    let questions = []
+    let questions = [];
     for (let i = 0; i < 20; i++) {
         const response = await fetch('https://riddles-api.vercel.app/random');
         const data = await response.json();
-        questions.push(data.riddle)
+        questions.push(data.riddle);
     }
     return questions;
 }
 
-const questionsNew = []
+const questionsNew = [];

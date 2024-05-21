@@ -1,6 +1,6 @@
-import { queue, privateQueue, socketIO } from "../server.js";
-import { fetchDataFiltered, updateData } from "../database/dbInterface.js";
-import { addStat } from "../auth/useractions.js";
+import { queue, privateQueue, socketIO } from '../server.js';
+import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
+import { addStat } from '../auth/useractions.js';
 
 export async function endGame(players, winner, pointDiff, game_id) {
     await updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
@@ -23,7 +23,7 @@ export async function disconnectGame(username) {
     socketIO.emit('end-game-dc-' + username);
     socketIO.emit('end-game-dc-' + otherUser);
     updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
-};
+}
 
 function splicePrivateQueue(username) {
     let index = null;
@@ -31,7 +31,7 @@ function splicePrivateQueue(username) {
         if (info.player1 == username) {
             index = idx;
         }
-    })
+    });
     if (index == null) return;
     privateQueue.splice(index, 1);
 }
@@ -42,7 +42,7 @@ export function splicePrivateQueueID(gameid) {
         if (info.game_id == gameid) {
             index = idx;
         }
-    })
+    });
     if (index == null) return null;
     const info = privateQueue.splice(index, 1);
     return info[0];
@@ -59,4 +59,3 @@ async function getOtherUser(username) {
     if (p1 == username) return [p2, game_id];
     if (p2 == username) return [p1, game_id];
 }
-

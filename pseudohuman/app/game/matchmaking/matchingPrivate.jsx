@@ -53,7 +53,7 @@ export default function MatchingScreenPrivate({ props }) {
         <div className={styles.matchingDiv}>
             <h2 className={styles.subtext}>{gameID}</h2>
             {display()}
-            <button className={styles.button} onClick={() => router.push('/?username=' + username)}>
+            <button className={styles.button} onClick={() => router.push('/?username=' + username, { scroll: false })}>
                 Leave
             </button>
         </div>

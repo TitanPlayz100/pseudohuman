@@ -1,8 +1,8 @@
-import shuffleArray from "shuffle-array";
-import { fetchData, insertData } from "../database/dbInterface.js";
-import { queue, privateQueue, socketIO } from "../server.js";
-import { nextRound, updatePlayerNav } from "./gameloop.js";
-import { splicePrivateQueueID } from "./end.js";
+import shuffleArray from 'shuffle-array';
+import { fetchData, insertData } from '../database/dbInterface.js';
+import { queue, privateQueue, socketIO } from '../server.js';
+import { nextRound, updatePlayerNav } from './gameloop.js';
+import { splicePrivateQueueID } from './end.js';
 
 export async function enterMatchmaking(username, code) {
     console.info(username + ' has joined');
@@ -15,7 +15,8 @@ export async function enterMatchmaking(username, code) {
         const { player1, game_id: gameid } = info;
         game_id = gameid;
         [p1, p2] = [player1, username];
-    } else { // joining normal matchmaking
+    } else {
+        // joining normal matchmaking
         if (queue.includes(username)) return; // prevent duplicate matchmaking
         queue.push(username);
         socketIO.emit('entered-matching-' + username);
@@ -28,16 +29,16 @@ export async function enterMatchmaking(username, code) {
     console.info('game ' + game_id + ' started');
     updatePlayerNav([p1, 0], [p2, 0]);
     socketIO.emit('start-' + p1, game_id, 1, "You will be guessing the other player's response first");
-    socketIO.emit('start-' + p2, game_id, 2, "You will pretend to be an AI first");
+    socketIO.emit('start-' + p2, game_id, 2, 'You will pretend to be an AI first');
 
     await initGame(p1, p2, game_id);
     await nextRound(game_id, 1);
-};
+}
 
 export async function enterMatchmakingPrivate(username) {
     console.info(username + ' has joined the private queue');
 
-    if (privateQueue.some((info) => info.player1 == username)) return;
+    if (privateQueue.some(info => info.player1 == username)) return;
 
     const game_id = generateGameID(4);
     const info = { player1: username, game_id };
@@ -49,11 +50,11 @@ export async function enterMatchmakingPrivate(username) {
 export async function check_room_id(req, res) {
     const id = req.body.gameid;
     let valid = false;
-    privateQueue.forEach((info) => {
+    privateQueue.forEach(info => {
         if (info.game_id == id) {
             valid = true;
         }
-    })
+    });
     res.send({ valid });
 }
 
@@ -66,7 +67,7 @@ async function initGame(player1, player2, game_ID) {
         const { question: que, ai_answers: ans } = allprompts[Math.floor(Math.random() * allprompts.length)];
         shuffleArray(ans);
         const selected = ans.slice(0, 2);
-        const obj = { 'ai': selected, 'question': que };
+        const obj = { ai: selected, question: que };
         questions.push(obj);
     }
 
@@ -80,7 +81,7 @@ async function initGame(player1, player2, game_ID) {
         p1_score: 0,
         p2_score: 0,
         human_responses: [],
-        status: true
+        status: true,
     };
 
     await insertData('GamesTable', [gameinfo]);
@@ -88,5 +89,8 @@ async function initGame(player1, player2, game_ID) {
 
 function generateGameID(length) {
     // uses current time and base 16
-    return Date.now().toString(16).replace(/\./, '').slice(11 - length);
+    return Date.now()
+        .toString(16)
+        .replace(/\./, '')
+        .slice(11 - length);
 }

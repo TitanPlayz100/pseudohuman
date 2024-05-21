@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import PlayerBar from './navbar/topbar';
@@ -7,15 +9,16 @@ import secureLocalStorage from 'react-secure-storage';
 import MatchingScreenPrivate from './matchmaking/matchingPrivate';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+// server connection
 const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
 export default function MainPage() {
+    const [showBar, setShowBar] = useState(false);
     const [display, setDisplay] = useState(
         <div className={styles.matchingDiv}>
             <h1 className={styles.loadingtext}>Loading</h1>
         </div>
     );
-    const [showBar, setShowBar] = useState(false);
 
     const changeDisplay = display => setDisplay(display);
     const changeTopbar = bool => setShowBar(bool);
@@ -24,6 +27,7 @@ export default function MainPage() {
     const router = useRouter();
     let music;
 
+    // audio function that other components use
     const playAudio = name => {
         const audio = new Audio('/sfx/' + name + '.mp3');
         audio.volume = 0.1;
@@ -31,27 +35,22 @@ export default function MainPage() {
         audio.play();
     };
 
-    // check user interaction
-    useEffect(() => {
-        music = new Audio('/gameMusic.mp3');
-        music.volume = 0.05;
-    }, []);
-
+    // if private game send to private game creation screen
     function changeComponent(username) {
-        // if private game send to private game creation screen
-        if (isPrivate == 'true') {
-            setDisplay(
+        const newComponent =
+            isPrivate == 'true' ? (
                 <MatchingScreenPrivate props={{ socket, changeDisplay, username, changeTopbar, playAudio, music }} />
+            ) : (
+                <MatchingScreen props={{ socket, changeDisplay, username, changeTopbar, roomCode, playAudio, music }} />
             );
-            return;
-        }
 
-        setDisplay(
-            <MatchingScreen props={{ socket, changeDisplay, username, changeTopbar, roomCode, playAudio, music }} />
-        );
+        setDisplay(newComponent);
     }
 
     useEffect(() => {
+        // music setup
+        music = new Audio('/gameMusic.mp3');
+        music.volume = 0.05;
         // get username from localstorage in order to validate it
         const username = secureLocalStorage.getItem('username');
 
