@@ -1,5 +1,5 @@
-import styles from './gameplay.module.css'
-import { useEffect, useState } from 'react'
+import styles from './gameplay.module.css';
+import { useEffect, useState } from 'react';
 import EndRound from './endround';
 import Finish from './finish';
 import SimilarityEngine from '@roxon3000/text-similarity';
@@ -8,26 +8,26 @@ import { replaceProfanities } from 'no-profanity';
 
 export default function Pretender({ props }) {
     const { socket, changeDisplay, game_id, questions, playAudio, music } = props;
-    const [inputText, setText] = useState("");
+    const [inputText, setText] = useState('');
     const [waiting, setWaiting] = useState(false);
     const [timer, setTimer] = useState(45);
     const [timerMax, setMax] = useState(45);
     const [similarityScore, setSimilarity] = useState(0);
     const sc = new SimilarityEngine();
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         setText(event.target.value);
         checkSimilarity();
-    }
+    };
 
     // checks the similarity between input and the answers
     // uses a custom library
     function checkSimilarity() {
-        if (inputText == "") return 0;
-        const check1 = sc.getSimilarityScore(inputText + " ", questions.answers[0])
-        const check2 = sc.getSimilarityScore(inputText + " ", questions.answers[1])
-        setSimilarity(check1 > check2 ? check1 : check2)
-        return check1 > check2 ? check1 : check2
+        if (inputText == '') return 0;
+        const check1 = sc.getSimilarityScore(inputText + ' ', questions.answers[0]);
+        const check2 = sc.getSimilarityScore(inputText + ' ', questions.answers[1]);
+        setSimilarity(check1 > check2 ? check1 : check2);
+        return check1 > check2 ? check1 : check2;
     }
 
     // ensures that input is below threshold of similarity which is 75%
@@ -37,7 +37,7 @@ export default function Pretender({ props }) {
         // replaces profane words with ***
         const inputTextclean = replaceProfanities(inputText);
 
-        socket.emit('send-player-answer', game_id, inputTextclean)
+        socket.emit('send-player-answer', game_id, inputTextclean);
         setWaiting(true);
 
         playAudio('select');
@@ -46,12 +46,12 @@ export default function Pretender({ props }) {
     useEffect(() => {
         music.play();
 
-        socket.on('next-round-' + game_id, (winner) => {
-            changeDisplay(<EndRound props={{ ...props, winner }} />)
+        socket.on('next-round-' + game_id, winner => {
+            changeDisplay(<EndRound props={{ ...props, winner }} />);
         });
 
         socket.on('end-game-' + game_id, (final_winner, amount) => {
-            changeDisplay(<Finish props={{ ...props, final_winner, amount }} />)
+            changeDisplay(<Finish props={{ ...props, final_winner, amount }} />);
         });
 
         socket.on('countdown-' + game_id, (number, maxNo) => {
@@ -89,42 +89,53 @@ export default function Pretender({ props }) {
                 />
 
                 <center>
-                    <p className={styles.textwarn} style={{ opacity: similarityScore > 75 ? 1 : 0 }}>Answer too similar: {similarityScore}%</p>
-                    <button className={styles.submit} onClick={submitAnswer} >Submit Answer</button>
+                    <p className={styles.textwarn} style={{ opacity: similarityScore > 75 ? 1 : 0 }}>
+                        Answer too similar: {similarityScore}%
+                    </p>
+                    <button className={styles.submit} onClick={submitAnswer}>
+                        Submit Answer
+                    </button>
                 </center>
 
                 {/* progress bar and timer */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: 'auto', gap: '1vw' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: 'auto',
+                        gap: '1vw',
+                    }}
+                >
                     <p>{timer} seconds</p>
                     <ProgressBar
                         completed={timer}
-                        bgColor="#000000"
-                        height="1.5vh"
+                        bgColor='#000000'
+                        height='1.5vh'
                         width='50vw'
-                        borderRadius="0"
-                        labelAlignment="center"
-                        baseBgColor="#00cc00"
-                        labelColor="#0c0c0c"
-                        labelSize="1em"
-                        transitionDuration="0.4s"
-                        transitionTimingFunction="ease"
+                        borderRadius='0'
+                        labelAlignment='center'
+                        baseBgColor='#00cc00'
+                        labelColor='#0c0c0c'
+                        labelSize='1em'
+                        transitionDuration='0.4s'
+                        transitionTimingFunction='ease'
                         animateOnRender
                         maxCompleted={timerMax}
-                        customLabel=" "
-                        dir="rtl"
+                        customLabel=' '
+                        dir='rtl'
                     />
                 </div>
             </div>
-        )
-    }
-    else {
+        );
+    } else {
         // waiting text
         return (
             <div className={styles.parentdiv} style={{ textAlign: 'center' }}>
                 <h1 className={styles.text}>Waiting for other player's choice</h1>
                 <p className={styles.text}>Do you think you will fool them?</p>
             </div>
-        )
+        );
     }
-
 }

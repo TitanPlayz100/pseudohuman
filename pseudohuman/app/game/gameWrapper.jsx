@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client"
-import PlayerBar from "./topbar";
-import MatchingScreen from "./matching";
-import styles from './startgame.module.css'
-import secureLocalStorage from "react-secure-storage";
-import MatchingScreenPrivate from "./matchingPrivate";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import PlayerBar from './navbar/topbar';
+import MatchingScreen from './matchmaking/matching';
+import styles from './matchmaking/matchmaking.module.css';
+import secureLocalStorage from 'react-secure-storage';
+import MatchingScreenPrivate from './matchmaking/matchingPrivate';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
 export default function MainPage() {
-    const [display, setDisplay] = useState(<div className={styles.matchingDiv}><h1 className={styles.loadingtext}>Loading</h1></div>);
+    const [display, setDisplay] = useState(
+        <div className={styles.matchingDiv}>
+            <h1 className={styles.loadingtext}>Loading</h1>
+        </div>
+    );
     const [showBar, setShowBar] = useState(false);
 
     const changeDisplay = display => setDisplay(display);
@@ -20,12 +24,12 @@ export default function MainPage() {
     const router = useRouter();
     let music;
 
-    const playAudio = (name) => {
+    const playAudio = name => {
         const audio = new Audio('/sfx/' + name + '.mp3');
         audio.volume = 0.1;
         if (name == 'victory') audio.volume = 0.05;
         audio.play();
-    }
+    };
 
     // check user interaction
     useEffect(() => {
@@ -36,11 +40,15 @@ export default function MainPage() {
     function changeComponent(username) {
         // if private game send to private game creation screen
         if (isPrivate == 'true') {
-            setDisplay(<MatchingScreenPrivate props={{ socket, changeDisplay, username, changeTopbar, playAudio, music }} />);
+            setDisplay(
+                <MatchingScreenPrivate props={{ socket, changeDisplay, username, changeTopbar, playAudio, music }} />
+            );
             return;
         }
 
-        setDisplay(<MatchingScreen props={{ socket, changeDisplay, username, changeTopbar, roomCode, playAudio, music }} />)
+        setDisplay(
+            <MatchingScreen props={{ socket, changeDisplay, username, changeTopbar, roomCode, playAudio, music }} />
+        );
     }
 
     useEffect(() => {
@@ -63,7 +71,7 @@ export default function MainPage() {
         window.onbeforeunload = () => {
             secureLocalStorage.removeItem('game_id');
             socket.emit('user-disconnected', username);
-        }
+        };
     }, []);
 
     return (
@@ -72,6 +80,5 @@ export default function MainPage() {
             {showBar ? <PlayerBar socket={socket} /> : <></>}
             {display}
         </>
-    )
-
+    );
 }

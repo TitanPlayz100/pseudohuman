@@ -1,0 +1,6 @@
+.background {
+    position: absolute;
+    background: linear-gradient(140deg, rgba(0, 0, 0, 0), rgba(14, 93, 14, 0.384));
+    width: 100vw;
+    height: 100vh;
+}

@@ -1,6 +1,6 @@
 import styles from './login.module.css';
 import { useState } from 'react';
-import MainMenu from './mainMenu';
+import MainMenu from '../mainMenu';
 import secureLocalStorage from 'react-secure-storage';
 
 export default function PassInput({ props }) {
@@ -8,18 +8,17 @@ export default function PassInput({ props }) {
     const [password, setInput] = useState('');
     const [bottomText, setBottomText] = useState('');
 
-
     async function pressedEnter(event) {
-        if (event.key != "Enter") return;
+        if (event.key != 'Enter') return;
 
         setBottomText('Loading');
 
         // fetch data from server
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/check_password", {
+            const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/check_password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password }),
             });
             const { valid } = await res.json();
             switch (valid) {
@@ -30,15 +29,15 @@ export default function PassInput({ props }) {
                     setBottomText('Wrong, Try Again');
                     break;
                 case true:
-
                     // stores the username on encrypted localstorage in order to validate it later
                     // uses a custom library
                     secureLocalStorage.setItem('username', username);
                     changeDisplay(<MainMenu props={props} />);
                     break;
             }
+        } catch (error) {
+            setBottomText('An internal error occured');
         }
-        catch (error) { setBottomText('An internal error occured'); }
     }
 
     return (
@@ -49,12 +48,15 @@ export default function PassInput({ props }) {
                 className={bottomText && bottomText != 'Loading' ? styles.loginInputError : styles.loginInput}
                 style={{ fontFamily: 'Arial' }}
                 type='password'
-                onChange={event => { setInput(event.target.value); setBottomText(''); }}
+                onChange={event => {
+                    setInput(event.target.value);
+                    setBottomText('');
+                }}
                 onKeyDown={pressedEnter}
                 value={password}
                 autoFocus
             />
             <p className={bottomText == 'Loading' ? styles.loginTextP : styles.incorrect}>{bottomText}</p>
         </div>
-    )
+    );
 }

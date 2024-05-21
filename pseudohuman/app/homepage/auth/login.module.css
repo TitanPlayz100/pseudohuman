@@ -6,10 +6,10 @@
     height: 58vh;
     text-align: center;
     transform: translate(-50%, -40%);
-    border: 5px solid #38B000;
+    border: 5px solid #38b000;
     border-radius: 3px;
-    color: #70E000;
-    box-shadow: 0 0 50px #38B000;
+    color: #70e000;
+    box-shadow: 0 0 50px #38b000;
     backdrop-filter: blur(4px);
 }
 
@@ -50,11 +50,11 @@
 
 .loginInputError:focus {
     border: 3px solid #971919;
-    color: #ff5b5b
+    color: #ff5b5b;
 }
 
 .loginInput:focus {
-    border: 3px solid #058C42;
+    border: 3px solid #058c42;
 }
 
 .incorrect {

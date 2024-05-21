@@ -6,8 +6,8 @@
     width: 60%;
     transform: translate(-50%, -45%);
     height: auto;
-    border: 5px solid #38B000;
-    box-shadow: 0 0 50px #38B000;
+    border: 5px solid #38b000;
+    box-shadow: 0 0 50px #38b000;
     color: #1ac728;
     backdrop-filter: blur(4px);
     background-color: #000000a0;
@@ -103,12 +103,4 @@
     font-size: 1.5em;
     color: #6dc614;
     text-align: center;
-}
-
-/* background */
-.background {
-    position: absolute;
-    background: linear-gradient(140deg, rgba(0, 0, 0, 0), rgba(14, 93, 14, 0.384));
-    width: 100vw;
-    height: 100vh;
 }

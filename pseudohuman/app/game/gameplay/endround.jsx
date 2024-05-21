@@ -1,4 +1,4 @@
-import styles from './gameplay.module.css'
+import styles from './gameplay.module.css';
 import { useEffect, useState } from 'react';
 import Guesser from './guessing';
 import Pretender from './pretending';
@@ -12,12 +12,12 @@ export default function EndRound({ props }) {
         music.currentTime = 0;
 
         if (winner == username) {
-            playAudio('showscore')
+            playAudio('showscore');
         } else {
-            playAudio('lose')
+            playAudio('lose');
         }
 
-        socket.on('countdown-' + game_id, (number) => {
+        socket.on('countdown-' + game_id, number => {
             setCount(number);
         });
 
@@ -27,10 +27,11 @@ export default function EndRound({ props }) {
 
             // if the match number is odd, then player 1 is the pretender
             // if the match number is even, then player 2 is the pretender
-            const display = isOddMatch ^ isPlayer1 ? <Pretender props={{ ...props, questions }} /> : <Guesser props={props} />
+            const display =
+                isOddMatch ^ isPlayer1 ? <Pretender props={{ ...props, questions }} /> : <Guesser props={props} />;
 
             changeDisplay(display);
-        })
+        });
     }, []);
 
     return (
@@ -38,5 +39,5 @@ export default function EndRound({ props }) {
             <h1 className={styles.text}>{winner} is the winner</h1>
             <h2 className={styles.text}>Next round starting in {countdown}</h2>
         </div>
-    )
+    );
 }

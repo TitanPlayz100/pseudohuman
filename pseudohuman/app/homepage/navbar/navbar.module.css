@@ -24,12 +24,12 @@
     text-align: center;
     transition: all 1s ease;
     letter-spacing: 2px;
-    box-shadow: 0 0 20px #058C42;
+    box-shadow: 0 0 20px #058c42;
 }
 
 .Button:hover,
 .Button:focus {
-    background-color: #0D2818;
+    background-color: #0d2818;
     transition: all 0.2s ease;
 }
 
