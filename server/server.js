@@ -10,7 +10,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
 import { check_password, check_username, register, change_stat, get_stat } from './auth/endpoints.js';
-import { check_room_id, enterMatchmaking, enterMatchmakingPrivate } from './game/matchmaking.js';
+import { check_room_id, enterMatchmaking, createPrivateRoom } from './game/matchmaking.js';
 import { disconnectGame } from './game/end.js';
 import { guessedAnswer, sendAnswer } from './game/gameloop.js';
 
@@ -42,7 +42,7 @@ export const socketIO = new Server(server, { cors: corsURLS });
 
 socketIO.on('connection', socket => {
     socket.on('enter-matchmaking', enterMatchmaking);
-    socket.on('enter-matchmaking-private', enterMatchmakingPrivate);
+    socket.on('enter-matchmaking-private', createPrivateRoom);
     socket.on('send-player-answer', sendAnswer);
     socket.on('guessed-answer', guessedAnswer);
     socket.on('user-disconnected', disconnectGame);

@@ -1,7 +1,7 @@
 import shuffleArray from 'shuffle-array';
-import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
+import { updateData } from '../database/dbInterface.js';
 import { socketIO } from '../server.js';
-import { getPlayerData, getQuestion, updateGameData } from './gamedata.js';
+import { getPlayerData, getQuestion, getWinnerData, updateGameData } from './gamedata.js';
 import { endGame } from './end.js';
 
 export async function sendQuestion(game_id) {
@@ -54,7 +54,7 @@ export async function guessedAnswer(game_id, playerNo, answer) {
 export async function nextRound(game_id, num) {
     const questions = await getQuestion(game_id);
     // countdown for starting next round
-    countdown(4, game_id, () => {
+    countdown(5, game_id, () => {
         socketIO.emit('ready-' + game_id, num, questions);
         // countdown for player to write answer
         countdown(45, game_id, () => {
@@ -82,11 +82,8 @@ function clearCountdown(game_id) {
 }
 
 async function getWinner(game_id, player, ans, players) {
-    const data = await fetchDataFiltered('GamesTable', 'human_responses', 'game_ID', game_id);
-    const response = data[0].human_responses;
-    // check if selected answer matches other user's answer
-    const correct = response[response.length - 1] == ans;
-    const winnerNum = correct ^ (player == 1) ? 'p2' : 'p1';
+    const response = await getWinnerData(game_id);
+    const winnerNum = (response == ans) ^ (player == 1) ? 'p2' : 'p1';
     const winnerUsername = players[winnerNum + '_username'];
     return { winnerNum, winnerUsername };
 }

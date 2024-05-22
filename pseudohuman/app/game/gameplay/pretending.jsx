@@ -68,7 +68,7 @@ export default function Pretender({ props }) {
     if (!waiting) {
         return (
             // answering box
-            <div className={styles.parentdiv}>
+            <div className={styles.parentdiv + (timer <= 5 ? ' ' + styles.parentdivdanger : '')}>
                 <h1 className={styles.h1}>{questions.question}</h1>
                 <p>Write an answer, and make it appear like an AI wrote it</p>
 
@@ -81,7 +81,7 @@ export default function Pretender({ props }) {
 
                 {/* user input */}
                 <input
-                    className={similarityScore > 75 ? styles.inputwarn : styles.input}
+                    className={similarityScore > 75 || timer <= 5 ? styles.inputwarn : styles.input}
                     type='text'
                     placeholder='Input text (max 150)'
                     maxLength={150}
@@ -92,7 +92,10 @@ export default function Pretender({ props }) {
                     <p className={styles.textwarn} style={{ opacity: similarityScore > 75 ? 1 : 0 }}>
                         Answer too similar: {similarityScore}%
                     </p>
-                    <button className={styles.submit} onClick={submitAnswer}>
+                    <button
+                        className={styles.submit + (timer <= 5 ? ' ' + styles.submitdanger : '')}
+                        onClick={submitAnswer}
+                    >
                         Submit Answer
                     </button>
                 </center>
@@ -116,7 +119,7 @@ export default function Pretender({ props }) {
                         width='50vw'
                         borderRadius='0'
                         labelAlignment='center'
-                        baseBgColor='#00cc00'
+                        baseBgColor={timer <= 5 ? '#cc0000' : '#00cc00'}
                         labelColor='#0c0c0c'
                         labelSize='1em'
                         transitionDuration='0.4s'

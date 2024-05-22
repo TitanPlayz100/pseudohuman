@@ -1,6 +1,7 @@
 import { queue, privateQueue, socketIO } from '../server.js';
 import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
 import { addStat } from '../auth/useractions.js';
+import { updatePlayerStatus } from './gamedata.js';
 
 export async function endGame(players, winner, pointDiff, game_id) {
     await updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
@@ -8,13 +9,15 @@ export async function endGame(players, winner, pointDiff, game_id) {
     await addStat(winner, 'wins', 1);
     await addStat(players.p1_username, 'total_games', 1);
     await addStat(players.p2_username, 'total_games', 1);
+    updatePlayerStatus(players.p1_username, false);
+    updatePlayerStatus(players.p2_username, true);
     console.info('Game ' + game_id + ' ended');
 }
 
 export async function disconnectGame(username) {
-    console.info(username + ' has left');
-    queue.splice(queue.indexOf(username), 1);
+    spliceQueue(username);
     splicePrivateQueue(username);
+    updatePlayerStatus(username, false);
 
     const data = await getOtherUser(username);
     if (data == null) return;
@@ -22,7 +25,16 @@ export async function disconnectGame(username) {
 
     socketIO.emit('end-game-dc-' + username);
     socketIO.emit('end-game-dc-' + otherUser);
+    spliceQueue(otherUser);
+    updatePlayerStatus(otherUser, false);
     updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
+    console.info('Game ' + game_id + ' ended');
+}
+
+function spliceQueue(username) {
+    const ind = queue.indexOf(username);
+    if (ind == -1) return;
+    queue.splice(ind, 1);
 }
 
 function splicePrivateQueue(username) {

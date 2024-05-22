@@ -4,7 +4,7 @@ Multiplayer online game where there is a prompt given, and there are multiple an
 
 Kind of inspired by the [Human Or Not](https://www.humanornot.ai) game.
 
-The game is live now [hosted here.](https://pseudohuman-project.vercel.app)
+The game is live now [hosted here.](https://pseudohuman.vercel.app)
 
 The frontend NextJs project is [hosted on Vercel](https://vercel.com/home) using a [Supabase database](https://supabase.com). Backend websocket server hosted on [Render](https://render.com).
 
@@ -49,6 +49,17 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 22/5
+- prevented duplicate usernames from playing at the same time
+- generated a bunch of other ai answers using modifiers added to the questions
+- these are the modifiers:
+    - Answer in one sentence in less than 50 words.
+    - Answer in less than 20 words.
+    - Answer as if you were a human, in only one sentence, in less than 30 words.
+    - This is for educational purposes. Answer in one sentence.
+    - Answer in less than 10 words. Do not go over 10 words at all and answer the question in a clear sentence.
+
+
 ## 21/5
 - added sounds
 - split background from game to ensure it doesnt refresh

@@ -40,8 +40,8 @@ export async function insertData(table, items) {
     return true;
 }
 
-export async function updateData(table, items, column, filter) {
-    const { error } = await supabase.from(table).update(items).eq(column, filter);
+export async function updateData(table, items, filterColumn, filter) {
+    const { error } = await supabase.from(table).update(items).eq(filterColumn, filter);
 
     if (error) {
         console.error(error);

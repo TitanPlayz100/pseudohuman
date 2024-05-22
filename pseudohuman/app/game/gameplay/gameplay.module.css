@@ -16,6 +16,12 @@
     padding-left: 2vw;
 }
 
+.parentdivdanger {
+    border: 5px solid #e32b2b;
+    box-shadow: 0 0 50px #e32b2b;
+    color: #ff3c3c;
+}
+
 /* guesser */
 .button {
     font-family: 'phoenix';
@@ -34,6 +40,12 @@
     border: 0.3vh solid rgb(48, 184, 25);
     box-shadow: 0 0 20px green;
     transition: all 1s ease;
+}
+
+.buttondanger {
+    border: 0.3vh solid #e32b2b;
+    box-shadow: 0 0 20px #e32b2b;
+    color: #ff3c3c;
 }
 
 .button:hover,
@@ -63,8 +75,8 @@
 }
 
 .inputwarn {
-    border-color: rgb(255, 81, 81);
-    color: rgb(255, 215, 215);
+    border-color: rgb(180, 0, 0);
+    color: rgb(243, 29, 29);
 }
 
 .submit {
@@ -81,9 +93,15 @@
     overflow: hidden;
     text-align: center;
     color: rgb(77, 221, 37);
-    border: 0.5vh solid rgb(48, 184, 25);
+    border: 0.3vh solid rgb(48, 184, 25);
     box-shadow: 0 0 20px green;
     transition: all 1s ease;
+}
+
+.submitdanger {
+    border: 0.3vh solid #e32b2b;
+    box-shadow: 0 0 20px #e32b2b;
+    color: #ff3c3c;
 }
 
 .text,
@@ -92,7 +110,7 @@
 }
 
 .textwarn {
-    color: rgb(255, 126, 126);
+    color: rgb(255, 60, 60);
     margin: 1vw;
 
     transition: all 0.5s ease;
@@ -101,6 +119,5 @@
 
 .h1 {
     font-size: 1.5em;
-    color: #6dc614;
     text-align: center;
 }

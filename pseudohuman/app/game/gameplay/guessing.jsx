@@ -24,6 +24,7 @@ export default function Guesser({ props }) {
         socket.on('player-answered-' + game_id, (question, answers) => {
             setinfo({ question, answers });
             setWaiting('');
+            playAudio('select');
         });
 
         socket.on('next-round-' + game_id, winner => {
@@ -56,12 +57,15 @@ export default function Guesser({ props }) {
     } else {
         // select options for the answer
         return (
-            <div className={styles.parentdiv} style={{ textAlign: 'center' }}>
+            <div
+                className={styles.parentdiv + (timer <= 5 ? ' ' + styles.parentdivdanger : '')}
+                style={{ textAlign: 'center' }}
+            >
                 <h1>{info.question}</h1>
                 <p>Pick the option that seems most human</p>
 
                 <button
-                    className={styles.button}
+                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
                     onClick={() => {
                         selectAnswer(0);
                         playAudio('select');
@@ -70,7 +74,7 @@ export default function Guesser({ props }) {
                     {info.answers[0]}
                 </button>
                 <button
-                    className={styles.button}
+                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
                     onClick={() => {
                         selectAnswer(1);
                         playAudio('select');
@@ -79,7 +83,7 @@ export default function Guesser({ props }) {
                     {info.answers[1]}
                 </button>
                 <button
-                    className={styles.button}
+                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
                     onClick={() => {
                         selectAnswer(2);
                         playAudio('select');
@@ -107,7 +111,7 @@ export default function Guesser({ props }) {
                         width='50vw'
                         borderRadius='0'
                         labelAlignment='center'
-                        baseBgColor='#00cc00'
+                        baseBgColor={timer <= 5 ? '#cc0000' : '#00cc00'}
                         labelColor='#0c0c0c'
                         labelSize='1em'
                         transitionDuration='0.4s'

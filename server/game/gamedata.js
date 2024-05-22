@@ -1,4 +1,4 @@
-import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
+import { fetchDataCaseInsensitive, fetchDataFiltered, updateData } from '../database/dbInterface.js';
 
 export async function getQuestion(game_id) {
     const game = await fetchDataFiltered('GamesTable', 'match_NO,questions', 'game_ID', game_id);
@@ -31,4 +31,19 @@ export async function updateGameData(game_id, name, newData) {
 
     await updateData('GamesTable', [newObj], 'game_ID', game_id);
     return newObj[name];
+}
+
+export async function getWinnerData(game_id) {
+    const data = await fetchDataFiltered('GamesTable', 'human_responses', 'game_ID', game_id);
+    const response = data[0].human_responses;
+    return response[response.length - 1];
+}
+
+export async function updatePlayerStatus(username, newState) {
+    await updateData('UserTable', [{ isPlaying: newState }], 'username', username);
+}
+
+export async function getPlayerStatus(username) {
+    const data = await fetchDataCaseInsensitive('UserTable', 'isPlaying', 'username', username);
+    return data[0].isPlaying;
 }

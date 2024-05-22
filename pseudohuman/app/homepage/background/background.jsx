@@ -12,35 +12,11 @@ const bgsetup = () => {
         cw = window.innerWidth,
         ch = window.innerHeight,
         fontSize = 10,
-        maxColums = cw / fontSize,
-        charArr = [
-            'a',
-            'b',
-            'c',
-            'd',
-            'e',
-            'f',
-            'g',
-            'h',
-            'i',
-            'j',
-            'k',
-            'l',
-            'm',
-            'n',
-            'o',
-            'p',
-            'q',
-            'r',
-            's',
-            't',
-            'u',
-            'v',
-            'w',
-            'x',
-            'y',
-            'z',
-        ];
+        maxColums = cw / fontSize;
+
+    // prettier-ignore
+    const charArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',];
+
     canvas.width = canvas2.width = cw;
     canvas.height = canvas2.height = ch;
     let fallingCharArr = [];

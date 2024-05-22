@@ -8,7 +8,6 @@ import { BGoptions } from './bgoptions';
 
 export default function GameBackground() {
     const [init, setInit] = useState(false);
-    const options = BGoptions;
 
     // code to initialise custom particle library
     useEffect(() => {
@@ -23,7 +22,7 @@ export default function GameBackground() {
         return (
             <div className={styles.background}>
                 {/* custom particle library */}
-                <Particles id='tsparticles' options={options} />
+                <Particles id='tsparticles' options={BGoptions} />
             </div>
         );
     }

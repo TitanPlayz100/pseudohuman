@@ -2,20 +2,19 @@ import styles from './matchmaking.module.css';
 import spinner from './loadingspinner.module.css';
 import { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useRouter } from 'next/navigation';
 import Start from '../gameplay/start';
 
 export default function MatchingScreen({ props }) {
     const { socket, changeDisplay, username, changeTopbar, roomCode } = props;
     const [currentState, setCurrentState] = useState('no connection');
-    const router = useRouter();
 
     useEffect(() => {
         socket.emit('enter-matchmaking', username, roomCode);
 
-        socket.on('entered-matching-' + username, () => {
-            setCurrentState('connected');
-        });
+        socket.on('entered-matching-' + username, () => setCurrentState('connected'));
+
+        socket.on('already-ingame-' + username, () => (window.location = '/?username=' + username));
+
         socket.on('start-' + username, (game_id, playerNo, startText) => {
             setCurrentState('found');
             changeTopbar(true);
@@ -34,6 +33,7 @@ export default function MatchingScreen({ props }) {
                         <div className={spinner.loader}></div>
                     </>
                 );
+
             case 'connected':
                 return (
                     <>
@@ -41,6 +41,7 @@ export default function MatchingScreen({ props }) {
                         <div className={spinner.loader}></div>
                     </>
                 );
+
             case 'found':
                 return <h1 className={styles.loadingtext}>Player Found!</h1>;
         }
@@ -49,7 +50,7 @@ export default function MatchingScreen({ props }) {
     return (
         <div className={styles.matchingDiv}>
             {display()}
-            <button className={styles.button} onClick={() => router.push('/?username=' + username, { scroll: false })}>
+            <button className={styles.button} onClick={() => (window.location = '/?username=' + username)}>
                 Leave
             </button>
         </div>

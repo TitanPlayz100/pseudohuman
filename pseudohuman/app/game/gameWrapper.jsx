@@ -7,7 +7,7 @@ import MatchingScreen from './matchmaking/matching';
 import styles from './matchmaking/matchmaking.module.css';
 import secureLocalStorage from 'react-secure-storage';
 import MatchingScreenPrivate from './matchmaking/matchingPrivate';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 // server connection
 const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
@@ -24,7 +24,6 @@ export default function MainPage() {
     const changeTopbar = bool => setShowBar(bool);
     const isPrivate = useSearchParams().get('private');
     const roomCode = useSearchParams().get('gameid');
-    const router = useRouter();
     let music;
 
     // audio function that other components use
@@ -62,8 +61,9 @@ export default function MainPage() {
 
         // detect other user disconnected
         socket.on('end-game-dc-' + username, () => {
-            router.push('/?username=' + username);
             socket.disconnect();
+            music.pause();
+            window.location = '/?username=' + username;
         });
 
         // Detect disconnect
