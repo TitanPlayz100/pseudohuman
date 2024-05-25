@@ -5,6 +5,7 @@ import NavBar from './homepage/navbar/navbar';
 import UserInput from './homepage/auth/user';
 import { useSearchParams } from 'next/navigation';
 import Background from './homepage/background/background';
+import styles from './global.module.css';
 
 // Sets the main component to user login page
 export default function HomePage() {
@@ -29,7 +30,7 @@ export default function HomePage() {
         <>
             <Background />
             <NavBar props={{ username }} />
-            {display}
+            <div className={styles.parentParent}>{display}</div>
         </>
     );
 }

@@ -40,6 +40,8 @@
 
 .image {
     transform: translateY(1.2vh);
+    width: 11vmin;
+    height: 11vmin;
 }
 
 .li {

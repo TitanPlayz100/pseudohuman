@@ -59,7 +59,7 @@ export default function Pretender({ props }) {
             setMax(maxNo);
             setTimer(number);
 
-            if (number == 5) {
+            if (number == 6) {
                 playAudio('hyperalert');
             }
         });

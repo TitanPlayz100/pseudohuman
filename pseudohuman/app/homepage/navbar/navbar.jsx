@@ -7,7 +7,7 @@ export default function NavBar({ props }) {
         <div className={styles.parentDiv}>
             <ul className={styles.ul}>
                 <li className={styles.li}>
-                    <Image width={100} height={100} src='/cyborg.svg' alt='logo' className={styles.image} priority />
+                    <Image width={0} height={0} src='/cyborg.svg' alt='logo' className={styles.image} priority />
                 </li>
                 <li className={styles.li}>
                     <span className={styles.litext}>PseudoHuman</span>

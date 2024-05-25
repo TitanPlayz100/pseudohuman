@@ -49,6 +49,10 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 24/5
+- tried to add animations (did not work, never trying that again, -2 hours)
+- attempted to make the page more responsive, somewhat worked 
+
 ## 22/5
 - prevented duplicate usernames from playing at the same time
 - generated a bunch of other ai answers using modifiers added to the questions

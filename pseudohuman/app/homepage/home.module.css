@@ -1,22 +1,20 @@
 .parentdiv {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    width: 90%;
-    height: 40vw;
-    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 90vh;
     border-radius: 2vw;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
     color: black;
+    transform: translateY(10vh);
 }
 
 .info {
-    position: fixed;
     margin: 1vw;
-    padding: 2vh;
-    width: 55vw;
-    height: 20vw;
+    padding: 2vmin;
+    width: 60vw;
+    height: auto;
     border: 5px solid #008000;
     color: rgb(77, 221, 37);
     box-shadow: 0 0 50px green;
@@ -32,12 +30,10 @@
 }
 
 .buttondiv {
-    position: fixed;
     margin: 1vw;
-    padding: 1.2vh;
-    width: 55vw;
-    height: 13vw;
-    transform: translateY(160%);
+    padding: 2vmin;
+    width: 60vw;
+    height: auto;
     text-align: center;
     border: 5px solid #008000;
     box-shadow: 0 0 50px green;
@@ -55,7 +51,7 @@
     padding: 1vw;
     background: transparent;
     height: auto;
-    min-width: 100px;
+    width: 40vmin;
     text-align: center;
     border: 0.3vh solid rgb(48, 184, 25);
     box-shadow: 0 0 20px green;
@@ -79,6 +75,6 @@
     border-bottom: 3px solid rgb(48, 184, 25);
     outline: none;
     transition: all 0.4s ease;
-    width: 9vw;
+    width: 20vmin;
     text-align: center;
 }

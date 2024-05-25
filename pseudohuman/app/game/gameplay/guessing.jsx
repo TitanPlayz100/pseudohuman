@@ -40,7 +40,7 @@ export default function Guesser({ props }) {
             setMax(max);
             setTimer(number);
 
-            if (number == 5) {
+            if (number == 6) {
                 playAudio('hyperalert');
             }
         });
