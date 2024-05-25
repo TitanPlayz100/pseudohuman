@@ -4,6 +4,7 @@ import styles from './gameplay.module.css';
 export default function Finish({ props }) {
     const { username, final_winner, amount, music, playAudio } = props;
 
+    // winning audio, pause music
     useEffect(() => {
         music.pause();
         music.currentTime = 0;

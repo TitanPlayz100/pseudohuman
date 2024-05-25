@@ -15,6 +15,7 @@ export default function Start({ props }) {
         });
 
         socket.on('ready-' + game_id, (matchNo, questions) => {
+            // if player 1, then they are pretender
             changeDisplay(playerNo == 1 ? <Guesser props={props} /> : <Pretender props={{ ...props, questions }} />);
         });
     }, []);

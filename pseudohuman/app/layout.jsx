@@ -11,7 +11,8 @@ export default function RootLayout({ children }) {
             <body className={styles.homepage}>
                 <Suspense>
                     {children}
-                    {/* analytics to help degub */}
+
+                    {/* analytics to help debug */}
                     <SpeedInsights />
                     <Analytics />
                 </Suspense>

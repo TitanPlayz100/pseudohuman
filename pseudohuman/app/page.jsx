@@ -12,12 +12,8 @@ export default function HomePage() {
     const [display, setDisplay] = useState();
     const [username, setUsername] = useState(null);
 
-    const changeDisplay = display => {
-        setDisplay(display);
-    };
-    const changeUsername = display => {
-        setUsername(display);
-    };
+    const changeDisplay = display => setDisplay(display);
+    const changeUsername = display => setUsername(display);
 
     // get username from search url to see if user is already playing
     const urlUser = useSearchParams().get('username');
@@ -28,8 +24,13 @@ export default function HomePage() {
 
     return (
         <>
+            {/* matrix inspired background */}
             <Background />
+
+            {/* navbar */}
             <NavBar props={{ username }} />
+
+            {/* main display */}
             <div className={styles.parentParent}>{display}</div>
         </>
     );

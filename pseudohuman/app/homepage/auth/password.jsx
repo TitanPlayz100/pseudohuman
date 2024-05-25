@@ -46,6 +46,8 @@ export default function PassInput({ props }) {
             <p className={styles.loginTextP}>Input your Password. Press ENTER to continue</p>
             <input
                 className={bottomText && bottomText != 'Loading' ? styles.loginInputError : styles.loginInput}
+
+                // the main font didnt support circle characters to hide password
                 style={{ fontFamily: 'Arial' }}
                 type='password'
                 onChange={event => {

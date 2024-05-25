@@ -9,13 +9,17 @@ export default function MainMenu({ props }) {
     const audio = new Audio('/sfx/mmstart.mp3');
     const router = useRouter();
 
-    // function to update the stats
+    // display stats from server
     const displayStats = async () => {
         setStats({
             wins: await getStats('wins'),
             total_games: await getStats('total_games'),
         });
     };
+
+    useEffect(() => {
+        displayStats();
+    }, []);
 
     // fetch stats from the server
     async function getStats(stat) {
@@ -38,34 +42,28 @@ export default function MainMenu({ props }) {
         // makes sure gameid is 4 characters
         if (gameid.length != 4) return;
 
+        // checks if room code is valid by server
         const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/check_room_id', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ gameid }),
         });
+
+        // redirect if room code is valid
         const data = await response.json();
         if (data.valid) {
             router.push('/game?gameid=' + gameid);
         }
     }
 
-    function playSFX() {
-        audio.volume = 0.1;
-        audio.play();
-    }
-
+    // switch page to game page to start game
     function join(isPrivate = false) {
-        playSFX();
         if (isPrivate == true) {
-            setTimeout(() => router.push('/game?private=true'), 500);
+            router.push('/game?private=true');
         } else {
-            setTimeout(() => router.push('/game'), 500);
+            router.push('/game');
         }
     }
-
-    useEffect(() => {
-        displayStats();
-    }, []);
 
     return (
         <div className={styles.parentdiv}>
@@ -74,7 +72,9 @@ export default function MainMenu({ props }) {
                 <p>
                     You will play in turns with another person to try to catch the human amidst the ai responses. A
                     series of questions will be asked, and if you click the other persons response rather than generated
-                    responses, you gain a point. The first to 3 points wins
+                    responses, you gain a point. The first to 3 points wins.
+                    <br />
+                    Join a room by entering the code in the textbox and pressing ENTER
                 </p>
                 <p>You can play with random people or against a friend. </p>
                 <h2>Have Fun!</h2>

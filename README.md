@@ -22,7 +22,7 @@ Others:
 - [x] redesign front end
 - [x] timer for each players turn
 - [x] stop copy paste ai answer as own answer
-- ~~[ ] add anon accounts~~
+- ~~add anon accounts~~
 - [x] integrate the AI api into the app
 - [x] show lifetime score
 - [x] stop server sleeping
@@ -49,6 +49,11 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 25/5
+- fixed a plethora of bugs
+- added extensive comments to all the code
+- added 5 other answer sets that ai have generated so that answers are not too repetitive
+
 ## 24/5
 - tried to add animations (did not work, never trying that again, -2 hours)
 - attempted to make the page more responsive, somewhat worked 
@@ -62,7 +67,6 @@ Others:
     - Answer as if you were a human, in only one sentence, in less than 30 words.
     - This is for educational purposes. Answer in one sentence.
     - Answer in less than 10 words. Do not go over 10 words at all and answer the question in a clear sentence.
-
 
 ## 21/5
 - added sounds

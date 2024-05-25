@@ -4,18 +4,18 @@ import { socketIO } from '../server.js';
 import { getPlayerData, getQuestion, getWinnerData, updateGameData } from './gamedata.js';
 import { endGame } from './end.js';
 
-export async function sendQuestion(game_id) {
-    const { question, answers } = getQuestion(game_id);
-    socketIO.emit('return-question-' + game_id, question, answers);
-}
-
 export async function sendAnswer(game_id, input) {
-    await updateGameData(game_id, 'human_responses', input); // save response to db
+    // save response to db
+    await updateGameData(game_id, 'human_responses', input);
+
+    // shuffle player and ai answers together
     let { question, answers, match_NO } = await getQuestion(game_id);
-    answers.push(input); // add response to outdated array
+    answers.push(input);
     shuffleArray(answers);
     socketIO.emit('player-answered-' + game_id, question, answers);
-    const playerNo = match_NO % 2 == 0 ? 2 : 1; // who's turn it is
+
+    // who's turn it is
+    const playerNo = match_NO % 2 == 0 ? 2 : 1;
 
     if (input == 'timed out') {
         guessedAnswer(game_id, playerNo, 'timed out');
@@ -43,9 +43,11 @@ export async function guessedAnswer(game_id, playerNo, answer) {
 
     // check for winner
     if (players[winScore] >= 3) {
+        // calculate point difference
         const pointDifference = Math.abs(players.p1_score - players.p2_score);
         endGame(players, winnerUsername, pointDifference, game_id);
     } else {
+        // next round
         socketIO.emit('next-round-' + game_id, winnerUsername);
         nextRound(game_id, matchNo);
     }
@@ -53,9 +55,11 @@ export async function guessedAnswer(game_id, playerNo, answer) {
 
 export async function nextRound(game_id, num) {
     const questions = await getQuestion(game_id);
+
     // countdown for starting next round
     countdown(5, game_id, () => {
         socketIO.emit('ready-' + game_id, num, questions);
+
         // countdown for player to write answer
         countdown(45, game_id, () => {
             sendAnswer(game_id, 'timed out');
@@ -65,7 +69,10 @@ export async function nextRound(game_id, num) {
 
 function countdown(seconds, game_id, after) {
     const timers = [];
+
+    // generate new timers with +1 second delay
     for (let i = 0; i < seconds; i++) {
+        // stores each timer to array
         timers.push(
             setTimeout(() => {
                 // new timer with 1 sec delay
@@ -73,24 +80,33 @@ function countdown(seconds, game_id, after) {
             }, (1 + i) * 1000)
         );
     }
-    timers.push(setTimeout(() => after(), seconds * 1000 + 1000));
+
+    // command to run after all timers are done
+    timers.push(setTimeout(() => after(), (seconds + 1) * 1000));
+
+    // stores array of timer to global array for later use
     countdown[game_id] = timers;
 }
 
-function clearCountdown(game_id) {
+export function clearCountdown(game_id) {
+    // finds array of timers and ends them
     countdown[game_id].forEach(id => clearTimeout(id));
 }
 
 async function getWinner(game_id, player, ans, players) {
     const response = await getWinnerData(game_id);
+
+    // determine who won based on response and player number
     const winnerNum = (response == ans) ^ (player == 1) ? 'p2' : 'p1';
     const winnerUsername = players[winnerNum + '_username'];
     return { winnerNum, winnerUsername };
 }
 
 export function updatePlayerNav([p1user, p1score], [p2user, p2score]) {
+    // formats scores to send to client
     const p1Info = { username: p1user, points: p1score };
     const p2Info = { username: p2user, points: p2score };
+
     setTimeout(() => {
         socketIO.emit('update-navbar-' + p1user, p1Info, p2Info);
         socketIO.emit('update-navbar-' + p2user, p1Info, p2Info);

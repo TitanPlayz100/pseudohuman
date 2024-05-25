@@ -1,3 +1,4 @@
+// custom settings for particle library
 export const BGoptions = {
     autoPlay: true,
     background: {

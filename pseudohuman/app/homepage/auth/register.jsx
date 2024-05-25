@@ -12,6 +12,8 @@ export default function RegUser({ props }) {
         if (event.key != 'Enter') {
             return;
         }
+
+        // check password length
         if (password.length < 7) {
             setBottomText('Password too short');
             return;

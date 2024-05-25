@@ -1,3 +1,4 @@
+/* parent to center items in page */
 .parentdiv {
     width: 90vw;
     height: 90vh;
@@ -23,6 +24,7 @@
     font-size: 0.7em;
 }
 
+/* for centering text */
 .center {
     text-align: center;
     color: #6efc21;

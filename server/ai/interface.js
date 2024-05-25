@@ -2,6 +2,10 @@ import { cohereAI as cohere, geminiAI as gemini } from '../server.js';
 import { fetchDataFiltered, insertData, updateData } from '../database/dbInterface.js';
 import { modifiers, prompts } from '../answers.js';
 
+// a bunch of one time functions that run to do various things
+// like generate ai answers and store/fix the answers to database
+
+// AI interfaces
 async function askCohere(question) {
     const prompt = question;
     const result = await cohere.generate({ prompt: prompt });
@@ -20,15 +24,16 @@ async function askGemini(question) {
     }
 }
 
-// a bunch of one time functions that run to do various things
-// like generate ai answers and store/fix the answers to database
+// Storing answer into new record
 async function newQuestion(question, question_id, ai_answers, modifierIndex) {
     const info = { question };
     info['ai_answers_' + modifierIndex] = ai_answers;
     return await updateData('PromptsTable', [info], 'id', question_id);
 }
 
+// Appending answer into existing record
 async function appendAnswer(question, ai_answers_new) {
+    // first fetch answers, then append new answer to it
     const data = await fetchDataFiltered('PromptsTable', '*', 'question', question);
     if (!data) return false;
     let { ai_answers } = data[0];
@@ -36,7 +41,8 @@ async function appendAnswer(question, ai_answers_new) {
     return await updateData('PromptsTable', [{ ai_answers }], 'question', question);
 }
 
-async function generate() {
+// Generating new responses using AI (added delay)
+async function generateAndStoreAIAnswers() {
     const questionBank = prompts;
     const modifierBank = modifiers;
     let index = 1;
@@ -48,6 +54,7 @@ async function generate() {
             const answer = await askCohere(question + '? ' + modifier);
             const answer2 = await askGemini(question + '? ' + modifier);
 
+            // if answer is blank then skip
             if (!answer || !answer2) {
                 console.error(index + ' failed');
                 continue;
@@ -55,6 +62,8 @@ async function generate() {
 
             await newQuestion(question, id, [answer, answer2], modifierIndex);
             console.info(`modifier ${modifierIndex}, question ${index} out of ${max}`);
+
+            // added delay to bypass rate limit
             await new Promise(resolve => setTimeout(resolve, 6000));
             modifierIndex++;
         }
@@ -62,6 +71,7 @@ async function generate() {
     }
 }
 
+// Some questions from the riddle API
 async function getQuestions() {
     let questions = [];
     for (let i = 0; i < 20; i++) {
@@ -70,12 +80,4 @@ async function getQuestions() {
         questions.push(data.riddle);
     }
     return questions;
-}
-
-async function fixQuestions() {
-    const qBank = prompts;
-    for (let info of qBank) {
-        const { id, question } = info;
-        await updateData('PromptsTable', [{ question }], 'id', id);
-    }
 }

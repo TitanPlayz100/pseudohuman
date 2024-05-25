@@ -4,6 +4,7 @@ export async function getQuestion(game_id) {
     const game = await fetchDataFiltered('GamesTable', 'match_NO,questions', 'game_ID', game_id);
     const { questions, match_NO } = game[0];
 
+    // gets the next question based on match_NO
     const question = questions[match_NO - 1].question;
     const answers = questions[match_NO - 1].ai;
     return { question, answers, match_NO };
@@ -19,6 +20,9 @@ export async function updateGameData(game_id, name, newData) {
     let data = (await fetchDataFiltered('GamesTable', name, 'game_ID', game_id))[0][name];
     if (data == null) data = [];
     const newObj = {};
+
+    // merges new data with current data
+    // both round_winner and human_responses are arrays, use array merging
     switch (name) {
         case 'round_winner':
         case 'human_responses':
@@ -39,11 +43,11 @@ export async function getWinnerData(game_id) {
     return response[response.length - 1];
 }
 
-export async function updatePlayerStatus(username, newState) {
-    await updateData('UserTable', [{ isPlaying: newState }], 'username', username);
-}
-
 export async function getPlayerStatus(username) {
     const data = await fetchDataCaseInsensitive('UserTable', 'isPlaying', 'username', username);
     return data[0].isPlaying;
+}
+
+export async function updatePlayerStatus(username, newState) {
+    await updateData('UserTable', [{ isPlaying: newState }], 'username', username);
 }

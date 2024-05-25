@@ -3,6 +3,7 @@ import { compare, hash } from 'bcrypt';
 
 // AUTH
 export async function registerUser(username, password) {
+    // hash +salt function from external library used
     const hashedPassword = await hash(password, 5);
     return await insertData('UserTable', [{ username, password: hashedPassword, wins: 0, total_games: 0 }]);
 }

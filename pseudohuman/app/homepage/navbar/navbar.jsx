@@ -7,6 +7,7 @@ export default function NavBar({ props }) {
         <div className={styles.parentDiv}>
             <ul className={styles.ul}>
                 <li className={styles.li}>
+                    {/* icon */}
                     <Image width={0} height={0} src='/cyborg.svg' alt='logo' className={styles.image} priority />
                 </li>
                 <li className={styles.li}>
@@ -15,6 +16,7 @@ export default function NavBar({ props }) {
             </ul>
             <ul className={styles.ul}>
                 <li className={styles.li}>
+                    {/* logout component */}
                     <LogoutButton props={props} />
                 </li>
             </ul>

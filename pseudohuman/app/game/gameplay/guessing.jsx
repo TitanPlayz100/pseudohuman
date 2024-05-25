@@ -2,7 +2,7 @@ import styles from './gameplay.module.css';
 import { useEffect, useState } from 'react';
 import EndRound from './endround';
 import Finish from './finish';
-import ProgressBar from '@ramonak/react-progress-bar';
+import TimerBar from './timerProgress';
 
 export default function Guesser({ props }) {
     const { socket, changeDisplay, game_id, playerNo, playAudio, music } = props;
@@ -11,6 +11,7 @@ export default function Guesser({ props }) {
     const [info, setinfo] = useState({ question: 'Loading', answers: ['loading', 'loading', 'loading'] });
     const [timerMax, setMax] = useState(20);
 
+    // presses an option
     function selectAnswer(index) {
         const selected = info.answers[index];
         socket.emit('guessed-answer', game_id, playerNo, selected);
@@ -21,6 +22,7 @@ export default function Guesser({ props }) {
     useEffect(() => {
         music.play();
 
+        // detect when other player answered
         socket.on('player-answered-' + game_id, (question, answers) => {
             setinfo({ question, answers });
             setWaiting('');
@@ -35,6 +37,7 @@ export default function Guesser({ props }) {
             changeDisplay(<Finish props={{ ...props, final_winner, amount }} />);
         });
 
+        // change countdown bar
         socket.on('countdown-' + game_id, (number, max) => {
             if (waitingText != '') return;
             setMax(max);
@@ -64,64 +67,20 @@ export default function Guesser({ props }) {
                 <h1>{info.question}</h1>
                 <p>Pick the option that seems most human</p>
 
-                <button
-                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
-                    onClick={() => {
-                        selectAnswer(0);
-                        playAudio('select');
-                    }}
-                >
-                    {info.answers[0]}
-                </button>
-                <button
-                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
-                    onClick={() => {
-                        selectAnswer(1);
-                        playAudio('select');
-                    }}
-                >
-                    {info.answers[1]}
-                </button>
-                <button
-                    className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
-                    onClick={() => {
-                        selectAnswer(2);
-                        playAudio('select');
-                    }}
-                >
-                    {info.answers[2]}
-                </button>
+                {/* options mapped out */}
+                {info.answers.map((answer, index) => {
+                    return (
+                        <button
+                            className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
+                            onClick={() => selectAnswer(index)}
+                        >
+                            {answer}
+                        </button>
+                    );
+                })}
 
-                {/* progress bar and timer */}
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        height: 'auto',
-                        gap: '1vw',
-                    }}
-                >
-                    <p>{timer} seconds</p>
-                    <ProgressBar
-                        completed={timer}
-                        bgColor='#000000'
-                        height='1.5vh'
-                        width='50vw'
-                        borderRadius='0'
-                        labelAlignment='center'
-                        baseBgColor={timer <= 5 ? '#cc0000' : '#00cc00'}
-                        labelColor='#0c0c0c'
-                        labelSize='1em'
-                        transitionDuration='0.4s'
-                        transitionTimingFunction='ease'
-                        animateOnRender
-                        maxCompleted={timerMax}
-                        customLabel=' '
-                        dir='rtl'
-                    />
-                </div>
+                {/* timer */}
+                <TimerBar timer={timer} timerMax={timerMax} />
             </div>
         );
     }

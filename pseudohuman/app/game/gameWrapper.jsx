@@ -29,12 +29,12 @@ export default function MainPage() {
     // audio function that other components use
     const playAudio = name => {
         const audio = new Audio('/sfx/' + name + '.mp3');
-        audio.volume = 0.1;
+        audio.volume = 0.05;
         if (name == 'victory') audio.volume = 0.05;
         audio.play();
     };
 
-    // if private game send to private game creation screen
+    // if private game send to private game screen
     function changeComponent(username) {
         const newComponent =
             isPrivate == 'true' ? (
@@ -49,7 +49,7 @@ export default function MainPage() {
     useEffect(() => {
         // music setup
         music = new Audio('/gameMusic.mp3');
-        music.volume = 0.05;
+        music.volume = 0.02;
         // get username from localstorage in order to validate it
         const username = secureLocalStorage.getItem('username');
 
@@ -58,6 +58,7 @@ export default function MainPage() {
         }
 
         changeComponent(username);
+        playAudio('mmstart');
 
         // detect other user disconnected
         socket.on('end-game-dc-' + username, () => {

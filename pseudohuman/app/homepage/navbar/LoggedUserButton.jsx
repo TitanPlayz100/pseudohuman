@@ -6,6 +6,7 @@ export function LogoutButton({ props }) {
         <button
             className={styles.Button + ' ' + styles.loginbutton}
             onClick={() => {
+                // remove username from localstorage and reload to send to login page
                 secureLocalStorage.clear();
                 window.location.reload();
             }}

@@ -12,8 +12,11 @@ export default function UserInput({ props }) {
     const [bottomText, setBottomText] = useState(false);
 
     useEffect(() => {
+        // checks if username is stored in local storage
         const tempUsername = secureLocalStorage.getItem('username');
         if (tempUsername == null) return;
+
+        // if it is automatically login user and redirect to main menu
         if (tempUsername != urlUser) setInput(tempUsername);
         changeUsername(tempUsername);
         changeDisplay(<MainMenu props={{ ...props, username: tempUsername }} />);
@@ -47,6 +50,7 @@ export default function UserInput({ props }) {
             const { valid } = await res.json();
             changeUsername(username);
             switch (valid) {
+                // if server error occured
                 case null:
                     setBottomText('An error occured');
                     break;

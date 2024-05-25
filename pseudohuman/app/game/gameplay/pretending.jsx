@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import EndRound from './endround';
 import Finish from './finish';
 import SimilarityEngine from '@roxon3000/text-similarity';
-import ProgressBar from '@ramonak/react-progress-bar';
 import { replaceProfanities } from 'no-profanity';
+import TimerBar from './timerProgress';
 
 export default function Pretender({ props }) {
     const { socket, changeDisplay, game_id, questions, playAudio, music } = props;
@@ -89,9 +89,12 @@ export default function Pretender({ props }) {
                 />
 
                 <center>
+                    {/* similarity score display */}
                     <p className={styles.textwarn} style={{ opacity: similarityScore > 75 ? 1 : 0 }}>
                         Answer too similar: {similarityScore}%
                     </p>
+
+                    {/* submit button */}
                     <button
                         className={styles.submit + (timer <= 5 ? ' ' + styles.submitdanger : '')}
                         onClick={submitAnswer}
@@ -100,36 +103,8 @@ export default function Pretender({ props }) {
                     </button>
                 </center>
 
-                {/* progress bar and timer */}
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        height: 'auto',
-                        gap: '1vw',
-                    }}
-                >
-                    <p>{timer} seconds</p>
-                    <ProgressBar
-                        completed={timer}
-                        bgColor='#000000'
-                        height='1.5vh'
-                        width='50vw'
-                        borderRadius='0'
-                        labelAlignment='center'
-                        baseBgColor={timer <= 5 ? '#cc0000' : '#00cc00'}
-                        labelColor='#0c0c0c'
-                        labelSize='1em'
-                        transitionDuration='0.4s'
-                        transitionTimingFunction='ease'
-                        animateOnRender
-                        maxCompleted={timerMax}
-                        customLabel=' '
-                        dir='rtl'
-                    />
-                </div>
+                {/* timer */}
+                <TimerBar timer={timer} timerMax={timerMax} />
             </div>
         );
     } else {

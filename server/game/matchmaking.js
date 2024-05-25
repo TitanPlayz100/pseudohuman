@@ -6,20 +6,23 @@ import { disconnectGame, splicePrivateQueueID } from './end.js';
 import { getPlayerStatus, updatePlayerStatus } from './gamedata.js';
 
 export async function enterMatchmaking(username, code) {
+    // prevent same player playing 2 games at once
     if ((await getPlayerStatus(username)) == true) {
-        socketIO.emit('already-ingame-' + username); // prevent same player playing 2 games at once
-        setTimeout(() => disconnectGame(username), 100);
+        console.log(username + ' is already ingame');
+        socketIO.emit('already-ingame-' + username);
+        setTimeout(() => disconnectGame(username), 200);
         return;
     }
 
-    code != null ? joinPrivate(username, code) : joinQueue(username);
+    // if they entered with a room code use private rooms, else chech normal queue
+    code != null ? joinPrivateRoom(username, code) : joinQueue(username);
 }
 
-async function joinPrivate(username, code) {
+async function joinPrivateRoom(username, code) {
     const info = splicePrivateQueueID(code);
     updatePlayerStatus(username, true);
     console.info(username + ' has joined');
-    if (info == null) return; // incase game suddenly disappears :shrug:
+    if (info == null) return; // incase game suddenly disappears
 
     const { player1, game_id } = info;
     const [p1, p2] = [player1, username];
@@ -46,7 +49,10 @@ async function joinQueue(username) {
 
 export async function createPrivateRoom(username) {
     console.info(username + ' has joined the private queue');
+
+    // check if player has already joined a private
     if (privateQueue.some(info => info.player1 == username)) return;
+    setTimeout(() => updatePlayerStatus(username, true), 100);
 
     const game_id = generateGameID(4);
     const info = { player1: username, game_id };
@@ -55,14 +61,12 @@ export async function createPrivateRoom(username) {
     socketIO.emit('entered-matching-private-' + username, game_id);
 }
 
+// check if room id is valid
 export async function check_room_id(req, res) {
     const id = req.body.gameid;
-    let valid = false;
-    privateQueue.forEach(info => {
-        if (info.game_id == id) {
-            valid = true;
-        }
-    });
+
+    // loop through each private room and check if game id matches
+    const valid = privateQueue.some(room => room.game_id == id);
     res.send({ valid });
 }
 
@@ -71,12 +75,23 @@ async function initGame(player1, player2, game_id) {
     socketIO.emit('start-' + player1, game_id, 1, "You will be guessing the other player's response first");
     socketIO.emit('start-' + player2, game_id, 2, 'You will pretend to be an AI first');
 
+    // fetches every prompt saved in database
     const allprompts = await fetchData('PromptsTable', '*');
     const questions = [];
 
     // generate 6 random questions
     for (let i = 0; i < 6; i++) {
-        const { question: que, ai_answers: ans } = allprompts[Math.floor(Math.random() * allprompts.length)];
+        const rand = Math.floor(Math.random() * allprompts.length);
+        const { question: que } = allprompts[rand];
+
+        // generate answers from a random answer set
+        // if its empty fallback to default answers
+        const randAnswerSet = Math.floor(Math.random() * 5);
+        let ans = allprompts[rand][`ai_answers_${randAnswerSet}`];
+        if (ans == null) {
+            ans = allprompts[rand]['ai_answers'];
+        }
+
         shuffleArray(ans);
         const selected = ans.slice(0, 2);
         const obj = { ai: selected, question: que };
@@ -101,7 +116,8 @@ async function initGame(player1, player2, game_id) {
 }
 
 function generateGameID(length) {
-    // uses current time and base 16
+    // uses current time and converts to base 16 so that there is minimal chance for game ids to match
+    // (most games run very close to each other)
     return Date.now()
         .toString(16)
         .replace(/\./, '')
