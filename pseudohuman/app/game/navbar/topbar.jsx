@@ -21,11 +21,11 @@ export default function PlayerBar({ socket }) {
 
     return (
         <div className={styles.playersdiv}>
-            <p className={styles.playerstext}>{info.player1.points}</p>
+            <p className={styles.playerstext}>${info.player1.points}</p>
             <p className={styles.vstext}>
                 {info.player1.username} VS {info.player2.username}
             </p>
-            <p className={styles.playerstext}>{info.player2.points}</p>
+            <p className={styles.playerstext}>${info.player2.points}</p>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import shuffleArray from 'shuffle-array';
-import { fetchData, insertData } from '../database/dbInterface.js';
+import { fetchData, fetchDataRandom, insertData } from '../database/dbInterface.js';
 import { queue, privateQueue, socketIO } from '../server.js';
 import { nextRound, updatePlayerNav } from './gameloop.js';
 import { disconnectGame, splicePrivateQueueID } from './end.js';
@@ -75,28 +75,8 @@ async function initGame(player1, player2, game_id) {
     socketIO.emit('start-' + player1, game_id, 1, "You will be guessing the other player's response first");
     socketIO.emit('start-' + player2, game_id, 2, 'You will pretend to be an AI first');
 
-    // fetches every prompt saved in database
-    const allprompts = await fetchData('PromptsTable', '*');
-    const questions = [];
-
-    // generate 6 random questions
-    for (let i = 0; i < 6; i++) {
-        const rand = Math.floor(Math.random() * allprompts.length);
-        const { question: que } = allprompts[rand];
-
-        // generate answers from a random answer set
-        // if its empty fallback to default answers
-        const randAnswerSet = Math.floor(Math.random() * 5);
-        let ans = allprompts[rand][`ai_answers_${randAnswerSet}`];
-        if (ans == null) {
-            ans = allprompts[rand]['ai_answers'];
-        }
-
-        shuffleArray(ans);
-        const selected = ans.slice(0, 2);
-        const obj = { ai: selected, question: que };
-        questions.push(obj);
-    }
+    // generates all the questions
+    const questions = await generateQuestions();
 
     // set default game info
     const gameinfo = {
@@ -113,6 +93,31 @@ async function initGame(player1, player2, game_id) {
 
     await insertData('GamesTable', [gameinfo]);
     console.info('game ' + game_id + ' started');
+}
+
+async function generateQuestions() {
+    const randomPrompts = await fetchDataRandom();
+    const questions = [];
+
+    randomPrompts.forEach((prompt) => {
+        // get a random ai answer from 5 options, if its null fallback to default answers
+        const randAnswerSet = Math.floor(Math.random() * 5);
+        let ans = prompt[`ai_answers_${randAnswerSet}`];
+        if (ans == null) {
+            ans = prompt['ai_answers'];
+        }
+
+        // limit to one sentence
+        ans.map((aiAnswer) => {
+            return aiAnswer.split('. ')[0];
+        })
+
+        shuffleArray(ans);
+        const limited = ans.slice(0, 2);
+        const obj = { ai: limited, question: prompt.question };
+        questions.push(obj);
+    })
+    return questions;
 }
 
 function generateGameID(length) {

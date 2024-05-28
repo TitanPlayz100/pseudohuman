@@ -10,6 +10,17 @@ export async function fetchData(table, columns) {
     return data;
 }
 
+// gets 6 random rows from prompts table
+export async function fetchDataRandom() {
+    const { data, error } = await supabase.rpc('get_random_prompts');
+
+    if (error) {
+        console.error(error);
+        return false;
+    }
+    return data;
+}
+
 export async function fetchDataFiltered(table, columns, filterColumn, filter) {
     const { data, error } = await supabase.from(table).select(columns).eq(filterColumn, filter);
 

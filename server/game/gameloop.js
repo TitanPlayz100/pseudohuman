@@ -1,12 +1,13 @@
 import shuffleArray from 'shuffle-array';
 import { updateData } from '../database/dbInterface.js';
-import { socketIO } from '../server.js';
+import { countdowns, socketIO, timeToAnswer } from '../server.js';
 import { getPlayerData, getQuestion, getWinnerData, updateGameData } from './gamedata.js';
 import { endGame } from './end.js';
 
-export async function sendAnswer(game_id, input) {
+export async function sendAnswer(game_id, input, timer) {
     // save response to db
     await updateGameData(game_id, 'human_responses', input);
+    timeToAnswer[game_id] = timer;
 
     // shuffle player and ai answers together
     let { question, answers, match_NO } = await getQuestion(game_id);
@@ -18,37 +19,43 @@ export async function sendAnswer(game_id, input) {
     const playerNo = match_NO % 2 == 0 ? 2 : 1;
 
     if (input == 'timed out') {
-        guessedAnswer(game_id, playerNo, 'timed out');
+        guessedAnswer(game_id, playerNo, 'timed out', 20);
     } else {
         // countdown for other player to pick answer
         clearCountdown(game_id);
         countdown(20, game_id, () => {
-            guessedAnswer(game_id, playerNo, 'timed out');
+            guessedAnswer(game_id, playerNo, 'timed out', 0);
         });
     }
 }
 
-export async function guessedAnswer(game_id, playerNo, answer) {
+export async function guessedAnswer(game_id, playerNo, answer, timer) {
     clearCountdown(game_id);
+
+    const { question, answers } = await getQuestion(game_id);
     const players = await getPlayerData(game_id);
     const matchNo = await updateGameData(game_id, 'match_NO', 1);
     const { winnerNum, winnerUsername } = await getWinner(game_id, playerNo, answer, players);
     const winScore = winnerNum + '_score';
 
+    // calculate points gained
+    const timePercent = winnerNum == playerNo ? timer / 20 : timeToAnswer[game_id] / 45;
+    const cost = calculateCost(question, answers, timePercent);
+
     // update game with new score
-    players[winScore] += 1;
+    players[winScore] += cost;
     updatePlayerNav([players.p1_username, players.p1_score], [players.p2_username, players.p2_score]);
     await updateData('GamesTable', [players], 'game_ID', game_id);
     await updateGameData(game_id, 'round_winner', winnerUsername);
 
     // check for winner
-    if (players[winScore] >= 3) {
+    if (players[winScore] >= 3000 || matchNo > 6) {
         // calculate point difference
         const pointDifference = Math.abs(players.p1_score - players.p2_score);
         endGame(players, winnerUsername, pointDifference, game_id);
     } else {
         // next round
-        socketIO.emit('next-round-' + game_id, winnerUsername);
+        socketIO.emit('next-round-' + game_id, winnerUsername, cost);
         nextRound(game_id, matchNo);
     }
 }
@@ -62,7 +69,7 @@ export async function nextRound(game_id, num) {
 
         // countdown for player to write answer
         countdown(45, game_id, () => {
-            sendAnswer(game_id, 'timed out');
+            sendAnswer(game_id, 'timed out', 0);
         });
     });
 }
@@ -85,12 +92,13 @@ function countdown(seconds, game_id, after) {
     timers.push(setTimeout(() => after(), (seconds + 1) * 1000));
 
     // stores array of timer to global array for later use
-    countdown[game_id] = timers;
+    countdowns[game_id] = timers;
 }
 
 export function clearCountdown(game_id) {
     // finds array of timers and ends them
-    countdown[game_id].forEach(id => clearTimeout(id));
+    countdowns[game_id].forEach(id => clearTimeout(id));
+    countdowns[game_id] = [];
 }
 
 async function getWinner(game_id, player, ans, players) {
@@ -111,4 +119,19 @@ export function updatePlayerNav([p1user, p1score], [p2user, p2score]) {
         socketIO.emit('update-navbar-' + p1user, p1Info, p2Info);
         socketIO.emit('update-navbar-' + p2user, p1Info, p2Info);
     }, 100);
+}
+
+function calculateCost(question, answers, time) {
+    // different factors in determining points gained
+    let cost = 400 +
+        question.split(' ').length * 20 +
+        answers[0].length * 1.4 +
+        answers[1].length * 1.4 +
+        time * 200;
+
+    // limit by 700 < cost < 1300
+    if (cost < 700) cost = 700;
+    if (cost > 1300) cost = 1300;
+
+    return Math.round(cost);
 }

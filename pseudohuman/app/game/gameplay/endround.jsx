@@ -4,7 +4,7 @@ import Guesser from './guessing';
 import Pretender from './pretending';
 
 export default function EndRound({ props }) {
-    const { socket, changeDisplay, game_id, playerNo, winner, playAudio, username, music } = props;
+    const { socket, changeDisplay, game_id, playerNo, winner, pointsGained, playAudio, username, music } = props;
     const [countdown, setCount] = useState(5);
 
     useEffect(() => {
@@ -38,6 +38,7 @@ export default function EndRound({ props }) {
     return (
         <div className={styles.parentdiv} style={{ textAlign: 'center' }}>
             <h1 className={styles.text}>{winner} is the winner</h1>
+            <p className={styles.text}>They gained ${pointsGained}</p>
             <h2 className={styles.text}>Next round starting in {countdown}</h2>
         </div>
     );

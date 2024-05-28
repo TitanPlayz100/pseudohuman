@@ -5,18 +5,13 @@ env.config();
 
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { CohereClient } from 'cohere-ai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+
 import { createClient } from '@supabase/supabase-js';
 
 import { check_password, check_username, register, change_stat, get_stat } from './auth/endpoints.js';
 import { check_room_id, enterMatchmaking, createPrivateRoom } from './game/matchmaking.js';
 import { disconnectGame } from './game/end.js';
 import { guessedAnswer, sendAnswer } from './game/gameloop.js';
-
-// init ai
-export const cohereAI = new CohereClient({ token: process.env.AI_API_KEY });
-export const geminiAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY).getGenerativeModel({ model: 'gemini-pro' });
 
 // init database
 export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -25,6 +20,7 @@ export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUP
 export const queue = [];
 export const privateQueue = [];
 export const countdowns = {};
+export const timeToAnswer = {};
 
 // server setup
 const corsURLS = { origin: ['http://localhost:3000', process.env.SERVER_URL] };

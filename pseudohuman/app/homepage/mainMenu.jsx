@@ -72,7 +72,7 @@ export default function MainMenu({ props }) {
                 <p>
                     You will play in turns with another person to try to catch the human amidst the ai responses. A
                     series of questions will be asked, and if you click the other persons response rather than generated
-                    responses, you gain a point. The first to 3 points wins.
+                    responses, you gain cash. The first to $3000 or the most cash after 6 rounds wins.
                     <br />
                     Join a room by entering the code in the textbox and pressing ENTER
                 </p>

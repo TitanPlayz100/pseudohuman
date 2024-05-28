@@ -18,6 +18,7 @@ The Large Language Models used in this project are from [Cohere](https://dashboa
 - [ ] story creation gamemode
 
 Others:
+- [x] change points system to cash system
 - [x] add ability to create custom rooms for 2 people
 - [x] redesign front end
 - [x] timer for each players turn
@@ -53,6 +54,9 @@ Others:
 - fixed a plethora of bugs
 - added extensive comments to all the code
 - added 5 other answer sets that ai have generated so that answers are not too repetitive
+- change points system to cash system
+    - win by getting $3000 or most cash after 6 rounds
+    - each question is valued differently based on question length, and average ai answer length, and time to respond
 
 ## 24/5
 - tried to add animations (did not work, never trying that again, -2 hours)

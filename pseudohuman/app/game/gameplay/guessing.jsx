@@ -14,7 +14,7 @@ export default function Guesser({ props }) {
     // presses an option
     function selectAnswer(index) {
         const selected = info.answers[index];
-        socket.emit('guessed-answer', game_id, playerNo, selected);
+        socket.emit('guessed-answer', game_id, playerNo, selected, timer);
         setWaiting('Checking answer...');
         playAudio('select');
     }
@@ -29,8 +29,8 @@ export default function Guesser({ props }) {
             playAudio('select');
         });
 
-        socket.on('next-round-' + game_id, winner => {
-            changeDisplay(<EndRound props={{ ...props, winner }} />);
+        socket.on('next-round-' + game_id, (winner, amount) => {
+            changeDisplay(<EndRound props={{ ...props, winner, pointsGained: amount }} />);
         });
 
         socket.on('end-game-' + game_id, (final_winner, amount) => {
@@ -71,6 +71,7 @@ export default function Guesser({ props }) {
                 {info.answers.map((answer, index) => {
                     return (
                         <button
+                            key={index}
                             className={styles.button + (timer <= 5 ? ' ' + styles.buttondanger : '')}
                             onClick={() => selectAnswer(index)}
                         >

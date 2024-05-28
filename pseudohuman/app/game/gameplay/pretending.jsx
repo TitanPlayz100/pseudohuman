@@ -37,7 +37,7 @@ export default function Pretender({ props }) {
         // replaces profane words with ***
         const inputTextclean = replaceProfanities(inputText);
 
-        socket.emit('send-player-answer', game_id, inputTextclean);
+        socket.emit('send-player-answer', game_id, inputTextclean, timer);
         setWaiting(true);
 
         playAudio('select');
@@ -46,8 +46,8 @@ export default function Pretender({ props }) {
     useEffect(() => {
         music.play();
 
-        socket.on('next-round-' + game_id, winner => {
-            changeDisplay(<EndRound props={{ ...props, winner }} />);
+        socket.on('next-round-' + game_id, (winner, amount) => {
+            changeDisplay(<EndRound props={{ ...props, winner, pointsGained: amount }} />);
         });
 
         socket.on('end-game-' + game_id, (final_winner, amount) => {

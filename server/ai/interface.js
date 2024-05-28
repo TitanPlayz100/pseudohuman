@@ -1,6 +1,12 @@
-import { cohereAI as cohere, geminiAI as gemini } from '../server.js';
-import { fetchDataFiltered, insertData, updateData } from '../database/dbInterface.js';
+import { fetchDataFiltered, updateData } from '../database/dbInterface.js';
 import { modifiers, prompts } from '../answers.js';
+import { CohereClient } from 'cohere-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import env from 'dotenv';
+env.config();
+
+const cohereAI = new CohereClient({ token: process.env.AI_API_KEY });
+const geminiAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY).getGenerativeModel({ model: 'gemini-pro' });
 
 // a bunch of one time functions that run to do various things
 // like generate ai answers and store/fix the answers to database
@@ -8,7 +14,7 @@ import { modifiers, prompts } from '../answers.js';
 // AI interfaces
 async function askCohere(question) {
     const prompt = question;
-    const result = await cohere.generate({ prompt: prompt });
+    const result = await cohereAI.generate({ prompt: prompt });
     const answer = result.generations[0]['text'].replace('\n', ' ');
     return answer;
 }
@@ -16,7 +22,7 @@ async function askCohere(question) {
 async function askGemini(question) {
     const prompt = question;
     try {
-        const result = await gemini.generateContent(prompt);
+        const result = await geminiAI.generateContent(prompt);
         const answer = result.response.text().replace('\n', ' ');
         return answer;
     } catch (error) {
