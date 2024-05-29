@@ -7,12 +7,13 @@ import { replaceProfanities } from 'no-profanity';
 import TimerBar from './timerProgress';
 
 export default function Pretender({ props }) {
-    const { socket, changeDisplay, game_id, questions, playAudio, music } = props;
+    const { socket, changeDisplay, game_id, questions, playAudio, music, abilityCount, playerNo } = props;
     const [inputText, setText] = useState('');
     const [waiting, setWaiting] = useState(false);
     const [timer, setTimer] = useState(45);
     const [timerMax, setMax] = useState(45);
     const [similarityScore, setSimilarity] = useState(0);
+    const [abilities, setAbilityCount] = useState(abilityCount);
     const sc = new SimilarityEngine();
 
     const handleChange = event => {
@@ -26,15 +27,22 @@ export default function Pretender({ props }) {
         if (inputText == '') return 0;
         const check1 = sc.getSimilarityScore(inputText + ' ', questions.answers[0]);
         const check2 = sc.getSimilarityScore(inputText + ' ', questions.answers[1]);
-        setSimilarity(check1 > check2 ? check1 : check2);
-        return check1 > check2 ? check1 : check2;
+
+        setSimilarity(Math.max(check1, check2));
+        return Math.max(check1, check2);
     }
 
     // ensures that input is below threshold of similarity which is 75%
-    function submitAnswer() {
-        if (checkSimilarity() > 75) return;
+    function submitAnswer(force = false) {
+        if (checkSimilarity() > 75) {
+            if (force == true) {
+                setText('');
+            } else {
+                return;
+            }
+        }
 
-        // replaces profane words with ***
+        // replaces profane words with *
         const inputTextclean = replaceProfanities(inputText);
 
         socket.emit('send-player-answer', game_id, inputTextclean, timer);
@@ -45,6 +53,13 @@ export default function Pretender({ props }) {
 
     useEffect(() => {
         music.play();
+    }, []);
+
+    useEffect(() => {
+        console.log(inputText);
+        socket.on('get-incomplete-answer-' + game_id, () => {
+            submitAnswer(true);
+        });
 
         socket.on('next-round-' + game_id, (winner, amount) => {
             changeDisplay(<EndRound props={{ ...props, winner, pointsGained: amount }} />);
@@ -63,7 +78,16 @@ export default function Pretender({ props }) {
                 playAudio('hyperalert');
             }
         });
-    }, []);
+
+        socket.on('ability-used-' + game_id, (success, remaining) => {
+            setAbilityCount(remaining);
+            if (success == true) {
+                playAudio('buy');
+            } else {
+                playAudio('nope');
+            }
+        });
+    }, [inputText]);
 
     if (!waiting) {
         return (
@@ -105,6 +129,17 @@ export default function Pretender({ props }) {
 
                 {/* timer */}
                 <TimerBar timer={timer} timerMax={timerMax} />
+                <button
+                    className={styles.abilityButton}
+                    onClick={() => {
+                        socket.emit('use-ability', game_id, playerNo, timer);
+                        setAbilityCount('...');
+                    }}
+                    disabled={abilities == 0 || abilities == '...'}
+                >
+                    +10s
+                </button>
+                <span style={{ color: 'gray' }}>(Remaining: {abilities})</span>
             </div>
         );
     } else {

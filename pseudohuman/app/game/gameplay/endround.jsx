@@ -22,14 +22,19 @@ export default function EndRound({ props }) {
             setCount(number);
         });
 
-        socket.on('ready-' + game_id, (matchNo, questions) => {
+        socket.on('ready-' + game_id, (matchNo, questions, p1_abilities, p2_abilities) => {
             const isPlayer1 = playerNo == 1;
             const isOddMatch = matchNo % 2 == 1;
+            const abilityCount = isPlayer1 ? p1_abilities : p2_abilities;
 
             // if the match number is odd, then player 1 is the pretender
             // if the match number is even, then player 2 is the pretender
             const display =
-                isOddMatch ^ isPlayer1 ? <Pretender props={{ ...props, questions }} /> : <Guesser props={props} />;
+                isOddMatch ^ isPlayer1 ? (
+                    <Pretender props={{ ...props, questions, abilityCount }} />
+                ) : (
+                    <Guesser props={props} />
+                );
 
             changeDisplay(display);
         });

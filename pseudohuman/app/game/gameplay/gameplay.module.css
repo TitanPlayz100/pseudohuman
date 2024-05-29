@@ -47,6 +47,10 @@
     box-shadow: 0 0 20px #e32b2b;
     color: #ff3c3c;
 }
+.buttondanger:hover,
+.submitdanger:hover {
+    background-color: #e32b2b33 !important;
+}
 
 .button:hover,
 .submit:hover {
@@ -79,7 +83,8 @@
     color: rgb(243, 29, 29);
 }
 
-.submit {
+.submit,
+.abilityButton {
     font-family: 'phoenix';
     margin: 0.5vw;
     outline: none;
@@ -120,4 +125,26 @@
 .h1 {
     font-size: 1.5em;
     text-align: center;
+}
+
+.abilityButton {
+    font-size: 1em;
+    padding: 1vmin;
+    border-color: #b0ab1a;
+    color: #fcf403;
+    box-shadow: 0 0 20px #b0ab1a;
+}
+
+.abilityButton:hover {
+    background-color: #b0ab1a33;
+}
+
+.abilityButton:disabled {
+    border-color: gray;
+    color: gray;
+    box-shadow: none;
+}
+
+.abilityButton:disabled:hover {
+    background-color: #00000000;
 }

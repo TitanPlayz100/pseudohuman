@@ -18,6 +18,9 @@ The Large Language Models used in this project are from [Cohere](https://dashboa
 - [ ] story creation gamemode
 
 Others:
+- [x] abilities
+- [x] now playing song display
+- [x] improve speed of checking answer
 - [x] change points system to cash system
 - [x] add ability to create custom rooms for 2 people
 - [x] redesign front end
@@ -50,6 +53,11 @@ Others:
 - [x] allow for multiple games to run at once
 
 # Changelog
+## 29/5
+- timeout new sends answer to other player instead of instant lose
+- ai answers cut off at one sentence (split at '. ')
+- added ability to add 10 seconds once per game for the pretender
+
 ## 25/5
 - fixed a plethora of bugs
 - added extensive comments to all the code

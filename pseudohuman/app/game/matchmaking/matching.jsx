@@ -3,6 +3,7 @@ import spinner from './loadingspinner.module.css';
 import { useEffect, useRef, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import Start from '../gameplay/start';
+import NowPlaying from './nowPlaying';
 
 export default function MatchingScreen({ props }) {
     const { socket, changeDisplay, username, changeTopbar, roomCode } = props;
@@ -62,11 +63,14 @@ export default function MatchingScreen({ props }) {
     }
 
     return (
-        <div className={styles.matchingDiv}>
-            {display()}
-            <button className={styles.button} onClick={() => (window.location = '/?username=' + username)}>
-                Leave
-            </button>
-        </div>
+        <>
+            <div className={styles.matchingDiv}>
+                {display()}
+                <button className={styles.button} onClick={() => (window.location = '/?username=' + username)}>
+                    Leave
+                </button>
+            </div>
+            <NowPlaying text='Nuke the Moon Soundtrack (2020)' />
+        </>
     );
 }

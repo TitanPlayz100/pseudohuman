@@ -3,6 +3,7 @@ import spinner from './loadingspinner.module.css';
 import { useEffect, useRef, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import Start from '../gameplay/start';
+import NowPlaying from './nowPlaying';
 
 export default function MatchingScreenPrivate({ props }) {
     const { socket, changeDisplay, username, changeTopbar } = props;
@@ -64,12 +65,15 @@ export default function MatchingScreenPrivate({ props }) {
     }
 
     return (
-        <div className={styles.matchingDiv}>
-            <h2 className={styles.subtext}>{gameID}</h2>
-            {display()}
-            <button className={styles.button} onClick={() => (window.location = '/?username=' + username)}>
-                Leave
-            </button>
-        </div>
+        <>
+            <div className={styles.matchingDiv}>
+                <h2 className={styles.subtext}>{gameID}</h2>
+                {display()}
+                <button className={styles.button} onClick={() => (window.location = '/?username=' + username)}>
+                    Leave
+                </button>
+            </div>
+            <NowPlaying text='Nuke the Moon Soundtrack (2020)' />
+        </>
     );
 }

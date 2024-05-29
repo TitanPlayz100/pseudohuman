@@ -1,8 +1,10 @@
 import shuffleArray from 'shuffle-array';
-import { updateData } from '../database/dbInterface.js';
 import { countdowns, socketIO, timeToAnswer } from '../server.js';
-import { getPlayerData, getQuestion, getWinnerData, updateGameData } from './gamedata.js';
+import { getAbilityCounts, getPlayerData, getQuestion, getWinnerData, setAbilityCount, updateGameData, updatePlayerData } from './gamedata.js';
 import { endGame } from './end.js';
+
+const PretendingMaxTime = 45; // set back to 45
+const GuessingMaxTime = 20; // set back to 20
 
 export async function sendAnswer(game_id, input, timer) {
     // save response to db
@@ -16,17 +18,13 @@ export async function sendAnswer(game_id, input, timer) {
     socketIO.emit('player-answered-' + game_id, question, answers);
 
     // who's turn it is
-    const playerNo = match_NO % 2 == 0 ? 2 : 1;
+    const playerNo = (match_NO % 2 == 0) ? 2 : 1;
 
-    if (input == 'timed out') {
-        guessedAnswer(game_id, playerNo, 'timed out', 20);
-    } else {
-        // countdown for other player to pick answer
-        clearCountdown(game_id);
-        countdown(20, game_id, () => {
-            guessedAnswer(game_id, playerNo, 'timed out', 0);
-        });
-    }
+    // countdown for other player to pick answer
+    clearCountdown(game_id);
+    countdown(GuessingMaxTime, game_id, () => {
+        guessedAnswer(game_id, playerNo, 'timed out', 0);
+    });
 }
 
 export async function guessedAnswer(game_id, playerNo, answer, timer) {
@@ -39,14 +37,14 @@ export async function guessedAnswer(game_id, playerNo, answer, timer) {
     const winScore = winnerNum + '_score';
 
     // calculate points gained
-    const timePercent = winnerNum == playerNo ? timer / 20 : timeToAnswer[game_id] / 45;
+    const timePercent = winnerNum == playerNo ? timer / GuessingMaxTime : timeToAnswer[game_id] / PretendingMaxTime;
     const cost = calculateCost(question, answers, timePercent);
 
     // update game with new score
     players[winScore] += cost;
     updatePlayerNav([players.p1_username, players.p1_score], [players.p2_username, players.p2_score]);
-    await updateData('GamesTable', [players], 'game_ID', game_id);
-    await updateGameData(game_id, 'round_winner', winnerUsername);
+    updatePlayerData([players], game_id);
+    updateGameData(game_id, 'round_winner', winnerUsername);
 
     // check for winner
     if (players[winScore] >= 3000 || matchNo > 6) {
@@ -62,16 +60,45 @@ export async function guessedAnswer(game_id, playerNo, answer, timer) {
 
 export async function nextRound(game_id, num) {
     const questions = await getQuestion(game_id);
+    const { p1_abilities, p2_abilities } = await getAbilityCounts(game_id);
 
     // countdown for starting next round
     countdown(5, game_id, () => {
-        socketIO.emit('ready-' + game_id, num, questions);
+        socketIO.emit('ready-' + game_id, num, questions, p1_abilities, p2_abilities);
 
-        // countdown for player to write answer
-        countdown(45, game_id, () => {
-            sendAnswer(game_id, 'timed out', 0);
+        // time limit for pretending
+        countdown(PretendingMaxTime, game_id, () => {
+            socketIO.emit('get-incomplete-answer-' + game_id);
         });
     });
+}
+
+export async function useAbility(game_id, playerNo, timeLeft) {
+    const { p1_abilities, p2_abilities } = await getAbilityCounts(game_id);
+    let success = false;
+    let remainingAbilities = 0;
+    if (playerNo == 1) {
+        if (p1_abilities > 0) {
+            clearCountdown(game_id);
+            countdown(timeLeft + 10, game_id, () => {
+                socketIO.emit('get-incomplete-answer-' + game_id);
+            });
+            await setAbilityCount(game_id, 'p1_abilities', p1_abilities - 1);
+            success = true;
+            remainingAbilities = p1_abilities - 1;
+        }
+    } else if (playerNo == 2) {
+        if (p2_abilities > 0) {
+            clearCountdown(game_id);
+            countdown(timeLeft + 10, game_id, () => {
+                socketIO.emit('get-incomplete-answer-' + game_id);
+            });
+            await setAbilityCount(game_id, 'p2_abilities', p2_abilities - 1);
+            success = true;
+            remainingAbilities = p2_abilities - 1;
+        }
+    }
+    socketIO.emit('ability-used-' + game_id, success, remainingAbilities);
 }
 
 function countdown(seconds, game_id, after) {

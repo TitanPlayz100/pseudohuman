@@ -1,5 +1,5 @@
 import shuffleArray from 'shuffle-array';
-import { fetchData, fetchDataRandom, insertData } from '../database/dbInterface.js';
+import { fetchDataRandom, insertData } from '../database/dbInterface.js';
 import { queue, privateQueue, socketIO } from '../server.js';
 import { nextRound, updatePlayerNav } from './gameloop.js';
 import { disconnectGame, splicePrivateQueueID } from './end.js';
@@ -28,7 +28,6 @@ async function joinPrivateRoom(username, code) {
     const [p1, p2] = [player1, username];
 
     await initGame(p1, p2, game_id);
-    await nextRound(game_id, 1);
 }
 
 async function joinQueue(username) {
@@ -44,7 +43,6 @@ async function joinQueue(username) {
     const game_id = generateGameID(4); // unique game ID
 
     await initGame(p1, p2, game_id);
-    await nextRound(game_id, 1);
 }
 
 export async function createPrivateRoom(username) {
@@ -89,10 +87,14 @@ async function initGame(player1, player2, game_id) {
         p2_score: 0,
         human_responses: [],
         status: true,
+        p1_abilities: 1,
+        p2_abilities: 1
     };
 
     await insertData('GamesTable', [gameinfo]);
     console.info('game ' + game_id + ' started');
+
+    await nextRound(game_id, 1);
 }
 
 async function generateQuestions() {
@@ -108,9 +110,7 @@ async function generateQuestions() {
         }
 
         // limit to one sentence
-        ans.map((aiAnswer) => {
-            return aiAnswer.split('. ')[0];
-        })
+        ans = ans.map((aiAnswer) => aiAnswer.split('. ')[0]);
 
         shuffleArray(ans);
         const limited = ans.slice(0, 2);

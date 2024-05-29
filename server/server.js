@@ -11,7 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import { check_password, check_username, register, change_stat, get_stat } from './auth/endpoints.js';
 import { check_room_id, enterMatchmaking, createPrivateRoom } from './game/matchmaking.js';
 import { disconnectGame } from './game/end.js';
-import { guessedAnswer, sendAnswer } from './game/gameloop.js';
+import { guessedAnswer, sendAnswer, useAbility } from './game/gameloop.js';
 
 // init database
 export const supabaseDB = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -46,6 +46,7 @@ socketIO.on('connection', socket => {
     socket.on('send-player-answer', sendAnswer);
     socket.on('guessed-answer', guessedAnswer);
     socket.on('user-disconnected', disconnectGame);
+    socket.on('use-ability', useAbility);
 });
 
 // start server on port 10000

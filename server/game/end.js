@@ -9,11 +9,11 @@ export async function endGame(players, winner, pointDiff, game_id) {
 
     // updating database info
     await updateData('GamesTable', [{ status: false }], 'game_ID', game_id);
-    await addStat(winner, 'wins', 1);
-    await addStat(players.p1_username, 'total_games', 1);
-    await addStat(players.p2_username, 'total_games', 1);
-    updatePlayerStatus(players.p1_username, false);
-    updatePlayerStatus(players.p2_username, false);
+    addStat(winner, 'wins', 1);
+    addStat(players.p1_username, 'total_games', 1);
+    addStat(players.p2_username, 'total_games', 1);
+    await updatePlayerStatus(players.p1_username, false);
+    await updatePlayerStatus(players.p2_username, false);
     console.info('Game ' + game_id + ' ended');
 }
 

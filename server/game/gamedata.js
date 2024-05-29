@@ -16,6 +16,10 @@ export async function getPlayerData(game_id) {
     return { p1_username, p2_username, p1_score, p2_score };
 }
 
+export async function updatePlayerData(info, game_id) {
+    await updateData('GamesTable', info, 'game_ID', game_id);
+}
+
 export async function updateGameData(game_id, name, newData) {
     let data = (await fetchDataFiltered('GamesTable', name, 'game_ID', game_id))[0][name];
     if (data == null) data = [];
@@ -50,4 +54,16 @@ export async function getPlayerStatus(username) {
 
 export async function updatePlayerStatus(username, newState) {
     await updateData('UserTable', [{ isPlaying: newState }], 'username', username);
+}
+
+export async function getAbilityCounts(game_id) {
+    const data = await fetchDataFiltered('GamesTable', 'p1_abilities,p2_abilities', 'game_ID', game_id);
+    const { p1_abilities, p2_abilities } = data[0];
+    return { p1_abilities, p2_abilities };
+}
+
+export async function setAbilityCount(game_id, name, count) {
+    const newObj = {};
+    newObj[name] = count;
+    await updateData('GamesTable', [newObj], 'game_ID', game_id);
 }
