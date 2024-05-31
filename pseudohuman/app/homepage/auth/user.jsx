@@ -73,9 +73,7 @@ export default function UserInput({ props }) {
     return (
         <div className={styles.loginDiv}>
             <h1 className={styles.loginTextHeader}>Welcome</h1>
-            <p className={styles.loginTextP}>
-                Input a username, or leave blank to be anonymous. Press ENTER to continue
-            </p>
+            <p className={styles.loginTextP}>Input a username. Press ENTER to continue</p>
             <input
                 className={bottomText && bottomText != 'Loading' ? styles.loginInputError : styles.loginInput}
                 type='text'
